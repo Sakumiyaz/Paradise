@@ -1,9 +1,23 @@
 # Changelog
 
-All notable changes are tracked here. The project is not yet published as a
-public release.
+All notable changes are tracked here.
 
 ## Unreleased
+
+- No unreleased changes.
+
+## v0.1.0
+
+- Published Paradise as a clean public repository with a single root commit.
+- Verified the first public `GARM Verify` GitHub Actions run on `master`.
+- Documented Paradise as the public Worldcell Runtime identity over Eden's
+  broader architecture substrate.
+- Kept the no-claim boundary explicit: this is not an AGI capability claim and
+  not a trained model release.
+- Included local-first runtime APIs, operator console, contracts, conformance
+  evidence, runtime spine, Worldcell loop and public release documentation.
+
+## v0.1.0-rc1
 
 - Moved the GARM/GEWC runtime implementation into native library code under
   `eden_core/src/garm/` and added the official `eden-garm` runtime binary.
@@ -31,8 +45,6 @@ public release.
 
 - Draft tag name reserved for a future public-ready checkpoint.
 - Not published as a GitHub release.
-
-## v0.1.0-rc1
 
 - Local release candidate notes added in `docs/releases/v0.1.0-rc1.md`.
 - Not published as a GitHub release.
