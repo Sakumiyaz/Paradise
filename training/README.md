@@ -38,6 +38,8 @@ measurable capability before expensive GPU work:
 | `elcp/readiness_contract.py` | Writes the 4B readiness contract while keeping training blocked. |
 | `models/README.md` | Checkpoint policy; generated model artifacts stay out of git. |
 | `rocm/rocm_env.sh` | Local ROCm environment probe; it reports availability without requiring a GPU. |
+| `rocm/megatron_offline_smoke.sh` | Optional MI300X/Megatron smoke launcher. It uses `NullTokenizer`, mock data, random initialization and Docker `--network none`; it does not pull images or use external models. |
+| `rocm/megatron_eden_corpus_pilot.sh` | Optional MI300X/Megatron pilot launcher. It trains a local SentencePiece tokenizer from `eden_core/corpus`, preprocesses EDEN-owned text into Megatron format and runs a tiny random-weight GPT pilot without network access or external models. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -118,6 +120,47 @@ To prepare ELCP as EDEN's native latent cognitive objective without training:
 ```bash
 make elcp-prepare
 ```
+
+## Optional MI300X Megatron Smoke
+
+On an AMD ROCm host with `rocm/megatron-lm:v25.3` already present locally:
+
+```bash
+make training-megatron-offline-smoke
+```
+
+This is an execution-path smoke only. It starts a tiny randomly initialized GPT
+model, runs with Docker `--network none`, uses Megatron `NullTokenizer` and
+mock data, and writes:
+
+```text
+target/eden_megatron_offline_smoke/offline_megatron_smoke.log
+target/eden_megatron_offline_smoke/offline_megatron_smoke.summary
+```
+
+The script deliberately does not download checkpoints, tokenizers or datasets.
+It also does not admit a production checkpoint. It proves that the EDEN training
+surface can drive Megatron on ROCm without depending on an external model.
+
+For the first EDEN-owned data pilot:
+
+```bash
+make training-megatron-eden-corpus-pilot
+```
+
+This builds all trainable inputs from repo-local EDEN corpus files:
+
+```text
+target/eden_megatron_corpus_pilot/data/eden_corpus.jsonl
+target/eden_megatron_corpus_pilot/tokenizer/eden_sp.model
+target/eden_megatron_corpus_pilot/data/eden_corpus_text_document.bin
+target/eden_megatron_corpus_pilot/data/eden_corpus_text_document.idx
+target/eden_megatron_corpus_pilot/eden_corpus_pilot.log
+target/eden_megatron_corpus_pilot/eden_corpus_pilot.summary
+```
+
+The pilot starts from random weights and remains checkpoint-admission blocked.
+Its purpose is to prove the EDEN-only data path before larger training.
 
 ## ROCm Direction
 

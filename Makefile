@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -112,6 +112,12 @@ runtime-spine:
 
 training-rocm-profile:
 	bash training/rocm/rocm_env.sh
+
+training-megatron-offline-smoke:
+	bash training/rocm/megatron_offline_smoke.sh
+
+training-megatron-eden-corpus-pilot:
+	bash training/rocm/megatron_eden_corpus_pilot.sh
 
 operational-blackbox:
 	bash eden_core/src/garm/scripts/operational_blackbox.sh

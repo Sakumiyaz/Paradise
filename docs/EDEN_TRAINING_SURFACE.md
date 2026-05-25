@@ -35,6 +35,14 @@ ad hoc notebooks or private scripts.
   freeze manifest, metrics board and 4B readiness contract without training.
 - GEWC remains the runtime authority. Models are subordinate modules.
 - No script writes model weights, objectives, memory or tool actions directly.
+- `make training-megatron-offline-smoke` is available as an optional ROCm
+  hardware smoke. It requires a local Megatron ROCm Docker image, starts the
+  container with `--network none`, uses `NullTokenizer` plus mock data, and does
+  not consume external model weights, tokenizers, APIs or datasets.
+- `make training-megatron-eden-corpus-pilot` is available as the first
+  EDEN-owned corpus pilot. It trains a local SentencePiece tokenizer from
+  `eden_core/corpus`, preprocesses repo-local text into Megatron indexed data
+  and runs a tiny random-weight GPT pilot without network access.
 
 ## Future AMD GPU Use
 
@@ -81,6 +89,8 @@ The current model runtime path makes that boundary executable:
 
 ```bash
 make training-rocm-profile
+make training-megatron-offline-smoke
+make training-megatron-eden-corpus-pilot
 make training-smoke
 make training-evidence
 make model-runtime
