@@ -40,6 +40,7 @@ measurable capability before expensive GPU work:
 | `rocm/rocm_env.sh` | Local ROCm environment probe; it reports availability without requiring a GPU. |
 | `rocm/megatron_offline_smoke.sh` | Optional MI300X/Megatron smoke launcher. It uses `NullTokenizer`, mock data, random initialization and Docker `--network none`; it does not pull images or use external models. |
 | `rocm/megatron_eden_corpus_pilot.sh` | Optional MI300X/Megatron pilot launcher. It trains a local SentencePiece tokenizer from `eden_core/corpus`, preprocesses EDEN-owned text into Megatron format and runs a tiny random-weight GPT pilot without network access or external models. |
+| `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models and no checkpoint admission. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -161,6 +162,26 @@ target/eden_megatron_corpus_pilot/eden_corpus_pilot.summary
 
 The pilot starts from random weights and remains checkpoint-admission blocked.
 Its purpose is to prove the EDEN-only data path before larger training.
+
+For the first 7B-shape base-model path validation:
+
+```bash
+make training-megatron-eden-7b-base-pilot
+```
+
+This runs a large random-weight GPT-style model with:
+
+```text
+layers=32
+hidden_size=4096
+ffn_hidden_size=12288
+attention_heads=32
+sequence_length=128 by default
+```
+
+The run is intentionally tiny by default. It is useful as evidence that EDEN can
+build and step through a 7B-scale base-model path on ROCm; it is not evidence of
+AGI behavior, useful language competence or checkpoint admission.
 
 ## ROCm Direction
 

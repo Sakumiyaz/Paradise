@@ -43,6 +43,10 @@ ad hoc notebooks or private scripts.
   EDEN-owned corpus pilot. It trains a local SentencePiece tokenizer from
   `eden_core/corpus`, preprocesses repo-local text into Megatron indexed data
   and runs a tiny random-weight GPT pilot without network access.
+- `make training-megatron-eden-7b-base-pilot` is available as the first
+  7B-shape base-model path validation. It uses EDEN-owned corpus/tokenizer,
+  random initialization and no external network, but remains evidence of
+  training plumbing only, not AGI capability.
 
 ## Future AMD GPU Use
 
@@ -91,6 +95,7 @@ The current model runtime path makes that boundary executable:
 make training-rocm-profile
 make training-megatron-offline-smoke
 make training-megatron-eden-corpus-pilot
+make training-megatron-eden-7b-base-pilot
 make training-smoke
 make training-evidence
 make model-runtime
