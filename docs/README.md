@@ -8,6 +8,8 @@ governed local runtime from the Eden project.
 | Document | Use |
 | --- | --- |
 | `PARADISE_WORLDCELL_RUNTIME.md` | Public Paradise identity: Worldcell Runtime loop, session artifact and boundaries. |
+| `PARADISE_DEVELOPER_SURFACE.md` | Public CLI, API, contracts, GitHub Action and extension boundaries. |
+| `demos/paradise-quickstart.md` | Short transcript for the socket-free public quickstart. |
 | `EDEN_SYSTEM_LAYERS.md` | Layer model and terminology for Paradise, Eden, GARM, GEWC and the Runtime Spine. |
 | `EDEN_ENGINEERING_PRACTICES.md` | Project engineering standard for review scope, evidence, contracts and safety boundaries. |
 | `EDEN_OPERATOR_CONSOLE.html` | Static operator console served by the runtime root endpoint. |
@@ -44,6 +46,22 @@ http://127.0.0.1:8080/
 The console is static by design. Live state remains available through JSON
 endpoints so operators and SDK consumers can inspect the runtime without a
 frontend build chain.
+
+## Paradise CLI
+
+`paradise` is the socket-free public quickstart CLI:
+
+```sh
+cargo run -p eden_core --bin paradise -- status
+cargo run -p eden_core --bin paradise -- worldcell
+cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
+```
+
+Copyable public examples live under:
+
+```text
+examples/
+```
 
 ## Operator CLI
 

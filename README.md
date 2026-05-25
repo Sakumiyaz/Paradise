@@ -39,11 +39,21 @@ Intent
 Generate the current Paradise Worldcell evidence locally:
 
 ```bash
-make paradise-worldcell
+cargo run -p eden_core --bin paradise -- worldcell
 ```
 
 The command writes `paradise_worldcell_runtime.json` in the selected state
 directory and keeps `claim_allowed=false` and `agi_claim=false`.
+
+Plan an action without touching files, tools or APIs:
+
+```bash
+cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
+```
+
+That command records intent, produces a dry-run plan and writes a reviewable
+`paradise_worldcell_sessions.json` session. It does not execute the candidate
+action.
 
 Run a complete local Worldcell session without model training or external
 network access:
@@ -144,7 +154,7 @@ layer model and terminology.
 
 | Layer | Current surface |
 | --- | --- |
-| Paradise Worldcell | `paradise worldcell eval` / `make paradise-worldcell` writes the public Worldcell Runtime evidence artifact. |
+| Paradise Worldcell | `cargo run -p eden_core --bin paradise -- worldcell`, `cargo run -p eden_core --bin paradise -- run --dry-run ...` and `make paradise-worldcell` write the public Worldcell Runtime and dry-run evidence artifacts. |
 | Runtime spine | `runtime spine eval` / `runtime spine enforce` / `runtime spine verify` / `make runtime-spine` writes, guards and verifies universal contracts for messages, event bus, global state, replay, workflow risk, circuit breakers, safety, model routing, memory, simulation and multiagent coordination. |
 | Eden substrate | `eden_core/src/` contains the broader Eden modules with mixed maturity. |
 | Operator runtime | `eden_core/src/bin/eden_garm.rs` starts the native GARM runtime. |
@@ -156,7 +166,7 @@ layer model and terminology.
 | Training surface | `training/` contains the CPU-safe smoke benchmark, first trainable-memory contract, ELCP cognitive-transition fixtures, ROCm profile and future AMD GPU training entry point. |
 | Conformance | `make eden-api-conformance` validates a live endpoint from outside the process through the native `eden-garm-api-conformance` runner. |
 | Release evidence | `make eden-api-contracts` writes API artifacts, readiness package and independent validation through the native `eden-garm-package-validator` runner. |
-| Operator CLI | `cargo run -p eden_core --bin edenctl -- status` wraps the public runtime API. |
+| Operator CLI | `cargo run -p eden_core --bin paradise -- status` is the socket-free public quickstart CLI; `cargo run -p eden_core --bin edenctl -- status` wraps the live local runtime API. |
 
 ## Public-Ready Posture
 
@@ -182,6 +192,36 @@ layer model and terminology.
   `eden_core/src/` has the same maturity as the public GARM/GEWC surface.
 
 ## Quick Start
+
+Five-minute local path, no sockets and no network:
+
+```bash
+cargo run -p eden_core --bin paradise -- status
+cargo run -p eden_core --bin paradise -- worldcell
+cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
+```
+
+Expected evidence:
+
+```text
+/tmp/paradise/paradise_worldcell_runtime.json
+/tmp/paradise/paradise_worldcell_sessions.json
+```
+
+Or run the same path through Make:
+
+```bash
+make paradise-quickstart
+```
+
+Post-quick-start verification:
+
+```bash
+test -s /tmp/paradise_quickstart/paradise_worldcell_runtime.json
+test -s /tmp/paradise_quickstart/paradise_worldcell_sessions.json
+```
+
+Live local API path:
 
 ```bash
 cargo build --bin eden-garm -p eden_core
@@ -251,6 +291,7 @@ To generate the Paradise Worldcell Runtime artifact and a full local session
 without starting model training:
 
 ```bash
+make paradise-quickstart
 make paradise-worldcell
 make paradise-operational-loop
 make runtime-spine
@@ -363,6 +404,7 @@ frontend toolchain or network dependency.
 | Long-run stability gate | `make long-run-stability` |
 | Locus operator API | `cargo run -p eden_core --bin edenctl -- locus ingest "operator preference :: governed context"` |
 | Operator Forge API | `cargo run -p eden_core --bin edenctl -- forge synth "causal risk model"` |
+| Paradise public CLI | `cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"` |
 | OpenAPI export from live runtime | `cargo run -p eden_core --bin edenctl -- openapi export --output-dir contracts/v1/openapi` |
 | Runtime doctor | `cargo run -p eden_core --bin edenctl -- doctor` |
 | Legacy quick verification | `make verify` |
@@ -396,6 +438,8 @@ Dry-run never queues or executes commands.
 | --- | --- |
 | [docs/README.md](docs/README.md) | Documentation index and public-ready handoff. |
 | [docs/PARADISE_WORLDCELL_RUNTIME.md](docs/PARADISE_WORLDCELL_RUNTIME.md) | Public Paradise identity and Worldcell Runtime loop. |
+| [docs/PARADISE_DEVELOPER_SURFACE.md](docs/PARADISE_DEVELOPER_SURFACE.md) | Public CLI, API, contract, Action and extension boundaries. |
+| [docs/demos/paradise-quickstart.md](docs/demos/paradise-quickstart.md) | Short terminal transcript for the public quickstart flow. |
 | [docs/EDEN_SYSTEM_LAYERS.md](docs/EDEN_SYSTEM_LAYERS.md) | Layer model and terminology for Paradise, Eden, GARM and GEWC. |
 | [docs/EDEN_OPERATOR_CONSOLE.html](docs/EDEN_OPERATOR_CONSOLE.html) | Visual operator console served by the runtime root endpoint. |
 | [docs/EDEN_RUNTIME_API_SURFACE.md](docs/EDEN_RUNTIME_API_SURFACE.md) | Runtime, operational, artifact and action API map. |

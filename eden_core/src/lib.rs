@@ -38,6 +38,7 @@ pub mod mnemonic; // Sistema de memoria perfecta y latencia ultra-baja
 pub mod neural_network; // Red neuronal 100% Rust puro - desde cero
 pub mod neuroplast; // Neuroplasticidad
 pub mod paradigms; // Legacy paradigm helpers used by the native GARM runtime
+pub mod paradise_cli; // Public Paradise quickstart CLI over the local runtime surface
 pub mod phenomenal; // Experiencia fenoménica: consciencia y emociones reales
 pub mod physics; // Motor físico: Energon & Tres Actos (no_std)
 pub mod quantum; // Procesamiento cuántico y pre-conocimiento

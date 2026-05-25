@@ -1,7 +1,8 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-worldcell paradise-operational-loop runtime-spine training-rocm-profile operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
+PARADISE := cargo run -p eden_core --bin paradise --
 GARM_PACKAGE_VALIDATOR := cargo run -p eden_core --bin eden-garm-package-validator --
 
 fmt:
@@ -11,8 +12,10 @@ test:
 	cargo test -p eden_core eden_garm --lib -- --test-threads=1
 	cargo test -p eden_core sdk --lib
 	cargo test -p eden_core edenctl_cli --lib
+	cargo test -p eden_core paradise_cli --lib
 	cargo test --bin eden-garm -p eden_core
 	cargo test --bin edenctl -p eden_core
+	cargo test --bin paradise -p eden_core
 	cargo test --example edenctl -p eden_core
 
 workspace-test:
@@ -86,13 +89,22 @@ elcp-hardening: elcp-4b-readiness-contract
 elcp-prepare: training-smoke elcp-hardening
 	printf 'elcp prepare\nelcp hardening\nelcp readiness\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_elcp_prepare --api-port 0
 
+paradise-status:
+	$(PARADISE) --state-dir /tmp/paradise_quickstart status
+
 paradise-worldcell:
 	rm -rf -- /tmp/paradise_worldcell
-	printf 'paradise worldcell eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/paradise_worldcell --api-port 0
+	$(PARADISE) --state-dir /tmp/paradise_worldcell worldcell
 
 paradise-operational-loop:
 	rm -rf -- /tmp/paradise_operational_loop
 	printf 'paradise worldcell eval\nparadise intent inspect runtime status safely\nparadise plan\nparadise approve\nparadise execute\nparadise sessions\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/paradise_operational_loop --api-port 0
+
+paradise-quickstart:
+	rm -rf -- /tmp/paradise_quickstart
+	$(PARADISE) --state-dir /tmp/paradise_quickstart status
+	$(PARADISE) --state-dir /tmp/paradise_quickstart worldcell
+	$(PARADISE) --state-dir /tmp/paradise_quickstart run --dry-run "inspect runtime status safely"
 
 runtime-spine:
 	rm -rf -- /tmp/eden_runtime_spine
