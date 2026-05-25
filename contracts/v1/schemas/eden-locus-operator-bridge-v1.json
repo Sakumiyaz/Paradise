@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-locus-operator-bridge-v1.json",
+  "title": "EDEN Locus Operator Bridge",
+  "type": "object",
+  "required": ["schema", "artifact", "claim_allowed", "agi_claim", "authority", "memory_policy"],
+  "properties": {
+    "schema": { "const": "eden-locus-operator-bridge-v1" },
+    "artifact": { "const": "locus_operator_bridge" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "authority": { "type": "string" },
+    "source_domains": { "type": "array" },
+    "target_domain": { "type": "string" },
+    "locus": { "type": "object" },
+    "operator_forge": { "type": "object" },
+    "cwm": { "type": "object" },
+    "gates": { "type": "array" },
+    "memory_policy": {
+      "type": "object",
+      "required": ["direct_memory_write", "direct_objective_write", "model_weight_update"],
+      "properties": {
+        "direct_memory_write": { "const": false },
+        "direct_objective_write": { "const": false },
+        "model_weight_update": { "const": false }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

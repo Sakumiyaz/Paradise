@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.baseline_report.v1",
+  "title": "EDEN ELCP Baseline Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "baseline",
+    "datasets",
+    "summary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.baseline_report.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

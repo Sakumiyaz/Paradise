@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.training.capability_report.v1",
+  "title": "EDEN Training Capability Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "profile",
+    "model_config",
+    "device",
+    "summary",
+    "first_model_eval",
+    "results"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.training.capability_report.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "profile": {
+      "type": "object"
+    },
+    "model_config": {
+      "type": "object"
+    },
+    "device": {
+      "type": "object"
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "passed",
+        "total",
+        "score",
+        "by_capability"
+      ],
+      "properties": {
+        "passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "by_capability": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "first_model_eval": {
+      "type": "object",
+      "required": [
+        "module",
+        "role",
+        "claim_allowed",
+        "agi_claim",
+        "direct_memory_writes",
+        "direct_objective_writes",
+        "direct_tool_execution",
+        "passed",
+        "total",
+        "score",
+        "results"
+      ],
+      "properties": {
+        "claim_allowed": {
+          "const": false
+        },
+        "agi_claim": {
+          "const": false
+        },
+        "direct_memory_writes": {
+          "const": false
+        },
+        "direct_objective_writes": {
+          "const": false
+        },
+        "direct_tool_execution": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "capability",
+          "passed",
+          "observed"
+        ],
+        "properties": {
+          "passed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

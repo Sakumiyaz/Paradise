@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.replay_eval.v1",
+  "title": "EDEN ELCP Replay Evaluation",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "rows_passed",
+    "rows_total",
+    "field_score",
+    "passed",
+    "total",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.replay_eval.v1"
+    },
+    "artifact": {
+      "const": "elcp_replay_eval"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "field_score": {
+      "type": "number"
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

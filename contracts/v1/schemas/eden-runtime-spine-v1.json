@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-runtime-spine-v1.json",
+  "title": "EDEN Runtime Spine",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "kernel_invariants",
+    "interfaces",
+    "artifacts"
+  ],
+  "properties": {
+    "schema": { "const": "eden-runtime-spine-v1" },
+    "artifact": { "const": "runtime_spine" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "kernel_invariants": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "type": "string" }
+    },
+    "interfaces": {
+      "type": "array",
+      "minItems": 8,
+      "items": { "type": "string" }
+    },
+    "artifacts": { "type": "array" },
+    "runtime_counts": { "type": "object" }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.dataset_freeze_manifest.v1",
+  "title": "EDEN ELCP Dataset Freeze Manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "freeze_id",
+    "dataset_locked_for_training",
+    "candidate_pool_locked_for_review",
+    "training_allowed",
+    "files",
+    "passed",
+    "total",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.dataset_freeze_manifest.v1"
+    },
+    "artifact": {
+      "const": "elcp_dataset_freeze_manifest"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "dataset_locked_for_training": {
+      "const": false
+    },
+    "training_allowed": {
+      "const": false
+    },
+    "files": {
+      "type": "array"
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

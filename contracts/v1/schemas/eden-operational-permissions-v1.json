@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden-operational-permissions-v1",
+  "title": "EDEN Operational Permissions",
+  "type": "object",
+  "required": [
+    "schema",
+    "permissions",
+    "claim_allowed",
+    "agi_claim"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden-operational-permissions-v1"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "allowed"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "allowed": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

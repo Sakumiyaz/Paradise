@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.readiness.v1",
+  "title": "EDEN ELCP Readiness",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "objective_id",
+    "phase",
+    "training_executed",
+    "weights_present",
+    "gpu_job_submitted",
+    "passed",
+    "total",
+    "elcp_4a_complete",
+    "4b_training_allowed",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.readiness.v1"
+    },
+    "artifact": {
+      "const": "elcp_readiness"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "gpu_job_submitted": {
+      "const": false
+    },
+    "4b_training_allowed": {
+      "const": false
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,163 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "EDEN Operational API",
+    "version": "1.0.0",
+    "description": "Local-first operational API for Paradise public contract v1."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080"
+    }
+  ],
+  "security": [
+    {},
+    {
+      "EdenBearer": []
+    },
+    {
+      "EdenLocalToken": []
+    }
+  ],
+  "paths": {
+    "/api/operational/status": {
+      "get": {
+        "operationId": "readOperationalStatus",
+        "responses": {
+          "200": {
+            "description": "Operational status and runtime governance markers"
+          }
+        }
+      }
+    },
+    "/api/operational/permissions": {
+      "get": {
+        "operationId": "readOperationalPermissions",
+        "responses": {
+          "200": {
+            "description": "Persistent operational permissions"
+          }
+        }
+      }
+    },
+    "/api/operational/replay": {
+      "get": {
+        "operationId": "readOperationalReplay",
+        "responses": {
+          "200": {
+            "description": "GEWC decision replay index or selected decision"
+          }
+        }
+      }
+    },
+    "/api/operational/recovery": {
+      "get": {
+        "operationId": "readOperationalRecoveryPlan",
+        "responses": {
+          "200": {
+            "description": "Operational recovery plan"
+          }
+        }
+      }
+    },
+    "/api/operational/schemas": {
+      "get": {
+        "operationId": "readOperationalSchemas",
+        "responses": {
+          "200": {
+            "description": "Operational schema registry"
+          }
+        }
+      }
+    },
+    "/api/actions/dry-run": {
+      "get": {
+        "operationId": "dryRunAction",
+        "parameters": [
+          {
+            "name": "cmd",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Command classification without execution"
+          }
+        }
+      }
+    },
+    "/api/command": {
+      "get": {
+        "operationId": "queueCommand",
+        "parameters": [
+          {
+            "name": "cmd",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Queued governed command"
+          }
+        }
+      },
+      "post": {
+        "operationId": "postCommand",
+        "responses": {
+          "200": {
+            "description": "Legacy-compatible command submission"
+          }
+        }
+      }
+    },
+    "/api/command_sync": {
+      "get": {
+        "operationId": "runCommandSync",
+        "parameters": [
+          {
+            "name": "cmd",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Governed command result"
+          },
+          "503": {
+            "description": "Runtime is not ready"
+          },
+          "504": {
+            "description": "Command timed out"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "EdenBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Optional local token sourced from EDEN_API_TOKEN."
+      },
+      "EdenLocalToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-EDEN-API-Token",
+        "description": "Optional local token sourced from EDEN_API_TOKEN."
+      }
+    }
+  }
+}

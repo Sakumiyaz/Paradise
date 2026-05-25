@@ -1,0 +1,152 @@
+El gato come pizza porque tiene hambre.
+La pizza esta caliente porque salio del horno.
+El perro corre rapido porque persigue al gato.
+El gato sube al arbol porque escapa del perro.
+La rama se rompe porque el gato es pesado.
+El gato cae al suelo porque la rama se rompio.
+El sol calienta la tierra porque emite luz.
+La planta crece porque recibe sol y agua.
+El agua moja la tierra porque cae como lluvia.
+La lluvia cae porque las nubes contienen agua.
+Las nubes se forman porque el agua se evapora.
+El agua se evapora porque el sol calienta el oceano.
+El oceano contiene agua salada porque los rios traen sales.
+Los rios fluyen porque la gravedad atrae el agua.
+La gravedad atrae los objetos porque la tierra tiene masa.
+La masa de un objeto determina su peso.
+El peso empuja el objeto hacia abajo.
+Si un objeto cae entonces gana velocidad.
+Si dos objetos chocan entonces intercambian momento.
+El momento se conserva en las colisiones.
+La energia se transforma pero no se destruye.
+El motor convierte combustible en movimiento.
+El combustible quema oxigeno y libera calor.
+El calor expande los gases del motor.
+Los gases expandidos empujan el piston.
+El piston gira el cigueñal del motor.
+El cigueñal mueve las ruedas del coche.
+Las ruedas giran porque el motor produce torque.
+El cuerpo humano necesita comida porque las celulas requieren energia.
+Las celulas convierten azucar en energia mediante respiracion.
+El corazon bombea sangre porque las celulas necesitan oxigeno.
+La sangre transporta oxigeno desde los pulmones a las celulas.
+Los pulmones absorben oxigeno porque inhalan aire.
+El aire contiene oxigeno porque las plantas lo producen.
+Las plantas producen oxigeno mediante fotosintesis.
+La fotosintesis ocurre porque las hojas absorben luz solar.
+Las hojas son verdes porque contienen clorofila.
+La clorofila absorbe luz roja y azul pero refleja la verde.
+Los animales necesitan plantas porque las plantas almacenan energia.
+Los herbivoros comen plantas y los carnivoros comen herbivoros.
+Los depredadores cazan presas porque obtienen nutrientes.
+Las presas escapan porque los depredadores son peligrosos.
+La evolucion ocurre porque hay variacion y seleccion.
+La variacion existe porque los genes mutan.
+Las mutaciones causan diferencias entre individuos.
+Los individuos mejor adaptados sobreviven mas.
+Los sobrevivientes pasan sus genes a la siguiente generacion.
+La poblacion cambia con el tiempo porque las frecuencias geneticas cambian.
+The cat eats fish because it is hungry.
+The fish swims in water because it has gills.
+Water flows downhill because of gravity.
+Gravity attracts objects because Earth has mass.
+If an object falls then it accelerates downward.
+If you heat ice then it becomes water.
+If you cool water then it becomes ice.
+Plants grow because they need sunlight.
+Animals eat plants because plants store energy.
+Predators eat prey because prey has nutrients.
+Humans build tools because tools amplify ability.
+Tools require materials and design to work.
+Knowledge grows because humans share ideas.
+Ideas spread when humans communicate.
+Communication requires language and intention.
+Language carries meaning between minds.
+Meaning emerges from shared experience.
+Experience accumulates through repeated action.
+Action changes the world and the agent.
+A learning system improves with feedback.
+Feedback signals errors and successes.
+Errors teach what does not work.
+Success reinforces what works well.
+A fire burns because oxygen reacts with fuel.
+Without oxygen a fire cannot burn.
+Without fuel a fire goes out.
+A bird flies because its wings push air.
+A fish breathes through gills not lungs.
+A mammal breathes through lungs not gills.
+A human is a mammal that uses language.
+A computer runs programs because it has a processor.
+A processor executes instructions in cycles.
+A program is a sequence of instructions.
+Memory stores data that the processor reads.
+Reading data from disk is slower than reading from memory.
+Caches speed up memory access because they store frequent data.
+A network connects computers so they can share information.
+Information travels as packets through the network.
+Packets get lost when network is congested.
+Congestion happens because bandwidth is limited.
+Higher bandwidth allows more packets per second.
+Latency increases when distance increases.
+Encryption protects data because it scrambles information.
+Decryption recovers data when you have the key.
+A key must be secret to be useful.
+Compression reduces data size by removing redundancy.
+Lossless compression preserves all information.
+Lossy compression removes details that humans rarely notice.
+A compiler translates source code to machine code.
+Machine code runs directly on the processor.
+Interpreted code runs through a virtual machine.
+A virtual machine emulates a real processor.
+Emulation is slower than native execution.
+Just-in-time compilation speeds up interpreted code.
+A bug is an unintended program behavior.
+Bugs occur because programmers make mistakes.
+Testing reveals bugs before users find them.
+Test coverage measures how much code is exercised.
+High coverage reduces but does not eliminate bugs.
+Formal verification proves code correct against a specification.
+A specification describes what code should do.
+Without a specification you cannot prove correctness.
+A neural network learns patterns from data.
+Data must be diverse so the network generalizes.
+Overfitting happens when network memorizes training data.
+Regularization prevents overfitting by adding constraints.
+Generalization improves when training data is large.
+A loss function measures prediction error.
+Gradient descent reduces loss by adjusting weights.
+The learning rate controls how fast weights change.
+A high learning rate causes instability.
+A low learning rate causes slow learning.
+Backpropagation computes gradients through the chain rule.
+A deep network has many layers stacked.
+Each layer transforms its input into a richer representation.
+Attention selects which inputs to focus on.
+Recurrent networks process sequences over time.
+Memory in recurrent networks captures temporal patterns.
+A hidden state summarizes past inputs.
+Reinforcement learning rewards desirable actions.
+The agent chooses actions to maximize reward.
+Exploration finds new strategies and exploitation uses known strategies.
+Balancing exploration and exploitation is critical.
+A model of the world predicts consequences of actions.
+Planning chooses actions by simulating futures.
+Causality lets you predict effects of interventions.
+Correlation alone does not establish causation.
+A randomized experiment isolates cause from confounders.
+Confounders are hidden variables that affect both cause and effect.
+Without controlling confounders inferences can be wrong.
+Memory consolidation strengthens important experiences.
+Sleep consolidates memory by replaying experiences.
+A concept is a cluster of similar experiences.
+Concepts compose to form new concepts.
+Composition allows infinite ideas from finite primitives.
+Generalization extends learned concepts to new situations.
+Transfer learning uses old knowledge for new tasks.
+Curiosity drives an agent to explore the unknown.
+Boredom signals that an environment is fully predicted.
+Surprise signals a gap in the model of the world.
+A goal directs behavior toward a desired state.
+Hierarchical goals decompose into subgoals.
+Reaching subgoals brings the agent closer to the main goal.
+Without goals behavior is random and inefficient.

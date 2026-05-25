@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.model_adapter_runtime.v1",
+  "title": "EDEN Model Adapter Runtime",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "runtime_role",
+    "model_runtime_contract",
+    "adapters",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.model_adapter_runtime.v1"
+    },
+    "artifact": {
+      "const": "model_adapter_runtime"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "runtime_role": {
+      "const": "GEWC_SUBORDINATE_MODEL_ADAPTER_RUNTIME"
+    },
+    "model_runtime_contract": {
+      "type": "object",
+      "required": [
+        "gewc_is_final_authority",
+        "llm_or_model_outputs_are_hypotheses",
+        "state_mutations_require_core_authorization"
+      ],
+      "properties": {
+        "gewc_is_final_authority": {
+          "const": true
+        },
+        "llm_or_model_outputs_are_hypotheses": {
+          "const": true
+        },
+        "state_mutations_require_core_authorization": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "adapters": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "safety_boundary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

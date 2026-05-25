@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.transition_dataset.v1",
+  "title": "EDEN ELCP Transition Dataset",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "objective_id",
+    "phase",
+    "training_executed",
+    "contains_private_data",
+    "synthetic_fixture_only",
+    "config",
+    "train_data",
+    "eval_data",
+    "record_contract"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.transition_dataset.v1"
+    },
+    "artifact": {
+      "const": "elcp_transition_dataset"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "contains_private_data": {
+      "const": false
+    },
+    "synthetic_fixture_only": {
+      "const": true
+    }
+  },
+  "additionalProperties": true
+}

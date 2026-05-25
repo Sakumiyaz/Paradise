@@ -1,0 +1,410 @@
+use crate::eden_garm::{reproducible_package, runtime_state_api, state_paths};
+use std::collections::BTreeSet;
+
+pub fn run() -> String {
+    let value = registry_value();
+    let total = value
+        .get("total")
+        .and_then(serde_json::Value::as_u64)
+        .unwrap_or(0);
+    write_json(state_paths::schema_registry_path(), value);
+    format!(
+        "[SCHEMA-REGISTRY] schemas={} claim_allowed=false path={}\n",
+        total,
+        state_paths::schema_registry_path()
+    )
+}
+
+pub fn catalog_json() -> String {
+    std::fs::read_to_string(state_paths::schema_registry_path()).unwrap_or_else(|_| {
+        serde_json::to_string_pretty(&registry_value()).unwrap_or_else(|_| "{}".to_string())
+    })
+}
+
+pub fn schema_json(name: &str) -> String {
+    let needle = name.trim();
+    let registry = registry_value();
+    let records = registry
+        .get("schemas")
+        .and_then(serde_json::Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let record = records.into_iter().find(|record| {
+        record
+            .get("name")
+            .and_then(serde_json::Value::as_str)
+            .is_some_and(|value| value == needle)
+            || record
+                .get("schema")
+                .and_then(serde_json::Value::as_str)
+                .is_some_and(|value| value == needle)
+    });
+    serde_json::to_string_pretty(&serde_json::json!({
+        "schema": "eden-schema-registry-record-v1",
+        "claim_allowed": false,
+        "agi_claim": false,
+        "query": needle,
+        "found": record.is_some(),
+        "record": record,
+    }))
+    .unwrap_or_else(|_| "{}".to_string())
+}
+
+fn registry_value() -> serde_json::Value {
+    let mut seen = BTreeSet::new();
+    let mut records = Vec::new();
+
+    for record in curated_operational_schemas() {
+        push_record(&mut records, &mut seen, record);
+    }
+
+    for spec in runtime_state_api::state_specs() {
+        let present = std::fs::metadata(&spec.path).is_ok();
+        push_record(
+            &mut records,
+            &mut seen,
+            serde_json::json!({
+                "name": spec.name,
+                "schema": spec.schema_hint,
+                "domain": spec.domain,
+                "source": "runtime_state_api",
+                "path": spec.path,
+                "present": present,
+                "read_endpoint": format!("/api/runtime/state?name={}", spec.name),
+                "stability": schema_stability(spec.schema_hint),
+            }),
+        );
+    }
+
+    for spec in reproducible_package::artifact_specs() {
+        let present = std::fs::metadata(&spec.path).is_ok();
+        let schema =
+            schema_from_file(&spec.path).unwrap_or_else(|| "artifact-schema-unseen".to_string());
+        push_record(
+            &mut records,
+            &mut seen,
+            serde_json::json!({
+                "name": spec.name,
+                "schema": schema,
+                "domain": "release_artifact",
+                "source": "reproducible_package",
+                "path": spec.path,
+                "present": present,
+                "read_endpoint": format!("/api/artifact?name={}", spec.name),
+                "stability": schema_stability(&schema),
+            }),
+        );
+    }
+
+    records.sort_by(|a, b| {
+        let left = a
+            .get("name")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or_default();
+        let right = b
+            .get("name")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or_default();
+        left.cmp(right)
+    });
+
+    serde_json::json!({
+        "schema": "eden-schema-registry-v1",
+        "artifact": "schema_registry",
+        "claim_allowed": false,
+        "agi_claim": false,
+        "authority": "global_executive_workspace_core",
+        "purpose": "Make EDEN runtime JSON contracts discoverable and version-auditable from one local registry.",
+        "total": records.len(),
+        "schemas": records,
+        "invariants": [
+            "schema registry is read-only over HTTP",
+            "mutations remain command-routed through GEWC",
+            "missing artifacts are listed as contracts, not hidden",
+            "registry evidence is not an AGI capability claim"
+        ],
+    })
+}
+
+fn curated_operational_schemas() -> Vec<serde_json::Value> {
+    vec![
+        curated(
+            "operational_status",
+            "eden-operational-status-v1",
+            "/api/operational/status",
+        ),
+        curated(
+            "operational_permissions",
+            "eden-operational-permissions-v1",
+            "/api/operational/permissions",
+        ),
+        curated(
+            "operational_replay_index",
+            "eden-gewc-replay-index-v1",
+            "/api/operational/replay",
+        ),
+        curated(
+            "operational_replay_decision",
+            "eden-gewc-decision-replay-v1",
+            "/api/operational/replay?decision_id=<id>",
+        ),
+        curated(
+            "operational_recovery_plan",
+            "eden-operational-recovery-plan-v1",
+            "/api/operational/recovery",
+        ),
+        curated(
+            "operational_demo_suite",
+            "eden-operational-demo-suite-v1",
+            "/api/operational/demos",
+        ),
+        curated(
+            "schema_registry",
+            "eden-schema-registry-v1",
+            "/api/operational/schemas",
+        ),
+        curated(
+            "training_capability_report",
+            "eden.training.capability_report.v1",
+            "/api/artifact?name=training_capability_report",
+        ),
+        curated(
+            "training_capability_evidence",
+            "eden.garm.training_evidence.v1",
+            "/api/artifact?name=training_capability_evidence",
+        ),
+        curated(
+            "model_adapter_runtime",
+            "eden.model_adapter_runtime.v1",
+            "/api/artifact?name=model_adapter_runtime",
+        ),
+        curated(
+            "model_checkpoint_manifest",
+            "eden.model_checkpoint_manifest.v1",
+            "/api/artifact?name=model_checkpoint_manifest",
+        ),
+        curated(
+            "training_harness_report",
+            "eden.training_harness.v1",
+            "/api/artifact?name=training_harness_report",
+        ),
+        curated(
+            "model_governance_report",
+            "eden.model_governance.v1",
+            "/api/artifact?name=model_governance_report",
+        ),
+        curated(
+            "first_model_card",
+            "eden.first_model.card.v1",
+            "/api/artifact?name=first_model_card",
+        ),
+        curated(
+            "first_model_training_plan",
+            "eden.first_model.training_plan.v1",
+            "/api/artifact?name=first_model_training_plan",
+        ),
+        curated(
+            "first_model_readiness",
+            "eden.first_model.readiness.v1",
+            "/api/artifact?name=first_model_readiness",
+        ),
+        curated(
+            "elcp_objective_spec",
+            "eden.elcp.objective_spec.v1",
+            "/api/artifact?name=elcp_objective_spec",
+        ),
+        curated(
+            "elcp_transition_dataset",
+            "eden.elcp.transition_dataset.v1",
+            "/api/artifact?name=elcp_transition_dataset",
+        ),
+        curated(
+            "elcp_training_plan",
+            "eden.elcp.training_plan.v1",
+            "/api/artifact?name=elcp_training_plan",
+        ),
+        curated(
+            "elcp_admission_gate",
+            "eden.elcp.admission_gate.v1",
+            "/api/artifact?name=elcp_admission_gate",
+        ),
+        curated(
+            "elcp_trace_quality_gate",
+            "eden.elcp.trace_quality_gate.v1",
+            "/api/artifact?name=elcp_trace_quality_gate",
+        ),
+        curated(
+            "elcp_replay_eval",
+            "eden.elcp.replay_eval.v1",
+            "/api/artifact?name=elcp_replay_eval",
+        ),
+        curated(
+            "elcp_dataset_freeze_manifest",
+            "eden.elcp.dataset_freeze_manifest.v1",
+            "/api/artifact?name=elcp_dataset_freeze_manifest",
+        ),
+        curated(
+            "elcp_metrics_board",
+            "eden.elcp.metrics_board.v1",
+            "/api/artifact?name=elcp_metrics_board",
+        ),
+        curated(
+            "elcp_4b_readiness_contract",
+            "eden.elcp.4b_readiness_contract.v1",
+            "/api/artifact?name=elcp_4b_readiness_contract",
+        ),
+        curated(
+            "elcp_readiness",
+            "eden.elcp.readiness.v1",
+            "/api/artifact?name=elcp_readiness",
+        ),
+        curated(
+            "paradise_worldcell_runtime",
+            crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
+            "/api/artifact?name=paradise_worldcell_runtime",
+        ),
+        curated(
+            "paradise_worldcell_sessions",
+            crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SESSION_SCHEMA,
+            "/api/paradise/sessions",
+        ),
+        curated(
+            "runtime_spine",
+            crate::eden_garm::runtime_spine::RUNTIME_SPINE_SCHEMA,
+            "/api/operational/spine",
+        ),
+        curated(
+            "runtime_event_bus_state",
+            crate::eden_garm::runtime_spine::EVENT_BUS_SCHEMA,
+            "/api/operational/events",
+        ),
+        curated(
+            "runtime_global_state",
+            crate::eden_garm::runtime_spine::GLOBAL_STATE_SCHEMA,
+            "/api/operational/global-state",
+        ),
+        curated(
+            "runtime_replay_spine",
+            crate::eden_garm::runtime_spine::REPLAY_SPINE_SCHEMA,
+            "/api/operational/replay-spine",
+        ),
+        curated(
+            "runtime_spine_verification",
+            crate::eden_garm::runtime_spine::SPINE_VERIFICATION_SCHEMA,
+            "/api/operational/spine-verification",
+        ),
+        curated(
+            "runtime_guard_decisions",
+            crate::eden_garm::runtime_spine::GUARD_DECISION_SCHEMA,
+            "/api/runtime/state?name=runtime_guard_decisions",
+        ),
+        curated(
+            "runtime_spine_enforcement",
+            crate::eden_garm::runtime_spine::ENFORCEMENT_SCHEMA,
+            "/api/operational/spine-enforcement",
+        ),
+        curated(
+            "runtime_workflow_risk",
+            crate::eden_garm::runtime_spine::WORKFLOW_RISK_SCHEMA,
+            "/api/operational/workflow-risk",
+        ),
+        curated(
+            "runtime_circuit_breakers",
+            crate::eden_garm::runtime_spine::CIRCUIT_BREAKERS_SCHEMA,
+            "/api/operational/circuit-breakers",
+        ),
+        curated(
+            "runtime_replay_reconstruction",
+            crate::eden_garm::runtime_spine::REPLAY_RECONSTRUCTION_SCHEMA,
+            "/api/operational/spine-replay",
+        ),
+    ]
+}
+
+fn curated(name: &'static str, schema: &'static str, endpoint: &'static str) -> serde_json::Value {
+    serde_json::json!({
+        "name": name,
+        "schema": schema,
+        "domain": "operational_api",
+        "source": "curated_operational_contract",
+        "path": state_paths::schema_registry_path(),
+        "present": true,
+        "read_endpoint": endpoint,
+        "stability": schema_stability(schema),
+    })
+}
+
+fn push_record(
+    records: &mut Vec<serde_json::Value>,
+    seen: &mut BTreeSet<String>,
+    record: serde_json::Value,
+) {
+    let key = format!(
+        "{}|{}",
+        record
+            .get("name")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or_default(),
+        record
+            .get("schema")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or_default()
+    );
+    if seen.insert(key) {
+        records.push(record);
+    }
+}
+
+fn schema_from_file(path: &str) -> Option<String> {
+    let body = std::fs::read_to_string(path).ok()?;
+    let candidate = if body.trim_start().starts_with('{') {
+        body
+    } else {
+        body.lines().next().unwrap_or_default().to_string()
+    };
+    let value = serde_json::from_str::<serde_json::Value>(&candidate).ok()?;
+    value
+        .get("schema")
+        .and_then(serde_json::Value::as_str)
+        .map(str::to_string)
+}
+
+fn schema_stability(schema: &str) -> &'static str {
+    if schema.ends_with("-v1") || schema.contains("-v1-") {
+        "versioned_v1"
+    } else if schema.contains("state") || schema.contains("artifact") {
+        "legacy_or_state_hint"
+    } else {
+        "unversioned_or_not_yet_generated"
+    }
+}
+
+fn write_json(path: String, record: serde_json::Value) {
+    let _ = state_paths::ensure_state_dir();
+    let _ = std::fs::write(
+        path,
+        serde_json::to_string_pretty(&record).unwrap_or_else(|_| record.to_string()),
+    );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn schema_registry_lists_operational_contracts() {
+        let _guard = state_paths::test_state_guard();
+        state_paths::set_state_dir(std::env::temp_dir().join(format!(
+            "eden_garm_schema_registry_test_{}",
+            std::process::id()
+        )));
+
+        let out = run();
+
+        assert!(out.contains("[SCHEMA-REGISTRY]"));
+        assert!(catalog_json().contains("eden-schema-registry-v1"));
+        assert!(catalog_json().contains("eden-operational-status-v1"));
+        assert!(schema_json("operational_status").contains("\"found\": true"));
+        assert!(schema_json("eden-operational-status-v1").contains("\"found\": true"));
+    }
+}

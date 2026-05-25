@@ -1,0 +1,4 @@
+local evidence supports readiness bench with cited context packs.
+retrieval evidence requires exact citations and restricted generation.
+world model predictions are valid only when observations support them.
+generalization benchmarks require local evidence across planning, retrieval, prediction, policy, provenance, uncertainty, and execution.

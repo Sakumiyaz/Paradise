@@ -1,0 +1,1563 @@
+la pelota cae al suelo porque la gravedad lo atrae.
+la manzana cae al suelo porque la gravedad lo atrae.
+el libro cae al suelo porque la gravedad lo atrae.
+la rama cae al suelo porque la gravedad lo atrae.
+la pluma cae al suelo porque la gravedad lo atrae.
+la roca cae al suelo porque la gravedad lo atrae.
+la moneda cae al suelo porque la gravedad lo atrae.
+el vaso cae al suelo porque la gravedad lo atrae.
+la hoja cae al suelo porque la gravedad lo atrae.
+la botella cae al suelo porque la gravedad lo atrae.
+la caja cae al suelo porque la gravedad lo atrae.
+la silla cae al suelo porque la gravedad lo atrae.
+la puerta cae al suelo porque la gravedad lo atrae.
+la ventana cae al suelo porque la gravedad lo atrae.
+la mesa cae al suelo porque la gravedad lo atrae.
+la cama cae al suelo porque la gravedad lo atrae.
+el carro cae al suelo porque la gravedad lo atrae.
+el plato cae al suelo porque la gravedad lo atrae.
+el espejo cae al suelo porque la gravedad lo atrae.
+la copa cae al suelo porque la gravedad lo atrae.
+el huevo cae al suelo porque la gravedad lo atrae.
+la lampara cae al suelo porque la gravedad lo atrae.
+el aceite cae al suelo porque la gravedad lo atrae.
+la madera cae al suelo porque la gravedad lo atrae.
+el corcho cae al suelo porque la gravedad lo atrae.
+el plastico cae al suelo porque la gravedad lo atrae.
+el metal cae al suelo porque la gravedad lo atrae.
+el oro cae al suelo porque la gravedad lo atrae.
+la piedra cae al suelo porque la gravedad lo atrae.
+el ladrillo cae al suelo porque la gravedad lo atrae.
+el gato cae al suelo porque la gravedad lo atrae.
+el perro cae al suelo porque la gravedad lo atrae.
+el caballo cae al suelo porque la gravedad lo atrae.
+la vaca cae al suelo porque la gravedad lo atrae.
+la oveja cae al suelo porque la gravedad lo atrae.
+el cerdo cae al suelo porque la gravedad lo atrae.
+el leon cae al suelo porque la gravedad lo atrae.
+el tigre cae al suelo porque la gravedad lo atrae.
+el oso cae al suelo porque la gravedad lo atrae.
+el elefante cae al suelo porque la gravedad lo atrae.
+el lobo cae al suelo porque la gravedad lo atrae.
+el zorro cae al suelo porque la gravedad lo atrae.
+el conejo cae al suelo porque la gravedad lo atrae.
+el raton cae al suelo porque la gravedad lo atrae.
+el aguila cae al suelo porque la gravedad lo atrae.
+el halcon cae al suelo porque la gravedad lo atrae.
+el pinguino cae al suelo porque la gravedad lo atrae.
+el delfin cae al suelo porque la gravedad lo atrae.
+la ballena cae al suelo porque la gravedad lo atrae.
+el tiburon cae al suelo porque la gravedad lo atrae.
+el pez cae al suelo porque la gravedad lo atrae.
+el ave cae al suelo porque la gravedad lo atrae.
+la serpiente cae al suelo porque la gravedad lo atrae.
+la rana cae al suelo porque la gravedad lo atrae.
+la mariposa cae al suelo porque la gravedad lo atrae.
+la abeja cae al suelo porque la gravedad lo atrae.
+la hormiga cae al suelo porque la gravedad lo atrae.
+la rosa cae al suelo porque la gravedad lo atrae.
+el roble cae al suelo porque la gravedad lo atrae.
+el pino cae al suelo porque la gravedad lo atrae.
+el cactus cae al suelo porque la gravedad lo atrae.
+la palma cae al suelo porque la gravedad lo atrae.
+el tomate cae al suelo porque la gravedad lo atrae.
+el maiz cae al suelo porque la gravedad lo atrae.
+el trigo cae al suelo porque la gravedad lo atrae.
+la papa cae al suelo porque la gravedad lo atrae.
+la lechuga cae al suelo porque la gravedad lo atrae.
+la zanahoria cae al suelo porque la gravedad lo atrae.
+el girasol cae al suelo porque la gravedad lo atrae.
+la orquidea cae al suelo porque la gravedad lo atrae.
+el bambu cae al suelo porque la gravedad lo atrae.
+el sauce cae al suelo porque la gravedad lo atrae.
+la pelota se mueve porque alguien aplica fuerza.
+la manzana se mueve porque alguien aplica fuerza.
+el libro se mueve porque alguien aplica fuerza.
+la rama se mueve porque alguien aplica fuerza.
+la pluma se mueve porque alguien aplica fuerza.
+la roca se mueve porque alguien aplica fuerza.
+la moneda se mueve porque alguien aplica fuerza.
+el vaso se mueve porque alguien aplica fuerza.
+la hoja se mueve porque alguien aplica fuerza.
+la botella se mueve porque alguien aplica fuerza.
+la caja se mueve porque alguien aplica fuerza.
+la silla se mueve porque alguien aplica fuerza.
+la puerta se mueve porque alguien aplica fuerza.
+la ventana se mueve porque alguien aplica fuerza.
+la mesa se mueve porque alguien aplica fuerza.
+la cama se mueve porque alguien aplica fuerza.
+el carro se mueve porque alguien aplica fuerza.
+el plato se mueve porque alguien aplica fuerza.
+el espejo se mueve porque alguien aplica fuerza.
+la copa se mueve porque alguien aplica fuerza.
+el huevo se mueve porque alguien aplica fuerza.
+la lampara se mueve porque alguien aplica fuerza.
+el aceite se mueve porque alguien aplica fuerza.
+la madera se mueve porque alguien aplica fuerza.
+el corcho se mueve porque alguien aplica fuerza.
+el plastico se mueve porque alguien aplica fuerza.
+el metal se mueve porque alguien aplica fuerza.
+el oro se mueve porque alguien aplica fuerza.
+la piedra se mueve porque alguien aplica fuerza.
+el ladrillo se mueve porque alguien aplica fuerza.
+el gato se mueve porque alguien aplica fuerza.
+el perro se mueve porque alguien aplica fuerza.
+el caballo se mueve porque alguien aplica fuerza.
+la vaca se mueve porque alguien aplica fuerza.
+la oveja se mueve porque alguien aplica fuerza.
+el cerdo se mueve porque alguien aplica fuerza.
+el leon se mueve porque alguien aplica fuerza.
+el tigre se mueve porque alguien aplica fuerza.
+el oso se mueve porque alguien aplica fuerza.
+el elefante se mueve porque alguien aplica fuerza.
+el lobo se mueve porque alguien aplica fuerza.
+el zorro se mueve porque alguien aplica fuerza.
+el conejo se mueve porque alguien aplica fuerza.
+el raton se mueve porque alguien aplica fuerza.
+el aguila se mueve porque alguien aplica fuerza.
+el halcon se mueve porque alguien aplica fuerza.
+el pinguino se mueve porque alguien aplica fuerza.
+el delfin se mueve porque alguien aplica fuerza.
+la ballena se mueve porque alguien aplica fuerza.
+el tiburon se mueve porque alguien aplica fuerza.
+el pez se mueve porque alguien aplica fuerza.
+el ave se mueve porque alguien aplica fuerza.
+la serpiente se mueve porque alguien aplica fuerza.
+la rana se mueve porque alguien aplica fuerza.
+la mariposa se mueve porque alguien aplica fuerza.
+la abeja se mueve porque alguien aplica fuerza.
+la hormiga se mueve porque alguien aplica fuerza.
+la rosa se mueve porque alguien aplica fuerza.
+el roble se mueve porque alguien aplica fuerza.
+el pino se mueve porque alguien aplica fuerza.
+el cactus se mueve porque alguien aplica fuerza.
+la palma se mueve porque alguien aplica fuerza.
+el tomate se mueve porque alguien aplica fuerza.
+el maiz se mueve porque alguien aplica fuerza.
+el trigo se mueve porque alguien aplica fuerza.
+la papa se mueve porque alguien aplica fuerza.
+la lechuga se mueve porque alguien aplica fuerza.
+la zanahoria se mueve porque alguien aplica fuerza.
+el girasol se mueve porque alguien aplica fuerza.
+la orquidea se mueve porque alguien aplica fuerza.
+el bambu se mueve porque alguien aplica fuerza.
+el sauce se mueve porque alguien aplica fuerza.
+la pelota se rompe porque cae desde altura.
+la manzana se rompe porque cae desde altura.
+el libro se rompe porque cae desde altura.
+la rama se rompe porque cae desde altura.
+la pluma se rompe porque cae desde altura.
+la roca se rompe porque cae desde altura.
+la moneda se rompe porque cae desde altura.
+el vaso se rompe porque cae desde altura.
+la hoja se rompe porque cae desde altura.
+la botella se rompe porque cae desde altura.
+la caja se rompe porque cae desde altura.
+la silla se rompe porque cae desde altura.
+la puerta se rompe porque cae desde altura.
+la ventana se rompe porque cae desde altura.
+la mesa se rompe porque cae desde altura.
+la cama se rompe porque cae desde altura.
+el carro se rompe porque cae desde altura.
+el plato se rompe porque cae desde altura.
+el espejo se rompe porque cae desde altura.
+la copa se rompe porque cae desde altura.
+el huevo se rompe porque cae desde altura.
+la lampara se rompe porque cae desde altura.
+el aceite se rompe porque cae desde altura.
+la madera se rompe porque cae desde altura.
+el corcho se rompe porque cae desde altura.
+el plastico se rompe porque cae desde altura.
+el metal se rompe porque cae desde altura.
+el oro se rompe porque cae desde altura.
+la piedra se rompe porque cae desde altura.
+el ladrillo se rompe porque cae desde altura.
+el gato se rompe porque cae desde altura.
+el perro se rompe porque cae desde altura.
+el caballo se rompe porque cae desde altura.
+la vaca se rompe porque cae desde altura.
+la oveja se rompe porque cae desde altura.
+el cerdo se rompe porque cae desde altura.
+el leon se rompe porque cae desde altura.
+el tigre se rompe porque cae desde altura.
+el oso se rompe porque cae desde altura.
+el elefante se rompe porque cae desde altura.
+el lobo se rompe porque cae desde altura.
+el zorro se rompe porque cae desde altura.
+el conejo se rompe porque cae desde altura.
+el raton se rompe porque cae desde altura.
+el aguila se rompe porque cae desde altura.
+el halcon se rompe porque cae desde altura.
+el pinguino se rompe porque cae desde altura.
+el delfin se rompe porque cae desde altura.
+la ballena se rompe porque cae desde altura.
+el tiburon se rompe porque cae desde altura.
+el pez se rompe porque cae desde altura.
+el ave se rompe porque cae desde altura.
+la serpiente se rompe porque cae desde altura.
+la rana se rompe porque cae desde altura.
+la mariposa se rompe porque cae desde altura.
+la abeja se rompe porque cae desde altura.
+la hormiga se rompe porque cae desde altura.
+la rosa se rompe porque cae desde altura.
+el roble se rompe porque cae desde altura.
+el pino se rompe porque cae desde altura.
+el cactus se rompe porque cae desde altura.
+la palma se rompe porque cae desde altura.
+el tomate se rompe porque cae desde altura.
+el maiz se rompe porque cae desde altura.
+el trigo se rompe porque cae desde altura.
+la papa se rompe porque cae desde altura.
+la lechuga se rompe porque cae desde altura.
+la zanahoria se rompe porque cae desde altura.
+el girasol se rompe porque cae desde altura.
+la orquidea se rompe porque cae desde altura.
+el bambu se rompe porque cae desde altura.
+el sauce se rompe porque cae desde altura.
+la pelota flota en el agua porque es ligero.
+la manzana flota en el agua porque es ligero.
+el libro flota en el agua porque es ligero.
+la rama flota en el agua porque es ligero.
+la pluma flota en el agua porque es ligero.
+la roca flota en el agua porque es ligero.
+la moneda flota en el agua porque es ligero.
+el vaso flota en el agua porque es ligero.
+la hoja flota en el agua porque es ligero.
+la botella flota en el agua porque es ligero.
+la caja flota en el agua porque es ligero.
+la silla flota en el agua porque es ligero.
+la puerta flota en el agua porque es ligero.
+la ventana flota en el agua porque es ligero.
+la mesa flota en el agua porque es ligero.
+la cama flota en el agua porque es ligero.
+el carro flota en el agua porque es ligero.
+el plato flota en el agua porque es ligero.
+el espejo flota en el agua porque es ligero.
+la copa flota en el agua porque es ligero.
+el huevo flota en el agua porque es ligero.
+la lampara flota en el agua porque es ligero.
+el aceite flota en el agua porque es ligero.
+la madera flota en el agua porque es ligero.
+el corcho flota en el agua porque es ligero.
+el plastico flota en el agua porque es ligero.
+el metal flota en el agua porque es ligero.
+el oro flota en el agua porque es ligero.
+la piedra flota en el agua porque es ligero.
+el ladrillo flota en el agua porque es ligero.
+el gato flota en el agua porque es ligero.
+el perro flota en el agua porque es ligero.
+el caballo flota en el agua porque es ligero.
+la vaca flota en el agua porque es ligero.
+la oveja flota en el agua porque es ligero.
+el cerdo flota en el agua porque es ligero.
+el leon flota en el agua porque es ligero.
+el tigre flota en el agua porque es ligero.
+el oso flota en el agua porque es ligero.
+el elefante flota en el agua porque es ligero.
+el lobo flota en el agua porque es ligero.
+el zorro flota en el agua porque es ligero.
+el conejo flota en el agua porque es ligero.
+el raton flota en el agua porque es ligero.
+el aguila flota en el agua porque es ligero.
+el halcon flota en el agua porque es ligero.
+el pinguino flota en el agua porque es ligero.
+el delfin flota en el agua porque es ligero.
+la ballena flota en el agua porque es ligero.
+el tiburon flota en el agua porque es ligero.
+el pez flota en el agua porque es ligero.
+el ave flota en el agua porque es ligero.
+la serpiente flota en el agua porque es ligero.
+la rana flota en el agua porque es ligero.
+la mariposa flota en el agua porque es ligero.
+la abeja flota en el agua porque es ligero.
+la hormiga flota en el agua porque es ligero.
+la rosa flota en el agua porque es ligero.
+el roble flota en el agua porque es ligero.
+el pino flota en el agua porque es ligero.
+el cactus flota en el agua porque es ligero.
+la palma flota en el agua porque es ligero.
+el tomate flota en el agua porque es ligero.
+el maiz flota en el agua porque es ligero.
+el trigo flota en el agua porque es ligero.
+la papa flota en el agua porque es ligero.
+la lechuga flota en el agua porque es ligero.
+la zanahoria flota en el agua porque es ligero.
+el girasol flota en el agua porque es ligero.
+la orquidea flota en el agua porque es ligero.
+el bambu flota en el agua porque es ligero.
+el sauce flota en el agua porque es ligero.
+la pelota se hunde porque es pesado.
+la manzana se hunde porque es pesado.
+el libro se hunde porque es pesado.
+la rama se hunde porque es pesado.
+la pluma se hunde porque es pesado.
+la roca se hunde porque es pesado.
+la moneda se hunde porque es pesado.
+el vaso se hunde porque es pesado.
+la hoja se hunde porque es pesado.
+la botella se hunde porque es pesado.
+la caja se hunde porque es pesado.
+la silla se hunde porque es pesado.
+la puerta se hunde porque es pesado.
+la ventana se hunde porque es pesado.
+la mesa se hunde porque es pesado.
+la cama se hunde porque es pesado.
+el carro se hunde porque es pesado.
+el plato se hunde porque es pesado.
+el espejo se hunde porque es pesado.
+la copa se hunde porque es pesado.
+el huevo se hunde porque es pesado.
+la lampara se hunde porque es pesado.
+el aceite se hunde porque es pesado.
+la madera se hunde porque es pesado.
+el corcho se hunde porque es pesado.
+el plastico se hunde porque es pesado.
+el metal se hunde porque es pesado.
+el oro se hunde porque es pesado.
+la piedra se hunde porque es pesado.
+el ladrillo se hunde porque es pesado.
+el gato se hunde porque es pesado.
+el perro se hunde porque es pesado.
+el caballo se hunde porque es pesado.
+la vaca se hunde porque es pesado.
+la oveja se hunde porque es pesado.
+el cerdo se hunde porque es pesado.
+el leon se hunde porque es pesado.
+el tigre se hunde porque es pesado.
+el oso se hunde porque es pesado.
+el elefante se hunde porque es pesado.
+el lobo se hunde porque es pesado.
+el zorro se hunde porque es pesado.
+el conejo se hunde porque es pesado.
+el raton se hunde porque es pesado.
+el aguila se hunde porque es pesado.
+el halcon se hunde porque es pesado.
+el pinguino se hunde porque es pesado.
+el delfin se hunde porque es pesado.
+la ballena se hunde porque es pesado.
+el tiburon se hunde porque es pesado.
+el pez se hunde porque es pesado.
+el ave se hunde porque es pesado.
+la serpiente se hunde porque es pesado.
+la rana se hunde porque es pesado.
+la mariposa se hunde porque es pesado.
+la abeja se hunde porque es pesado.
+la hormiga se hunde porque es pesado.
+la rosa se hunde porque es pesado.
+el roble se hunde porque es pesado.
+el pino se hunde porque es pesado.
+el cactus se hunde porque es pesado.
+la palma se hunde porque es pesado.
+el tomate se hunde porque es pesado.
+el maiz se hunde porque es pesado.
+el trigo se hunde porque es pesado.
+la papa se hunde porque es pesado.
+la lechuga se hunde porque es pesado.
+la zanahoria se hunde porque es pesado.
+el girasol se hunde porque es pesado.
+la orquidea se hunde porque es pesado.
+el bambu se hunde porque es pesado.
+el sauce se hunde porque es pesado.
+la pelota se calienta porque absorbe energia.
+la manzana se calienta porque absorbe energia.
+el libro se calienta porque absorbe energia.
+la rama se calienta porque absorbe energia.
+la pluma se calienta porque absorbe energia.
+la roca se calienta porque absorbe energia.
+la moneda se calienta porque absorbe energia.
+el vaso se calienta porque absorbe energia.
+la hoja se calienta porque absorbe energia.
+la botella se calienta porque absorbe energia.
+la caja se calienta porque absorbe energia.
+la silla se calienta porque absorbe energia.
+la puerta se calienta porque absorbe energia.
+la ventana se calienta porque absorbe energia.
+la mesa se calienta porque absorbe energia.
+la cama se calienta porque absorbe energia.
+el carro se calienta porque absorbe energia.
+el plato se calienta porque absorbe energia.
+el espejo se calienta porque absorbe energia.
+la copa se calienta porque absorbe energia.
+el huevo se calienta porque absorbe energia.
+la lampara se calienta porque absorbe energia.
+el aceite se calienta porque absorbe energia.
+la madera se calienta porque absorbe energia.
+el corcho se calienta porque absorbe energia.
+el plastico se calienta porque absorbe energia.
+el metal se calienta porque absorbe energia.
+el oro se calienta porque absorbe energia.
+la piedra se calienta porque absorbe energia.
+el ladrillo se calienta porque absorbe energia.
+el gato se calienta porque absorbe energia.
+el perro se calienta porque absorbe energia.
+el caballo se calienta porque absorbe energia.
+la vaca se calienta porque absorbe energia.
+la oveja se calienta porque absorbe energia.
+el cerdo se calienta porque absorbe energia.
+el leon se calienta porque absorbe energia.
+el tigre se calienta porque absorbe energia.
+el oso se calienta porque absorbe energia.
+el elefante se calienta porque absorbe energia.
+el lobo se calienta porque absorbe energia.
+el zorro se calienta porque absorbe energia.
+el conejo se calienta porque absorbe energia.
+el raton se calienta porque absorbe energia.
+el aguila se calienta porque absorbe energia.
+el halcon se calienta porque absorbe energia.
+el pinguino se calienta porque absorbe energia.
+el delfin se calienta porque absorbe energia.
+la ballena se calienta porque absorbe energia.
+el tiburon se calienta porque absorbe energia.
+el pez se calienta porque absorbe energia.
+el ave se calienta porque absorbe energia.
+la serpiente se calienta porque absorbe energia.
+la rana se calienta porque absorbe energia.
+la mariposa se calienta porque absorbe energia.
+la abeja se calienta porque absorbe energia.
+la hormiga se calienta porque absorbe energia.
+la rosa se calienta porque absorbe energia.
+el roble se calienta porque absorbe energia.
+el pino se calienta porque absorbe energia.
+el cactus se calienta porque absorbe energia.
+la palma se calienta porque absorbe energia.
+el tomate se calienta porque absorbe energia.
+el maiz se calienta porque absorbe energia.
+el trigo se calienta porque absorbe energia.
+la papa se calienta porque absorbe energia.
+la lechuga se calienta porque absorbe energia.
+la zanahoria se calienta porque absorbe energia.
+el girasol se calienta porque absorbe energia.
+la orquidea se calienta porque absorbe energia.
+el bambu se calienta porque absorbe energia.
+el sauce se calienta porque absorbe energia.
+la pelota se enfria porque pierde calor.
+la manzana se enfria porque pierde calor.
+el libro se enfria porque pierde calor.
+la rama se enfria porque pierde calor.
+la pluma se enfria porque pierde calor.
+la roca se enfria porque pierde calor.
+la moneda se enfria porque pierde calor.
+el vaso se enfria porque pierde calor.
+la hoja se enfria porque pierde calor.
+la botella se enfria porque pierde calor.
+la caja se enfria porque pierde calor.
+la silla se enfria porque pierde calor.
+la puerta se enfria porque pierde calor.
+la ventana se enfria porque pierde calor.
+la mesa se enfria porque pierde calor.
+la cama se enfria porque pierde calor.
+el carro se enfria porque pierde calor.
+el plato se enfria porque pierde calor.
+el espejo se enfria porque pierde calor.
+la copa se enfria porque pierde calor.
+el huevo se enfria porque pierde calor.
+la lampara se enfria porque pierde calor.
+el aceite se enfria porque pierde calor.
+la madera se enfria porque pierde calor.
+el corcho se enfria porque pierde calor.
+el plastico se enfria porque pierde calor.
+el metal se enfria porque pierde calor.
+el oro se enfria porque pierde calor.
+la piedra se enfria porque pierde calor.
+el ladrillo se enfria porque pierde calor.
+el gato se enfria porque pierde calor.
+el perro se enfria porque pierde calor.
+el caballo se enfria porque pierde calor.
+la vaca se enfria porque pierde calor.
+la oveja se enfria porque pierde calor.
+el cerdo se enfria porque pierde calor.
+el leon se enfria porque pierde calor.
+el tigre se enfria porque pierde calor.
+el oso se enfria porque pierde calor.
+el elefante se enfria porque pierde calor.
+el lobo se enfria porque pierde calor.
+el zorro se enfria porque pierde calor.
+el conejo se enfria porque pierde calor.
+el raton se enfria porque pierde calor.
+el aguila se enfria porque pierde calor.
+el halcon se enfria porque pierde calor.
+el pinguino se enfria porque pierde calor.
+el delfin se enfria porque pierde calor.
+la ballena se enfria porque pierde calor.
+el tiburon se enfria porque pierde calor.
+el pez se enfria porque pierde calor.
+el ave se enfria porque pierde calor.
+la serpiente se enfria porque pierde calor.
+la rana se enfria porque pierde calor.
+la mariposa se enfria porque pierde calor.
+la abeja se enfria porque pierde calor.
+la hormiga se enfria porque pierde calor.
+la rosa se enfria porque pierde calor.
+el roble se enfria porque pierde calor.
+el pino se enfria porque pierde calor.
+el cactus se enfria porque pierde calor.
+la palma se enfria porque pierde calor.
+el tomate se enfria porque pierde calor.
+el maiz se enfria porque pierde calor.
+el trigo se enfria porque pierde calor.
+la papa se enfria porque pierde calor.
+la lechuga se enfria porque pierde calor.
+la zanahoria se enfria porque pierde calor.
+el girasol se enfria porque pierde calor.
+la orquidea se enfria porque pierde calor.
+el bambu se enfria porque pierde calor.
+el sauce se enfria porque pierde calor.
+la pelota se rompe porque recibe un impacto fuerte.
+la manzana se rompe porque recibe un impacto fuerte.
+el libro se rompe porque recibe un impacto fuerte.
+la rama se rompe porque recibe un impacto fuerte.
+la pluma se rompe porque recibe un impacto fuerte.
+la roca se rompe porque recibe un impacto fuerte.
+la moneda se rompe porque recibe un impacto fuerte.
+el vaso se rompe porque recibe un impacto fuerte.
+la hoja se rompe porque recibe un impacto fuerte.
+la botella se rompe porque recibe un impacto fuerte.
+la caja se rompe porque recibe un impacto fuerte.
+la silla se rompe porque recibe un impacto fuerte.
+la puerta se rompe porque recibe un impacto fuerte.
+la ventana se rompe porque recibe un impacto fuerte.
+la mesa se rompe porque recibe un impacto fuerte.
+la cama se rompe porque recibe un impacto fuerte.
+el carro se rompe porque recibe un impacto fuerte.
+el plato se rompe porque recibe un impacto fuerte.
+el espejo se rompe porque recibe un impacto fuerte.
+la copa se rompe porque recibe un impacto fuerte.
+el huevo se rompe porque recibe un impacto fuerte.
+la lampara se rompe porque recibe un impacto fuerte.
+el aceite se rompe porque recibe un impacto fuerte.
+la madera se rompe porque recibe un impacto fuerte.
+el corcho se rompe porque recibe un impacto fuerte.
+el plastico se rompe porque recibe un impacto fuerte.
+el metal se rompe porque recibe un impacto fuerte.
+el oro se rompe porque recibe un impacto fuerte.
+la piedra se rompe porque recibe un impacto fuerte.
+el ladrillo se rompe porque recibe un impacto fuerte.
+el gato se rompe porque recibe un impacto fuerte.
+el perro se rompe porque recibe un impacto fuerte.
+el caballo se rompe porque recibe un impacto fuerte.
+la vaca se rompe porque recibe un impacto fuerte.
+la oveja se rompe porque recibe un impacto fuerte.
+el cerdo se rompe porque recibe un impacto fuerte.
+el leon se rompe porque recibe un impacto fuerte.
+el tigre se rompe porque recibe un impacto fuerte.
+el oso se rompe porque recibe un impacto fuerte.
+el elefante se rompe porque recibe un impacto fuerte.
+el lobo se rompe porque recibe un impacto fuerte.
+el zorro se rompe porque recibe un impacto fuerte.
+el conejo se rompe porque recibe un impacto fuerte.
+el raton se rompe porque recibe un impacto fuerte.
+el aguila se rompe porque recibe un impacto fuerte.
+el halcon se rompe porque recibe un impacto fuerte.
+el pinguino se rompe porque recibe un impacto fuerte.
+el delfin se rompe porque recibe un impacto fuerte.
+la ballena se rompe porque recibe un impacto fuerte.
+el tiburon se rompe porque recibe un impacto fuerte.
+el pez se rompe porque recibe un impacto fuerte.
+el ave se rompe porque recibe un impacto fuerte.
+la serpiente se rompe porque recibe un impacto fuerte.
+la rana se rompe porque recibe un impacto fuerte.
+la mariposa se rompe porque recibe un impacto fuerte.
+la abeja se rompe porque recibe un impacto fuerte.
+la hormiga se rompe porque recibe un impacto fuerte.
+la rosa se rompe porque recibe un impacto fuerte.
+el roble se rompe porque recibe un impacto fuerte.
+el pino se rompe porque recibe un impacto fuerte.
+el cactus se rompe porque recibe un impacto fuerte.
+la palma se rompe porque recibe un impacto fuerte.
+el tomate se rompe porque recibe un impacto fuerte.
+el maiz se rompe porque recibe un impacto fuerte.
+el trigo se rompe porque recibe un impacto fuerte.
+la papa se rompe porque recibe un impacto fuerte.
+la lechuga se rompe porque recibe un impacto fuerte.
+la zanahoria se rompe porque recibe un impacto fuerte.
+el girasol se rompe porque recibe un impacto fuerte.
+la orquidea se rompe porque recibe un impacto fuerte.
+el bambu se rompe porque recibe un impacto fuerte.
+el sauce se rompe porque recibe un impacto fuerte.
+la pelota rebota porque la superficie es elastica.
+la manzana rebota porque la superficie es elastica.
+el libro rebota porque la superficie es elastica.
+la rama rebota porque la superficie es elastica.
+la pluma rebota porque la superficie es elastica.
+la roca rebota porque la superficie es elastica.
+la moneda rebota porque la superficie es elastica.
+el vaso rebota porque la superficie es elastica.
+la hoja rebota porque la superficie es elastica.
+la botella rebota porque la superficie es elastica.
+la caja rebota porque la superficie es elastica.
+la silla rebota porque la superficie es elastica.
+la puerta rebota porque la superficie es elastica.
+la ventana rebota porque la superficie es elastica.
+la mesa rebota porque la superficie es elastica.
+la cama rebota porque la superficie es elastica.
+el carro rebota porque la superficie es elastica.
+el plato rebota porque la superficie es elastica.
+el espejo rebota porque la superficie es elastica.
+la copa rebota porque la superficie es elastica.
+el huevo rebota porque la superficie es elastica.
+la lampara rebota porque la superficie es elastica.
+el aceite rebota porque la superficie es elastica.
+la madera rebota porque la superficie es elastica.
+el corcho rebota porque la superficie es elastica.
+el plastico rebota porque la superficie es elastica.
+el metal rebota porque la superficie es elastica.
+el oro rebota porque la superficie es elastica.
+la piedra rebota porque la superficie es elastica.
+el ladrillo rebota porque la superficie es elastica.
+el gato rebota porque la superficie es elastica.
+el perro rebota porque la superficie es elastica.
+el caballo rebota porque la superficie es elastica.
+la vaca rebota porque la superficie es elastica.
+la oveja rebota porque la superficie es elastica.
+el cerdo rebota porque la superficie es elastica.
+el leon rebota porque la superficie es elastica.
+el tigre rebota porque la superficie es elastica.
+el oso rebota porque la superficie es elastica.
+el elefante rebota porque la superficie es elastica.
+el lobo rebota porque la superficie es elastica.
+el zorro rebota porque la superficie es elastica.
+el conejo rebota porque la superficie es elastica.
+el raton rebota porque la superficie es elastica.
+el aguila rebota porque la superficie es elastica.
+el halcon rebota porque la superficie es elastica.
+el pinguino rebota porque la superficie es elastica.
+el delfin rebota porque la superficie es elastica.
+la ballena rebota porque la superficie es elastica.
+el tiburon rebota porque la superficie es elastica.
+el pez rebota porque la superficie es elastica.
+el ave rebota porque la superficie es elastica.
+la serpiente rebota porque la superficie es elastica.
+la rana rebota porque la superficie es elastica.
+la mariposa rebota porque la superficie es elastica.
+la abeja rebota porque la superficie es elastica.
+la hormiga rebota porque la superficie es elastica.
+la rosa rebota porque la superficie es elastica.
+el roble rebota porque la superficie es elastica.
+el pino rebota porque la superficie es elastica.
+el cactus rebota porque la superficie es elastica.
+la palma rebota porque la superficie es elastica.
+el tomate rebota porque la superficie es elastica.
+el maiz rebota porque la superficie es elastica.
+el trigo rebota porque la superficie es elastica.
+la papa rebota porque la superficie es elastica.
+la lechuga rebota porque la superficie es elastica.
+la zanahoria rebota porque la superficie es elastica.
+el girasol rebota porque la superficie es elastica.
+la orquidea rebota porque la superficie es elastica.
+el bambu rebota porque la superficie es elastica.
+el sauce rebota porque la superficie es elastica.
+la pelota se desliza porque hay poca friccion.
+la manzana se desliza porque hay poca friccion.
+el libro se desliza porque hay poca friccion.
+la rama se desliza porque hay poca friccion.
+la pluma se desliza porque hay poca friccion.
+la roca se desliza porque hay poca friccion.
+la moneda se desliza porque hay poca friccion.
+el vaso se desliza porque hay poca friccion.
+la hoja se desliza porque hay poca friccion.
+la botella se desliza porque hay poca friccion.
+la caja se desliza porque hay poca friccion.
+la silla se desliza porque hay poca friccion.
+la puerta se desliza porque hay poca friccion.
+la ventana se desliza porque hay poca friccion.
+la mesa se desliza porque hay poca friccion.
+la cama se desliza porque hay poca friccion.
+el carro se desliza porque hay poca friccion.
+el plato se desliza porque hay poca friccion.
+el espejo se desliza porque hay poca friccion.
+la copa se desliza porque hay poca friccion.
+el huevo se desliza porque hay poca friccion.
+la lampara se desliza porque hay poca friccion.
+el aceite se desliza porque hay poca friccion.
+la madera se desliza porque hay poca friccion.
+el corcho se desliza porque hay poca friccion.
+el plastico se desliza porque hay poca friccion.
+el metal se desliza porque hay poca friccion.
+el oro se desliza porque hay poca friccion.
+la piedra se desliza porque hay poca friccion.
+el ladrillo se desliza porque hay poca friccion.
+el gato se desliza porque hay poca friccion.
+el perro se desliza porque hay poca friccion.
+el caballo se desliza porque hay poca friccion.
+la vaca se desliza porque hay poca friccion.
+la oveja se desliza porque hay poca friccion.
+el cerdo se desliza porque hay poca friccion.
+el leon se desliza porque hay poca friccion.
+el tigre se desliza porque hay poca friccion.
+el oso se desliza porque hay poca friccion.
+el elefante se desliza porque hay poca friccion.
+el lobo se desliza porque hay poca friccion.
+el zorro se desliza porque hay poca friccion.
+el conejo se desliza porque hay poca friccion.
+el raton se desliza porque hay poca friccion.
+el aguila se desliza porque hay poca friccion.
+el halcon se desliza porque hay poca friccion.
+el pinguino se desliza porque hay poca friccion.
+el delfin se desliza porque hay poca friccion.
+la ballena se desliza porque hay poca friccion.
+el tiburon se desliza porque hay poca friccion.
+el pez se desliza porque hay poca friccion.
+el ave se desliza porque hay poca friccion.
+la serpiente se desliza porque hay poca friccion.
+la rana se desliza porque hay poca friccion.
+la mariposa se desliza porque hay poca friccion.
+la abeja se desliza porque hay poca friccion.
+la hormiga se desliza porque hay poca friccion.
+la rosa se desliza porque hay poca friccion.
+el roble se desliza porque hay poca friccion.
+el pino se desliza porque hay poca friccion.
+el cactus se desliza porque hay poca friccion.
+la palma se desliza porque hay poca friccion.
+el tomate se desliza porque hay poca friccion.
+el maiz se desliza porque hay poca friccion.
+el trigo se desliza porque hay poca friccion.
+la papa se desliza porque hay poca friccion.
+la lechuga se desliza porque hay poca friccion.
+la zanahoria se desliza porque hay poca friccion.
+el girasol se desliza porque hay poca friccion.
+la orquidea se desliza porque hay poca friccion.
+el bambu se desliza porque hay poca friccion.
+el sauce se desliza porque hay poca friccion.
+el gato crece porque recibe nutrientes.
+el perro crece porque recibe nutrientes.
+el caballo crece porque recibe nutrientes.
+la vaca crece porque recibe nutrientes.
+la oveja crece porque recibe nutrientes.
+el cerdo crece porque recibe nutrientes.
+el leon crece porque recibe nutrientes.
+el tigre crece porque recibe nutrientes.
+el oso crece porque recibe nutrientes.
+el elefante crece porque recibe nutrientes.
+el lobo crece porque recibe nutrientes.
+el zorro crece porque recibe nutrientes.
+el conejo crece porque recibe nutrientes.
+el raton crece porque recibe nutrientes.
+el aguila crece porque recibe nutrientes.
+el halcon crece porque recibe nutrientes.
+el pinguino crece porque recibe nutrientes.
+el delfin crece porque recibe nutrientes.
+la ballena crece porque recibe nutrientes.
+el tiburon crece porque recibe nutrientes.
+el pez crece porque recibe nutrientes.
+el ave crece porque recibe nutrientes.
+la serpiente crece porque recibe nutrientes.
+la rana crece porque recibe nutrientes.
+la mariposa crece porque recibe nutrientes.
+la abeja crece porque recibe nutrientes.
+la hormiga crece porque recibe nutrientes.
+la rosa crece porque recibe nutrientes.
+el roble crece porque recibe nutrientes.
+el pino crece porque recibe nutrientes.
+el cactus crece porque recibe nutrientes.
+la palma crece porque recibe nutrientes.
+el tomate crece porque recibe nutrientes.
+el maiz crece porque recibe nutrientes.
+el trigo crece porque recibe nutrientes.
+la papa crece porque recibe nutrientes.
+la lechuga crece porque recibe nutrientes.
+la zanahoria crece porque recibe nutrientes.
+el girasol crece porque recibe nutrientes.
+la orquidea crece porque recibe nutrientes.
+el bambu crece porque recibe nutrientes.
+el sauce crece porque recibe nutrientes.
+el humano crece porque recibe nutrientes.
+el cientifico crece porque recibe nutrientes.
+el ingeniero crece porque recibe nutrientes.
+el medico crece porque recibe nutrientes.
+el estudiante crece porque recibe nutrientes.
+el profesor crece porque recibe nutrientes.
+el robot crece porque recibe nutrientes.
+el agente crece porque recibe nutrientes.
+el niño crece porque recibe nutrientes.
+la mujer crece porque recibe nutrientes.
+el hombre crece porque recibe nutrientes.
+la persona crece porque recibe nutrientes.
+el gato respira porque necesita oxigeno.
+el perro respira porque necesita oxigeno.
+el caballo respira porque necesita oxigeno.
+la vaca respira porque necesita oxigeno.
+la oveja respira porque necesita oxigeno.
+el cerdo respira porque necesita oxigeno.
+el leon respira porque necesita oxigeno.
+el tigre respira porque necesita oxigeno.
+el oso respira porque necesita oxigeno.
+el elefante respira porque necesita oxigeno.
+el lobo respira porque necesita oxigeno.
+el zorro respira porque necesita oxigeno.
+el conejo respira porque necesita oxigeno.
+el raton respira porque necesita oxigeno.
+el aguila respira porque necesita oxigeno.
+el halcon respira porque necesita oxigeno.
+el pinguino respira porque necesita oxigeno.
+el delfin respira porque necesita oxigeno.
+la ballena respira porque necesita oxigeno.
+el tiburon respira porque necesita oxigeno.
+el pez respira porque necesita oxigeno.
+el ave respira porque necesita oxigeno.
+la serpiente respira porque necesita oxigeno.
+la rana respira porque necesita oxigeno.
+la mariposa respira porque necesita oxigeno.
+la abeja respira porque necesita oxigeno.
+la hormiga respira porque necesita oxigeno.
+la rosa respira porque necesita oxigeno.
+el roble respira porque necesita oxigeno.
+el pino respira porque necesita oxigeno.
+el cactus respira porque necesita oxigeno.
+la palma respira porque necesita oxigeno.
+el tomate respira porque necesita oxigeno.
+el maiz respira porque necesita oxigeno.
+el trigo respira porque necesita oxigeno.
+la papa respira porque necesita oxigeno.
+la lechuga respira porque necesita oxigeno.
+la zanahoria respira porque necesita oxigeno.
+el girasol respira porque necesita oxigeno.
+la orquidea respira porque necesita oxigeno.
+el bambu respira porque necesita oxigeno.
+el sauce respira porque necesita oxigeno.
+el humano respira porque necesita oxigeno.
+el cientifico respira porque necesita oxigeno.
+el ingeniero respira porque necesita oxigeno.
+el medico respira porque necesita oxigeno.
+el estudiante respira porque necesita oxigeno.
+el profesor respira porque necesita oxigeno.
+el robot respira porque necesita oxigeno.
+el agente respira porque necesita oxigeno.
+el niño respira porque necesita oxigeno.
+la mujer respira porque necesita oxigeno.
+el hombre respira porque necesita oxigeno.
+la persona respira porque necesita oxigeno.
+el gato come porque necesita energia.
+el perro come porque necesita energia.
+el caballo come porque necesita energia.
+la vaca come porque necesita energia.
+la oveja come porque necesita energia.
+el cerdo come porque necesita energia.
+el leon come porque necesita energia.
+el tigre come porque necesita energia.
+el oso come porque necesita energia.
+el elefante come porque necesita energia.
+el lobo come porque necesita energia.
+el zorro come porque necesita energia.
+el conejo come porque necesita energia.
+el raton come porque necesita energia.
+el aguila come porque necesita energia.
+el halcon come porque necesita energia.
+el pinguino come porque necesita energia.
+el delfin come porque necesita energia.
+la ballena come porque necesita energia.
+el tiburon come porque necesita energia.
+el pez come porque necesita energia.
+el ave come porque necesita energia.
+la serpiente come porque necesita energia.
+la rana come porque necesita energia.
+la mariposa come porque necesita energia.
+la abeja come porque necesita energia.
+la hormiga come porque necesita energia.
+la rosa come porque necesita energia.
+el roble come porque necesita energia.
+el pino come porque necesita energia.
+el cactus come porque necesita energia.
+la palma come porque necesita energia.
+el tomate come porque necesita energia.
+el maiz come porque necesita energia.
+el trigo come porque necesita energia.
+la papa come porque necesita energia.
+la lechuga come porque necesita energia.
+la zanahoria come porque necesita energia.
+el girasol come porque necesita energia.
+la orquidea come porque necesita energia.
+el bambu come porque necesita energia.
+el sauce come porque necesita energia.
+el humano come porque necesita energia.
+el cientifico come porque necesita energia.
+el ingeniero come porque necesita energia.
+el medico come porque necesita energia.
+el estudiante come porque necesita energia.
+el profesor come porque necesita energia.
+el robot come porque necesita energia.
+el agente come porque necesita energia.
+el niño come porque necesita energia.
+la mujer come porque necesita energia.
+el hombre come porque necesita energia.
+la persona come porque necesita energia.
+el gato duerme porque necesita descanso.
+el perro duerme porque necesita descanso.
+el caballo duerme porque necesita descanso.
+la vaca duerme porque necesita descanso.
+la oveja duerme porque necesita descanso.
+el cerdo duerme porque necesita descanso.
+el leon duerme porque necesita descanso.
+el tigre duerme porque necesita descanso.
+el oso duerme porque necesita descanso.
+el elefante duerme porque necesita descanso.
+el lobo duerme porque necesita descanso.
+el zorro duerme porque necesita descanso.
+el conejo duerme porque necesita descanso.
+el raton duerme porque necesita descanso.
+el aguila duerme porque necesita descanso.
+el halcon duerme porque necesita descanso.
+el pinguino duerme porque necesita descanso.
+el delfin duerme porque necesita descanso.
+la ballena duerme porque necesita descanso.
+el tiburon duerme porque necesita descanso.
+el pez duerme porque necesita descanso.
+el ave duerme porque necesita descanso.
+la serpiente duerme porque necesita descanso.
+la rana duerme porque necesita descanso.
+la mariposa duerme porque necesita descanso.
+la abeja duerme porque necesita descanso.
+la hormiga duerme porque necesita descanso.
+la rosa duerme porque necesita descanso.
+el roble duerme porque necesita descanso.
+el pino duerme porque necesita descanso.
+el cactus duerme porque necesita descanso.
+la palma duerme porque necesita descanso.
+el tomate duerme porque necesita descanso.
+el maiz duerme porque necesita descanso.
+el trigo duerme porque necesita descanso.
+la papa duerme porque necesita descanso.
+la lechuga duerme porque necesita descanso.
+la zanahoria duerme porque necesita descanso.
+el girasol duerme porque necesita descanso.
+la orquidea duerme porque necesita descanso.
+el bambu duerme porque necesita descanso.
+el sauce duerme porque necesita descanso.
+el humano duerme porque necesita descanso.
+el cientifico duerme porque necesita descanso.
+el ingeniero duerme porque necesita descanso.
+el medico duerme porque necesita descanso.
+el estudiante duerme porque necesita descanso.
+el profesor duerme porque necesita descanso.
+el robot duerme porque necesita descanso.
+el agente duerme porque necesita descanso.
+el niño duerme porque necesita descanso.
+la mujer duerme porque necesita descanso.
+el hombre duerme porque necesita descanso.
+la persona duerme porque necesita descanso.
+el gato migra porque busca mejor clima.
+el perro migra porque busca mejor clima.
+el caballo migra porque busca mejor clima.
+la vaca migra porque busca mejor clima.
+la oveja migra porque busca mejor clima.
+el cerdo migra porque busca mejor clima.
+el leon migra porque busca mejor clima.
+el tigre migra porque busca mejor clima.
+el oso migra porque busca mejor clima.
+el elefante migra porque busca mejor clima.
+el lobo migra porque busca mejor clima.
+el zorro migra porque busca mejor clima.
+el conejo migra porque busca mejor clima.
+el raton migra porque busca mejor clima.
+el aguila migra porque busca mejor clima.
+el halcon migra porque busca mejor clima.
+el pinguino migra porque busca mejor clima.
+el delfin migra porque busca mejor clima.
+la ballena migra porque busca mejor clima.
+el tiburon migra porque busca mejor clima.
+el pez migra porque busca mejor clima.
+el ave migra porque busca mejor clima.
+la serpiente migra porque busca mejor clima.
+la rana migra porque busca mejor clima.
+la mariposa migra porque busca mejor clima.
+la abeja migra porque busca mejor clima.
+la hormiga migra porque busca mejor clima.
+la rosa migra porque busca mejor clima.
+el roble migra porque busca mejor clima.
+el pino migra porque busca mejor clima.
+el cactus migra porque busca mejor clima.
+la palma migra porque busca mejor clima.
+el tomate migra porque busca mejor clima.
+el maiz migra porque busca mejor clima.
+el trigo migra porque busca mejor clima.
+la papa migra porque busca mejor clima.
+la lechuga migra porque busca mejor clima.
+la zanahoria migra porque busca mejor clima.
+el girasol migra porque busca mejor clima.
+la orquidea migra porque busca mejor clima.
+el bambu migra porque busca mejor clima.
+el sauce migra porque busca mejor clima.
+el humano migra porque busca mejor clima.
+el cientifico migra porque busca mejor clima.
+el ingeniero migra porque busca mejor clima.
+el medico migra porque busca mejor clima.
+el estudiante migra porque busca mejor clima.
+el profesor migra porque busca mejor clima.
+el robot migra porque busca mejor clima.
+el agente migra porque busca mejor clima.
+el niño migra porque busca mejor clima.
+la mujer migra porque busca mejor clima.
+el hombre migra porque busca mejor clima.
+la persona migra porque busca mejor clima.
+el gato se reproduce porque la especie continua.
+el perro se reproduce porque la especie continua.
+el caballo se reproduce porque la especie continua.
+la vaca se reproduce porque la especie continua.
+la oveja se reproduce porque la especie continua.
+el cerdo se reproduce porque la especie continua.
+el leon se reproduce porque la especie continua.
+el tigre se reproduce porque la especie continua.
+el oso se reproduce porque la especie continua.
+el elefante se reproduce porque la especie continua.
+el lobo se reproduce porque la especie continua.
+el zorro se reproduce porque la especie continua.
+el conejo se reproduce porque la especie continua.
+el raton se reproduce porque la especie continua.
+el aguila se reproduce porque la especie continua.
+el halcon se reproduce porque la especie continua.
+el pinguino se reproduce porque la especie continua.
+el delfin se reproduce porque la especie continua.
+la ballena se reproduce porque la especie continua.
+el tiburon se reproduce porque la especie continua.
+el pez se reproduce porque la especie continua.
+el ave se reproduce porque la especie continua.
+la serpiente se reproduce porque la especie continua.
+la rana se reproduce porque la especie continua.
+la mariposa se reproduce porque la especie continua.
+la abeja se reproduce porque la especie continua.
+la hormiga se reproduce porque la especie continua.
+la rosa se reproduce porque la especie continua.
+el roble se reproduce porque la especie continua.
+el pino se reproduce porque la especie continua.
+el cactus se reproduce porque la especie continua.
+la palma se reproduce porque la especie continua.
+el tomate se reproduce porque la especie continua.
+el maiz se reproduce porque la especie continua.
+el trigo se reproduce porque la especie continua.
+la papa se reproduce porque la especie continua.
+la lechuga se reproduce porque la especie continua.
+la zanahoria se reproduce porque la especie continua.
+el girasol se reproduce porque la especie continua.
+la orquidea se reproduce porque la especie continua.
+el bambu se reproduce porque la especie continua.
+el sauce se reproduce porque la especie continua.
+el humano se reproduce porque la especie continua.
+el cientifico se reproduce porque la especie continua.
+el ingeniero se reproduce porque la especie continua.
+el medico se reproduce porque la especie continua.
+el estudiante se reproduce porque la especie continua.
+el profesor se reproduce porque la especie continua.
+el robot se reproduce porque la especie continua.
+el agente se reproduce porque la especie continua.
+el niño se reproduce porque la especie continua.
+la mujer se reproduce porque la especie continua.
+el hombre se reproduce porque la especie continua.
+la persona se reproduce porque la especie continua.
+el gato caza porque busca alimento.
+el perro caza porque busca alimento.
+el caballo caza porque busca alimento.
+la vaca caza porque busca alimento.
+la oveja caza porque busca alimento.
+el cerdo caza porque busca alimento.
+el leon caza porque busca alimento.
+el tigre caza porque busca alimento.
+el oso caza porque busca alimento.
+el elefante caza porque busca alimento.
+el lobo caza porque busca alimento.
+el zorro caza porque busca alimento.
+el conejo caza porque busca alimento.
+el raton caza porque busca alimento.
+el aguila caza porque busca alimento.
+el halcon caza porque busca alimento.
+el pinguino caza porque busca alimento.
+el delfin caza porque busca alimento.
+la ballena caza porque busca alimento.
+el tiburon caza porque busca alimento.
+el pez caza porque busca alimento.
+el ave caza porque busca alimento.
+la serpiente caza porque busca alimento.
+la rana caza porque busca alimento.
+la mariposa caza porque busca alimento.
+la abeja caza porque busca alimento.
+la hormiga caza porque busca alimento.
+la rosa caza porque busca alimento.
+el roble caza porque busca alimento.
+el pino caza porque busca alimento.
+el cactus caza porque busca alimento.
+la palma caza porque busca alimento.
+el tomate caza porque busca alimento.
+el maiz caza porque busca alimento.
+el trigo caza porque busca alimento.
+la papa caza porque busca alimento.
+la lechuga caza porque busca alimento.
+la zanahoria caza porque busca alimento.
+el girasol caza porque busca alimento.
+la orquidea caza porque busca alimento.
+el bambu caza porque busca alimento.
+el sauce caza porque busca alimento.
+el humano caza porque busca alimento.
+el cientifico caza porque busca alimento.
+el ingeniero caza porque busca alimento.
+el medico caza porque busca alimento.
+el estudiante caza porque busca alimento.
+el profesor caza porque busca alimento.
+el robot caza porque busca alimento.
+el agente caza porque busca alimento.
+el niño caza porque busca alimento.
+la mujer caza porque busca alimento.
+el hombre caza porque busca alimento.
+la persona caza porque busca alimento.
+el gato huye porque detecta peligro.
+el perro huye porque detecta peligro.
+el caballo huye porque detecta peligro.
+la vaca huye porque detecta peligro.
+la oveja huye porque detecta peligro.
+el cerdo huye porque detecta peligro.
+el leon huye porque detecta peligro.
+el tigre huye porque detecta peligro.
+el oso huye porque detecta peligro.
+el elefante huye porque detecta peligro.
+el lobo huye porque detecta peligro.
+el zorro huye porque detecta peligro.
+el conejo huye porque detecta peligro.
+el raton huye porque detecta peligro.
+el aguila huye porque detecta peligro.
+el halcon huye porque detecta peligro.
+el pinguino huye porque detecta peligro.
+el delfin huye porque detecta peligro.
+la ballena huye porque detecta peligro.
+el tiburon huye porque detecta peligro.
+el pez huye porque detecta peligro.
+el ave huye porque detecta peligro.
+la serpiente huye porque detecta peligro.
+la rana huye porque detecta peligro.
+la mariposa huye porque detecta peligro.
+la abeja huye porque detecta peligro.
+la hormiga huye porque detecta peligro.
+la rosa huye porque detecta peligro.
+el roble huye porque detecta peligro.
+el pino huye porque detecta peligro.
+el cactus huye porque detecta peligro.
+la palma huye porque detecta peligro.
+el tomate huye porque detecta peligro.
+el maiz huye porque detecta peligro.
+el trigo huye porque detecta peligro.
+la papa huye porque detecta peligro.
+la lechuga huye porque detecta peligro.
+la zanahoria huye porque detecta peligro.
+el girasol huye porque detecta peligro.
+la orquidea huye porque detecta peligro.
+el bambu huye porque detecta peligro.
+el sauce huye porque detecta peligro.
+el humano huye porque detecta peligro.
+el cientifico huye porque detecta peligro.
+el ingeniero huye porque detecta peligro.
+el medico huye porque detecta peligro.
+el estudiante huye porque detecta peligro.
+el profesor huye porque detecta peligro.
+el robot huye porque detecta peligro.
+el agente huye porque detecta peligro.
+el niño huye porque detecta peligro.
+la mujer huye porque detecta peligro.
+el hombre huye porque detecta peligro.
+la persona huye porque detecta peligro.
+el gato aprende porque observa el entorno.
+el perro aprende porque observa el entorno.
+el caballo aprende porque observa el entorno.
+la vaca aprende porque observa el entorno.
+la oveja aprende porque observa el entorno.
+el cerdo aprende porque observa el entorno.
+el leon aprende porque observa el entorno.
+el tigre aprende porque observa el entorno.
+el oso aprende porque observa el entorno.
+el elefante aprende porque observa el entorno.
+el lobo aprende porque observa el entorno.
+el zorro aprende porque observa el entorno.
+el conejo aprende porque observa el entorno.
+el raton aprende porque observa el entorno.
+el aguila aprende porque observa el entorno.
+el halcon aprende porque observa el entorno.
+el pinguino aprende porque observa el entorno.
+el delfin aprende porque observa el entorno.
+la ballena aprende porque observa el entorno.
+el tiburon aprende porque observa el entorno.
+el pez aprende porque observa el entorno.
+el ave aprende porque observa el entorno.
+la serpiente aprende porque observa el entorno.
+la rana aprende porque observa el entorno.
+la mariposa aprende porque observa el entorno.
+la abeja aprende porque observa el entorno.
+la hormiga aprende porque observa el entorno.
+la rosa aprende porque observa el entorno.
+el roble aprende porque observa el entorno.
+el pino aprende porque observa el entorno.
+el cactus aprende porque observa el entorno.
+la palma aprende porque observa el entorno.
+el tomate aprende porque observa el entorno.
+el maiz aprende porque observa el entorno.
+el trigo aprende porque observa el entorno.
+la papa aprende porque observa el entorno.
+la lechuga aprende porque observa el entorno.
+la zanahoria aprende porque observa el entorno.
+el girasol aprende porque observa el entorno.
+la orquidea aprende porque observa el entorno.
+el bambu aprende porque observa el entorno.
+el sauce aprende porque observa el entorno.
+el humano aprende porque observa el entorno.
+el cientifico aprende porque observa el entorno.
+el ingeniero aprende porque observa el entorno.
+el medico aprende porque observa el entorno.
+el estudiante aprende porque observa el entorno.
+el profesor aprende porque observa el entorno.
+el robot aprende porque observa el entorno.
+el agente aprende porque observa el entorno.
+el niño aprende porque observa el entorno.
+la mujer aprende porque observa el entorno.
+el hombre aprende porque observa el entorno.
+la persona aprende porque observa el entorno.
+el gato se comunica porque envia señales.
+el perro se comunica porque envia señales.
+el caballo se comunica porque envia señales.
+la vaca se comunica porque envia señales.
+la oveja se comunica porque envia señales.
+el cerdo se comunica porque envia señales.
+el leon se comunica porque envia señales.
+el tigre se comunica porque envia señales.
+el oso se comunica porque envia señales.
+el elefante se comunica porque envia señales.
+el lobo se comunica porque envia señales.
+el zorro se comunica porque envia señales.
+el conejo se comunica porque envia señales.
+el raton se comunica porque envia señales.
+el aguila se comunica porque envia señales.
+el halcon se comunica porque envia señales.
+el pinguino se comunica porque envia señales.
+el delfin se comunica porque envia señales.
+la ballena se comunica porque envia señales.
+el tiburon se comunica porque envia señales.
+el pez se comunica porque envia señales.
+el ave se comunica porque envia señales.
+la serpiente se comunica porque envia señales.
+la rana se comunica porque envia señales.
+la mariposa se comunica porque envia señales.
+la abeja se comunica porque envia señales.
+la hormiga se comunica porque envia señales.
+la rosa se comunica porque envia señales.
+el roble se comunica porque envia señales.
+el pino se comunica porque envia señales.
+el cactus se comunica porque envia señales.
+la palma se comunica porque envia señales.
+el tomate se comunica porque envia señales.
+el maiz se comunica porque envia señales.
+el trigo se comunica porque envia señales.
+la papa se comunica porque envia señales.
+la lechuga se comunica porque envia señales.
+la zanahoria se comunica porque envia señales.
+el girasol se comunica porque envia señales.
+la orquidea se comunica porque envia señales.
+el bambu se comunica porque envia señales.
+el sauce se comunica porque envia señales.
+el humano se comunica porque envia señales.
+el cientifico se comunica porque envia señales.
+el ingeniero se comunica porque envia señales.
+el medico se comunica porque envia señales.
+el estudiante se comunica porque envia señales.
+el profesor se comunica porque envia señales.
+el robot se comunica porque envia señales.
+el agente se comunica porque envia señales.
+el niño se comunica porque envia señales.
+la mujer se comunica porque envia señales.
+el hombre se comunica porque envia señales.
+la persona se comunica porque envia señales.
+el humano piensa porque procesa informacion.
+el cientifico piensa porque procesa informacion.
+el ingeniero piensa porque procesa informacion.
+el medico piensa porque procesa informacion.
+el estudiante piensa porque procesa informacion.
+el profesor piensa porque procesa informacion.
+el robot piensa porque procesa informacion.
+el agente piensa porque procesa informacion.
+el niño piensa porque procesa informacion.
+la mujer piensa porque procesa informacion.
+el hombre piensa porque procesa informacion.
+la persona piensa porque procesa informacion.
+el sistema piensa porque procesa informacion.
+la red piensa porque procesa informacion.
+el modelo piensa porque procesa informacion.
+el algoritmo piensa porque procesa informacion.
+la maquina piensa porque procesa informacion.
+el humano planifica porque tiene metas.
+el cientifico planifica porque tiene metas.
+el ingeniero planifica porque tiene metas.
+el medico planifica porque tiene metas.
+el estudiante planifica porque tiene metas.
+el profesor planifica porque tiene metas.
+el robot planifica porque tiene metas.
+el agente planifica porque tiene metas.
+el niño planifica porque tiene metas.
+la mujer planifica porque tiene metas.
+el hombre planifica porque tiene metas.
+la persona planifica porque tiene metas.
+el sistema planifica porque tiene metas.
+la red planifica porque tiene metas.
+el modelo planifica porque tiene metas.
+el algoritmo planifica porque tiene metas.
+la maquina planifica porque tiene metas.
+el humano aprende porque la experiencia lo modifica.
+el cientifico aprende porque la experiencia lo modifica.
+el ingeniero aprende porque la experiencia lo modifica.
+el medico aprende porque la experiencia lo modifica.
+el estudiante aprende porque la experiencia lo modifica.
+el profesor aprende porque la experiencia lo modifica.
+el robot aprende porque la experiencia lo modifica.
+el agente aprende porque la experiencia lo modifica.
+el niño aprende porque la experiencia lo modifica.
+la mujer aprende porque la experiencia lo modifica.
+el hombre aprende porque la experiencia lo modifica.
+la persona aprende porque la experiencia lo modifica.
+el sistema aprende porque la experiencia lo modifica.
+la red aprende porque la experiencia lo modifica.
+el modelo aprende porque la experiencia lo modifica.
+el algoritmo aprende porque la experiencia lo modifica.
+la maquina aprende porque la experiencia lo modifica.
+el humano olvida porque la memoria decae.
+el cientifico olvida porque la memoria decae.
+el ingeniero olvida porque la memoria decae.
+el medico olvida porque la memoria decae.
+el estudiante olvida porque la memoria decae.
+el profesor olvida porque la memoria decae.
+el robot olvida porque la memoria decae.
+el agente olvida porque la memoria decae.
+el niño olvida porque la memoria decae.
+la mujer olvida porque la memoria decae.
+el hombre olvida porque la memoria decae.
+la persona olvida porque la memoria decae.
+el sistema olvida porque la memoria decae.
+la red olvida porque la memoria decae.
+el modelo olvida porque la memoria decae.
+el algoritmo olvida porque la memoria decae.
+la maquina olvida porque la memoria decae.
+el humano recuerda porque almacena experiencias.
+el cientifico recuerda porque almacena experiencias.
+el ingeniero recuerda porque almacena experiencias.
+el medico recuerda porque almacena experiencias.
+el estudiante recuerda porque almacena experiencias.
+el profesor recuerda porque almacena experiencias.
+el robot recuerda porque almacena experiencias.
+el agente recuerda porque almacena experiencias.
+el niño recuerda porque almacena experiencias.
+la mujer recuerda porque almacena experiencias.
+el hombre recuerda porque almacena experiencias.
+la persona recuerda porque almacena experiencias.
+el sistema recuerda porque almacena experiencias.
+la red recuerda porque almacena experiencias.
+el modelo recuerda porque almacena experiencias.
+el algoritmo recuerda porque almacena experiencias.
+la maquina recuerda porque almacena experiencias.
+el humano predice porque modela el futuro.
+el cientifico predice porque modela el futuro.
+el ingeniero predice porque modela el futuro.
+el medico predice porque modela el futuro.
+el estudiante predice porque modela el futuro.
+el profesor predice porque modela el futuro.
+el robot predice porque modela el futuro.
+el agente predice porque modela el futuro.
+el niño predice porque modela el futuro.
+la mujer predice porque modela el futuro.
+el hombre predice porque modela el futuro.
+la persona predice porque modela el futuro.
+el sistema predice porque modela el futuro.
+la red predice porque modela el futuro.
+el modelo predice porque modela el futuro.
+el algoritmo predice porque modela el futuro.
+la maquina predice porque modela el futuro.
+el humano explora porque tiene curiosidad.
+el cientifico explora porque tiene curiosidad.
+el ingeniero explora porque tiene curiosidad.
+el medico explora porque tiene curiosidad.
+el estudiante explora porque tiene curiosidad.
+el profesor explora porque tiene curiosidad.
+el robot explora porque tiene curiosidad.
+el agente explora porque tiene curiosidad.
+el niño explora porque tiene curiosidad.
+la mujer explora porque tiene curiosidad.
+el hombre explora porque tiene curiosidad.
+la persona explora porque tiene curiosidad.
+el sistema explora porque tiene curiosidad.
+la red explora porque tiene curiosidad.
+el modelo explora porque tiene curiosidad.
+el algoritmo explora porque tiene curiosidad.
+la maquina explora porque tiene curiosidad.
+el humano explica porque conoce las causas.
+el cientifico explica porque conoce las causas.
+el ingeniero explica porque conoce las causas.
+el medico explica porque conoce las causas.
+el estudiante explica porque conoce las causas.
+el profesor explica porque conoce las causas.
+el robot explica porque conoce las causas.
+el agente explica porque conoce las causas.
+el niño explica porque conoce las causas.
+la mujer explica porque conoce las causas.
+el hombre explica porque conoce las causas.
+la persona explica porque conoce las causas.
+el sistema explica porque conoce las causas.
+la red explica porque conoce las causas.
+el modelo explica porque conoce las causas.
+el algoritmo explica porque conoce las causas.
+la maquina explica porque conoce las causas.
+the ball falls because gravity pulls it down.
+the apple falls because gravity pulls it down.
+the rock falls because gravity pulls it down.
+the leaf falls because gravity pulls it down.
+the cat falls because gravity pulls it down.
+the dog falls because gravity pulls it down.
+the bird falls because gravity pulls it down.
+the fish falls because gravity pulls it down.
+the tree falls because gravity pulls it down.
+the human falls because gravity pulls it down.
+the agent falls because gravity pulls it down.
+the child falls because gravity pulls it down.
+the model falls because gravity pulls it down.
+the network falls because gravity pulls it down.
+the robot falls because gravity pulls it down.
+the ball burns because oxygen reacts with fuel.
+the apple burns because oxygen reacts with fuel.
+the rock burns because oxygen reacts with fuel.
+the leaf burns because oxygen reacts with fuel.
+the cat burns because oxygen reacts with fuel.
+the dog burns because oxygen reacts with fuel.
+the bird burns because oxygen reacts with fuel.
+the fish burns because oxygen reacts with fuel.
+the tree burns because oxygen reacts with fuel.
+the human burns because oxygen reacts with fuel.
+the agent burns because oxygen reacts with fuel.
+the child burns because oxygen reacts with fuel.
+the model burns because oxygen reacts with fuel.
+the network burns because oxygen reacts with fuel.
+the robot burns because oxygen reacts with fuel.
+the ball freezes because temperature drops.
+the apple freezes because temperature drops.
+the rock freezes because temperature drops.
+the leaf freezes because temperature drops.
+the cat freezes because temperature drops.
+the dog freezes because temperature drops.
+the bird freezes because temperature drops.
+the fish freezes because temperature drops.
+the tree freezes because temperature drops.
+the human freezes because temperature drops.
+the agent freezes because temperature drops.
+the child freezes because temperature drops.
+the model freezes because temperature drops.
+the network freezes because temperature drops.
+the robot freezes because temperature drops.
+the ball grows because it gets nutrients.
+the apple grows because it gets nutrients.
+the rock grows because it gets nutrients.
+the leaf grows because it gets nutrients.
+the cat grows because it gets nutrients.
+the dog grows because it gets nutrients.
+the bird grows because it gets nutrients.
+the fish grows because it gets nutrients.
+the tree grows because it gets nutrients.
+the human grows because it gets nutrients.
+the agent grows because it gets nutrients.
+the child grows because it gets nutrients.
+the model grows because it gets nutrients.
+the network grows because it gets nutrients.
+the robot grows because it gets nutrients.
+the ball learns because feedback shapes behavior.
+the apple learns because feedback shapes behavior.
+the rock learns because feedback shapes behavior.
+the leaf learns because feedback shapes behavior.
+the cat learns because feedback shapes behavior.
+the dog learns because feedback shapes behavior.
+the bird learns because feedback shapes behavior.
+the fish learns because feedback shapes behavior.
+the tree learns because feedback shapes behavior.
+the human learns because feedback shapes behavior.
+the agent learns because feedback shapes behavior.
+the child learns because feedback shapes behavior.
+the model learns because feedback shapes behavior.
+the network learns because feedback shapes behavior.
+the robot learns because feedback shapes behavior.
+the ball predicts because models encode patterns.
+the apple predicts because models encode patterns.
+the rock predicts because models encode patterns.
+the leaf predicts because models encode patterns.
+the cat predicts because models encode patterns.
+the dog predicts because models encode patterns.
+the bird predicts because models encode patterns.
+the fish predicts because models encode patterns.
+the tree predicts because models encode patterns.
+the human predicts because models encode patterns.
+the agent predicts because models encode patterns.
+the child predicts because models encode patterns.
+the model predicts because models encode patterns.
+the network predicts because models encode patterns.
+the robot predicts because models encode patterns.
+the ball runs because muscles contract.
+the apple runs because muscles contract.
+the rock runs because muscles contract.
+the leaf runs because muscles contract.
+the cat runs because muscles contract.
+the dog runs because muscles contract.
+the bird runs because muscles contract.
+the fish runs because muscles contract.
+the tree runs because muscles contract.
+the human runs because muscles contract.
+the agent runs because muscles contract.
+the child runs because muscles contract.
+the model runs because muscles contract.
+the network runs because muscles contract.
+the robot runs because muscles contract.
+the ball swims because water provides buoyancy.
+the apple swims because water provides buoyancy.
+the rock swims because water provides buoyancy.
+the leaf swims because water provides buoyancy.
+the cat swims because water provides buoyancy.
+the dog swims because water provides buoyancy.
+the bird swims because water provides buoyancy.
+the fish swims because water provides buoyancy.
+the tree swims because water provides buoyancy.
+the human swims because water provides buoyancy.
+the agent swims because water provides buoyancy.
+the child swims because water provides buoyancy.
+the model swims because water provides buoyancy.
+the network swims because water provides buoyancy.
+the robot swims because water provides buoyancy.
+the ball flies because wings push air.
+the apple flies because wings push air.
+the rock flies because wings push air.
+the leaf flies because wings push air.
+the cat flies because wings push air.
+the dog flies because wings push air.
+the bird flies because wings push air.
+the fish flies because wings push air.
+the tree flies because wings push air.
+the human flies because wings push air.
+the agent flies because wings push air.
+the child flies because wings push air.
+the model flies because wings push air.
+the network flies because wings push air.
+the robot flies because wings push air.
+El agua se evapora porque el sol calienta la tierra.
+If el sol calienta la tierra then el agua se evapora.
+Las nubes se forman porque el agua se evapora.
+If el agua se evapora then las nubes se forman.
+La lluvia cae porque las nubes se forman.
+If las nubes se forman then la lluvia cae.
+Las plantas crecen porque la lluvia cae.
+If la lluvia cae then las plantas crecen.
+Los animales comen porque las plantas crecen.
+If las plantas crecen then los animales comen.
+Obtienen energia porque los animales comen.
+If los animales comen then obtienen energia.
+Sobreviven porque obtienen energia.
+If obtienen energia then sobreviven.
+Se reproducen porque sobreviven.
+If sobreviven then se reproducen.
+La especie continua porque se reproducen.
+If se reproducen then la especie continua.
+Water evaporates porque the sun heats earth.
+If the sun heats earth then water evaporates.
+Clouds form porque water evaporates.
+If water evaporates then clouds form.
+Rain falls porque clouds form.
+If clouds form then rain falls.
+Plants grow porque rain falls.
+If rain falls then plants grow.
+Animals eat porque plants grow.
+If plants grow then animals eat.
+They survive porque animals eat.
+If animals eat then they survive.
+They reproduce porque they survive.
+If they survive then they reproduce.

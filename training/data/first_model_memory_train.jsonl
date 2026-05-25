@@ -1,0 +1,4 @@
+{"id":"train_memory_001","text":"GEWC routes model outputs through verification and safety before runtime action."}
+{"id":"train_memory_002","text":"EDEN training reports are evidence for the evaluation pipeline and keep claim_allowed false."}
+{"id":"train_memory_003","text":"The first EDEN trainable memory module retrieves memories but cannot write goals, memory or tools directly."}
+{"id":"train_memory_004","text":"ROCm profiles may accelerate future training while CPU smoke tests keep CI reproducible."}

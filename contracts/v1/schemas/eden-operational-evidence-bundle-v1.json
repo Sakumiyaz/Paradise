@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden-operational-evidence-bundle-v1",
+  "title": "EDEN Operational Evidence Bundle",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated_at",
+    "artifacts",
+    "claim_allowed",
+    "agi_claim"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden-operational-evidence-bundle-v1"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

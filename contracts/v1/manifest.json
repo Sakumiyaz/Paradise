@@ -1,0 +1,87 @@
+{
+  "schema": "eden-public-contract-manifest-v1",
+  "version": "v1",
+  "date": "2026-05-25",
+  "scope": "local-first Paradise operator/runtime API",
+  "claim_boundary": {
+    "claim_allowed": false,
+    "agi_claim": false,
+    "description": "Contracts validate API shape, runtime evidence and governance markers only."
+  },
+  "entrypoints": {
+    "cli": "cargo run -p eden_core --bin edenctl --",
+    "sdk": "eden_core::sdk",
+    "base_url_default": "http://127.0.0.1:8080"
+  },
+  "auth": {
+    "optional": true,
+    "environment": "EDEN_API_TOKEN",
+    "headers": [
+      "Authorization: Bearer <token>",
+      "X-EDEN-API-Token: <token>"
+    ],
+    "note": "If EDEN_API_TOKEN is unset, local API routes remain open for local-first development."
+  },
+  "openapi": [
+    "openapi/eden-runtime-api-v1.openapi.json",
+    "openapi/eden-operational-api-v1.openapi.json"
+  ],
+  "schemas": [
+    "schemas/eden-operational-status-v1.json",
+    "schemas/eden-operational-permissions-v1.json",
+    "schemas/eden-operational-recovery-plan-v1.json",
+    "schemas/eden-operational-evidence-bundle-v1.json",
+    "schemas/eden-locus-layer-v1.json",
+    "schemas/eden-operator-forge-v1.json",
+    "schemas/eden-locus-operator-bridge-v1.json",
+    "schemas/eden-training-capability-report-v1.json",
+    "schemas/eden-garm-training-evidence-v1.json",
+    "schemas/eden-model-adapter-runtime-v1.json",
+    "schemas/eden-model-checkpoint-manifest-v1.json",
+    "schemas/eden-training-harness-v1.json",
+    "schemas/eden-model-governance-v1.json",
+    "schemas/eden-first-model-card-v1.json",
+    "schemas/eden-first-model-training-plan-v1.json",
+    "schemas/eden-first-model-readiness-v1.json",
+    "schemas/eden-elcp-objective-spec-v1.json",
+    "schemas/eden-elcp-transition-dataset-v1.json",
+    "schemas/eden-elcp-training-plan-v1.json",
+    "schemas/eden-elcp-readiness-v1.json",
+    "schemas/eden-elcp-validation-report-v1.json",
+    "schemas/eden-elcp-baseline-report-v1.json",
+    "schemas/eden-elcp-trace-export-v1.json",
+    "schemas/eden-elcp-training-dry-run-v1.json",
+    "schemas/eden-elcp-admission-gate-v1.json",
+    "schemas/eden-elcp-trace-quality-gate-v1.json",
+    "schemas/eden-elcp-replay-eval-v1.json",
+    "schemas/eden-elcp-dataset-freeze-manifest-v1.json",
+    "schemas/eden-elcp-metrics-board-v1.json",
+    "schemas/eden-elcp-4b-readiness-contract-v1.json",
+    "schemas/eden-paradise-worldcell-runtime-v1.json",
+    "schemas/eden-paradise-worldcell-session-v1.json",
+    "schemas/eden-runtime-spine-v1.json",
+    "schemas/eden-runtime-event-bus-v1.json",
+    "schemas/eden-runtime-global-state-v1.json",
+    "schemas/eden-runtime-replay-spine-v1.json",
+    "schemas/eden-runtime-spine-verification-v1.json",
+    "schemas/eden-runtime-guard-decision-v1.json",
+    "schemas/eden-runtime-spine-enforcement-v1.json",
+    "schemas/eden-runtime-workflow-risk-v1.json",
+    "schemas/eden-runtime-circuit-breakers-v1.json",
+    "schemas/eden-runtime-replay-reconstruction-v1.json",
+    "schemas/eden-runtime-security-gates-v1.json"
+  ],
+  "examples": [
+    "examples/operational-status.example.json",
+    "examples/action-dry-run.example.json"
+  ],
+  "gates": [
+    "make fmt",
+    "make check",
+    "make test",
+    "make eden-api-conformance",
+    "make operational-blackbox",
+    "make long-run-stability",
+    "make public-audit"
+  ]
+}

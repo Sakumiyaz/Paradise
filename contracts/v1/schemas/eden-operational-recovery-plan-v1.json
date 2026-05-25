@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden-operational-recovery-plan-v1",
+  "title": "EDEN Operational Recovery Plan",
+  "type": "object",
+  "required": [
+    "schema",
+    "recovery",
+    "claim_allowed",
+    "agi_claim"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden-operational-recovery-plan-v1"
+    },
+    "recovery": {
+      "type": "object"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

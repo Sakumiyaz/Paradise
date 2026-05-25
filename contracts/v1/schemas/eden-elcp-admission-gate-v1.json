@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.admission_gate.v1",
+  "title": "EDEN ELCP Admission Gate",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "checkpoint_admission_allowed",
+    "4b_training_allowed",
+    "mode",
+    "passed",
+    "total",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.admission_gate.v1"
+    },
+    "artifact": {
+      "const": "elcp_admission_gate"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "checkpoint_admission_allowed": {
+      "const": false
+    },
+    "4b_training_allowed": {
+      "const": false
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

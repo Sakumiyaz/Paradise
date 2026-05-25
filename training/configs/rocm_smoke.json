@@ -1,0 +1,34 @@
+{
+  "profile": "eden-rocm-smoke",
+  "backend": "rocm",
+  "device_policy": {
+    "prefer_gpu": true,
+    "allow_cpu_fallback": true,
+    "required_vendor": "AMD",
+    "minimum_reported_backend": "cpu-fallback-or-rocm"
+  },
+  "training_scope": {
+    "first_modules": [
+      "memory_retrieval",
+      "small_language_model",
+      "world_model_proxy",
+      "safety_classifier"
+    ],
+    "blocked_claims": [
+      "completed_agi",
+      "externally_validated_agi",
+      "production_llm_lmm_checkpoint"
+    ]
+  },
+  "runtime_integration": {
+    "authority": "GEWC",
+    "model_role": "subordinate_module",
+    "direct_memory_writes": false,
+    "direct_objective_writes": false,
+    "direct_tool_execution": false
+  },
+  "smoke_benchmark": {
+    "dataset": "training/data/capability_smoke.jsonl",
+    "output": "target/eden_training_smoke/capability_report.json"
+  }
+}

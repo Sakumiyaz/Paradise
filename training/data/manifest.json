@@ -1,0 +1,49 @@
+{
+  "schema": "eden-training-data-manifest-v1",
+  "claim_allowed": false,
+  "agi_claim": false,
+  "scope": "repo-local synthetic training smoke data",
+  "contains_private_data": false,
+  "datasets": [
+    {
+      "name": "capability_smoke",
+      "path": "training/data/capability_smoke.jsonl",
+      "split": "smoke",
+      "format": "jsonl",
+      "source": "synthetic repo-local examples"
+    },
+    {
+      "name": "first_model_memory_train",
+      "path": "training/data/first_model_memory_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "synthetic repo-local examples"
+    },
+    {
+      "name": "first_model_memory_eval",
+      "path": "training/data/first_model_memory_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "synthetic repo-local examples"
+    },
+    {
+      "name": "elcp_transition_train",
+      "path": "training/data/elcp_transition_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "synthetic repo-local cognitive transition examples"
+    },
+    {
+      "name": "elcp_transition_eval",
+      "path": "training/data/elcp_transition_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "synthetic repo-local cognitive transition examples"
+    }
+  ],
+  "policy": {
+    "no_checkpoints_committed": true,
+    "no_user_private_data": true,
+    "outputs_must_remain_claim_gated": true
+  }
+}

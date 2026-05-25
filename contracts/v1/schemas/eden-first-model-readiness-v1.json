@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.first_model.readiness.v1",
+  "title": "EDEN First Model Readiness",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "model_id",
+    "phase",
+    "training_executed",
+    "weights_present",
+    "passed",
+    "total",
+    "4a_complete",
+    "4b_training_allowed",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.first_model.readiness.v1"
+    },
+    "artifact": {
+      "const": "first_model_readiness"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "4b_training_allowed": {
+      "const": false
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

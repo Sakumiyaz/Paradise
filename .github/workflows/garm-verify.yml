@@ -1,0 +1,569 @@
+name: GARM Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_external_tests:
+        description: Run hardware/network-dependent GPIO, I2C and crawler tests.
+        required: false
+        default: false
+        type: boolean
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Check formatting
+        run: make fmt
+
+      - name: Check JavaScript package-manager policy
+        run: make js-policy
+
+      - name: Check native runtime layout
+        run: make native-runtime-layout
+
+  tests:
+    name: GARM Tests (Sandbox Safe)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run GARM tests
+        run: |
+          make test 2>&1 | tee "${RUNNER_TEMP}/garm-tests.log"
+
+      - name: Upload GARM test evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-test-evidence
+          path: ${{ runner.temp }}/garm-tests.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  workspace_tests:
+    name: Full Workspace Tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run full workspace tests
+        run: make workspace-test
+
+  doctests:
+    name: Rust Doctests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run doctests
+        run: make doctest
+
+  training_smoke:
+    name: Training Capability Smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Probe ROCm profile
+        run: make training-rocm-profile
+
+      - name: Run training smoke benchmark
+        run: make training-smoke
+
+      - name: Upload training smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: eden-training-smoke-evidence
+          path: |
+            target/eden_training_smoke/capability_report.json
+            target/eden_training_smoke/capability_report.md
+          if-no-files-found: warn
+          retention-days: 14
+
+  external_tests_optional:
+    name: External Hardware And Network Tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_external_tests == true }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run external tests
+        run: make external-tests
+
+  api_transport:
+    name: API TCP Transport
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run explicit API socket transport test
+        run: make api-socket-test
+
+  check:
+    name: Examples And Bins
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Check examples and bins
+        run: make check
+
+  api_contracts:
+    name: API Contract Package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Validate API contracts and package handoff
+        run: |
+          make eden-api-contracts 2>&1 | tee "${RUNNER_TEMP}/garm-api-contracts.log"
+
+      - name: Upload API contract evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-api-contract-evidence
+          path: ${{ runner.temp }}/garm-api-contracts.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  api_conformance:
+    name: API Conformance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run external API conformance
+        env:
+          EDEN_CONFORMANCE_STATE_DIR: ${{ runner.temp }}/eden-api-conformance/state
+          EDEN_CONFORMANCE_PID_FILE: ${{ runner.temp }}/eden-api-conformance/eden.pid
+          EDEN_CONFORMANCE_LOG_FILE: ${{ runner.temp }}/eden-api-conformance/eden.log
+          EDEN_CONFORMANCE_STDOUT_FILE: ${{ runner.temp }}/eden-api-conformance/eden.stdout
+          EDEN_CONFORMANCE_REPORT: ${{ runner.temp }}/eden-api-conformance/sdk_conformance_report.json
+        run: |
+          make eden-api-conformance 2>&1 | tee "${RUNNER_TEMP}/eden-api-conformance.log"
+
+      - name: Upload API conformance evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: eden-api-conformance-evidence
+          path: |
+            ${{ runner.temp }}/eden-api-conformance
+            ${{ runner.temp }}/eden-api-conformance.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  operational_blackbox:
+    name: Operational Runtime Black Box
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run operational black-box gate
+        env:
+          GARM_BLACKBOX_STATE_DIR: ${{ runner.temp }}/garm-blackbox/state
+          GARM_BLACKBOX_PID_FILE: ${{ runner.temp }}/garm-blackbox/garm.pid
+          GARM_BLACKBOX_LOG_FILE: ${{ runner.temp }}/garm-blackbox/garm.log
+          GARM_BLACKBOX_STDOUT_FILE: ${{ runner.temp }}/garm-blackbox/garm.stdout
+        run: |
+          make operational-blackbox 2>&1 | tee "${RUNNER_TEMP}/garm-operational-blackbox.log"
+
+      - name: Upload operational black-box evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-operational-blackbox-evidence
+          path: |
+            ${{ runner.temp }}/garm-blackbox
+            ${{ runner.temp }}/garm-operational-blackbox.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  long_run_stability:
+    name: Long-Run Stability Gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run long-run stability gate
+        env:
+          GARM_LONGRUN_STATE_DIR: ${{ runner.temp }}/garm-long-run/state
+          GARM_LONGRUN_PID_FILE: ${{ runner.temp }}/garm-long-run/garm.pid
+          GARM_LONGRUN_LOG_FILE: ${{ runner.temp }}/garm-long-run/garm.log
+          GARM_LONGRUN_STDOUT_FILE: ${{ runner.temp }}/garm-long-run/garm.stdout
+          GARM_LONGRUN_EVIDENCE_FILE: ${{ runner.temp }}/garm-long-run/state/operational_evidence_bundle.json
+        run: |
+          make long-run-stability 2>&1 | tee "${RUNNER_TEMP}/garm-long-run-stability.log"
+
+      - name: Upload long-run stability evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-long-run-stability-evidence
+          path: |
+            ${{ runner.temp }}/garm-long-run
+            ${{ runner.temp }}/garm-long-run-stability.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  smoke:
+    name: Smoke Tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run API smoke
+        env:
+          GARM_SMOKE_STATE_DIR: ${{ runner.temp }}/garm-smoke/state
+          GARM_SMOKE_PID_FILE: ${{ runner.temp }}/garm-smoke/garm.pid
+          GARM_SMOKE_LOG_FILE: ${{ runner.temp }}/garm-smoke/garm.log
+          GARM_SMOKE_STDOUT_FILE: ${{ runner.temp }}/garm-smoke/garm.stdout
+        run: make smoke-api
+
+      - name: Run restart persistence smoke
+        env:
+          GARM_RESTART_SMOKE_STATE_DIR: ${{ runner.temp }}/garm-restart-smoke/state
+          GARM_RESTART_SMOKE_PID_FILE: ${{ runner.temp }}/garm-restart-smoke/garm.pid
+          GARM_RESTART_SMOKE_LOG_FILE: ${{ runner.temp }}/garm-restart-smoke/garm.log
+          GARM_RESTART_SMOKE_STDOUT_FILE: ${{ runner.temp }}/garm-restart-smoke/garm.stdout
+        run: make smoke-restart
+
+      - name: Upload smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-smoke-evidence
+          path: |
+            ${{ runner.temp }}/garm-smoke
+            ${{ runner.temp }}/garm-restart-smoke
+          if-no-files-found: warn
+          retention-days: 14
+
+  hrm_retrieval:
+    name: HRM Retrieval Regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run HRM retrieval regression
+        env:
+          GARM_HRM_REGRESSION_STATE_DIR: ${{ runner.temp }}/garm-hrm-retrieval/state
+          GARM_HRM_REGRESSION_PID_FILE: ${{ runner.temp }}/garm-hrm-retrieval/garm.pid
+          GARM_HRM_REGRESSION_LOG_FILE: ${{ runner.temp }}/garm-hrm-retrieval/garm.log
+          GARM_HRM_REGRESSION_STDOUT_FILE: ${{ runner.temp }}/garm-hrm-retrieval/garm.stdout
+        run: make hrm-regression
+
+      - name: Upload HRM retrieval evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: garm-hrm-retrieval-evidence
+          path: ${{ runner.temp }}/garm-hrm-retrieval
+          if-no-files-found: warn
+          retention-days: 14
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install audit tools
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny,cargo-audit
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run security checks
+        run: make security
+
+  verify:
+    name: Local Verification Gate
+    runs-on: ubuntu-24.04
+    needs:
+      - format
+      - tests
+      - workspace_tests
+      - doctests
+      - training_smoke
+      - api_transport
+      - check
+      - api_contracts
+      - api_conformance
+      - operational_blackbox
+      - smoke
+      - security
+      - hrm_retrieval
+      - long_run_stability
+    if: always()
+    steps:
+      - name: Verify required jobs passed
+        run: |
+          test "${{ needs.format.result }}" = "success"
+          test "${{ needs.tests.result }}" = "success"
+          test "${{ needs.workspace_tests.result }}" = "success"
+          test "${{ needs.doctests.result }}" = "success"
+          test "${{ needs.training_smoke.result }}" = "success"
+          test "${{ needs.api_transport.result }}" = "success"
+          test "${{ needs.check.result }}" = "success"
+          test "${{ needs.api_contracts.result }}" = "success"
+          test "${{ needs.api_conformance.result }}" = "success"
+          test "${{ needs.operational_blackbox.result }}" = "success"
+          test "${{ needs.smoke.result }}" = "success"
+          test "${{ needs.security.result }}" = "success"
+          test "${{ needs.hrm_retrieval.result }}" = "success"
+          test "${{ needs.long_run_stability.result }}" = "success"

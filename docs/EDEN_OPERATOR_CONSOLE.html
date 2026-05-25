@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EDEN Operator Console</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0f0c;
+      --panel: #151912;
+      --panel-2: #1d2319;
+      --line: #33402f;
+      --line-strong: #6d7d55;
+      --text: #f2f2e8;
+      --muted: #a8ad9a;
+      --green: #8fd14f;
+      --cyan: #52c8bc;
+      --amber: #d5a943;
+      --red: #c0644d;
+      --ink: #080a07;
+      --radius: 8px;
+      --mono: "IBM Plex Mono", "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: "Aptos", "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(143, 209, 79, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(82, 200, 188, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 15% 0%, rgba(143, 209, 79, 0.12), transparent 32rem),
+        linear-gradient(145deg, #0d0f0c 0%, #10130f 48%, #16150f 100%);
+      background-size: 40px 40px, 40px 40px, auto, auto;
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--green);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 54px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 44px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: linear-gradient(135deg, #26321c, #11140f);
+      box-shadow: inset 0 0 0 1px rgba(242, 242, 232, 0.06);
+      color: var(--green);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav a {
+      padding: 7px 10px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+    }
+
+    .nav a:hover {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 42px 0 28px;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 840px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 8vw, 92px);
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      max-width: 680px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .command-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .cmd,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .cmd {
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      color: var(--green);
+      background: rgba(0, 0, 0, 0.24);
+    }
+
+    .button {
+      padding: 0 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--green);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .status-board {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(21, 25, 18, 0.82);
+      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .status-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .signal {
+      color: var(--green);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric {
+      min-height: 104px;
+      padding: 18px 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .metric dt {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric dd {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 28px;
+      color: var(--text);
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .trace {
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .trace-line {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 12px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(109, 125, 85, 0.32);
+    }
+
+    .trace-line:first-child {
+      border-top: 0;
+    }
+
+    .trace-code {
+      color: var(--cyan);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(143, 209, 79, 0.08);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .pill.warn {
+      color: var(--amber);
+      background: rgba(213, 169, 67, 0.08);
+    }
+
+    .pill.danger {
+      color: var(--red);
+      background: rgba(192, 100, 77, 0.08);
+    }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(21, 25, 18, 0.72);
+      overflow: hidden;
+    }
+
+    .panel h3 {
+      margin: 0;
+      padding: 14px 14px 0;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .panel p {
+      margin: 8px 14px 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel a {
+      display: block;
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .panel .list {
+      display: grid;
+      gap: 7px;
+      margin: 12px 14px 14px;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .panel .list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(109, 125, 85, 0.28);
+      padding-top: 7px;
+    }
+
+    .panel .list li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+
+    .mono-block {
+      min-height: 112px;
+      margin: 12px 14px 14px;
+      padding: 12px;
+      border: 1px solid rgba(109, 125, 85, 0.42);
+      border-radius: 6px;
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.18);
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .node {
+      position: relative;
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .node strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .node::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -9px;
+      width: 8px;
+      height: 1px;
+      background: var(--line-strong);
+    }
+
+    .node:last-child::after {
+      display: none;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(21, 25, 18, 0.72);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    td {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code {
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 0.94em;
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wide {
+        grid-column: span 1;
+      }
+
+      .status-board {
+        min-width: 0;
+      }
+
+      .lane {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .node::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 14px;
+      }
+
+      .topbar,
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        border-right: 0;
+      }
+
+      .lane {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="mark">E</span>
+        <span>Paradise</span>
+      </a>
+      <nav class="nav" aria-label="Operator navigation">
+        <a href="#runtime">Runtime</a>
+        <a href="#operations">Operations</a>
+        <a href="#spine">Spine</a>
+        <a href="#paradise">Paradise</a>
+        <a href="#apis">APIs</a>
+        <a href="#validation">Validation</a>
+        <a href="/api/help">Text help</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="runtime">
+      <div class="hero-copy">
+        <p class="eyebrow">GEWC governed runtime console</p>
+        <h1>Operational view for the Paradise runtime.</h1>
+        <p class="summary">
+          Local runtime state, GEWC handler topology, action contracts,
+          reproducible artifacts and conformance evidence are exposed as
+          inspectable HTTP surfaces.
+        </p>
+        <div class="command-row" aria-label="Primary commands">
+          <span class="cmd">make eden-api-conformance</span>
+          <span class="cmd">make eden-api-contracts</span>
+          <a class="button" href="/api/runtime/snapshot">Read snapshot</a>
+        </div>
+      </div>
+
+      <aside class="status-board" aria-label="Runtime status board">
+        <div class="status-head">
+          <span>Operator console</span>
+          <span class="signal">local only</span>
+        </div>
+        <dl class="metrics">
+          <div class="metric">
+            <dt>Runtime states</dt>
+            <dd id="metric-runtime-states">...</dd>
+            <small>whitelisted read paths</small>
+          </div>
+          <div class="metric">
+            <dt>API surfaces</dt>
+            <dd id="metric-api-surfaces">...</dd>
+            <small>read contracts + dry-run</small>
+          </div>
+          <div class="metric">
+            <dt>Artifacts</dt>
+            <dd id="metric-schemas">...</dd>
+            <small>release inventory</small>
+          </div>
+          <div class="metric">
+            <dt>Conformance</dt>
+            <dd id="metric-permissions">...</dd>
+            <small>external endpoint checks</small>
+          </div>
+        </dl>
+        <div class="trace">
+          <div class="trace-line">
+            <span>policy</span>
+            <span class="trace-code" id="trace-policy">claim_allowed=false</span>
+          </div>
+          <div class="trace-line">
+            <span>actions</span>
+            <span class="trace-code" id="trace-actions">dry-run does not execute</span>
+          </div>
+          <div class="trace-line">
+            <span>core</span>
+            <span class="trace-code" id="trace-core">GEWC owns body dispatch</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="operations">
+      <div class="section-title">
+        <h2>Operational Control</h2>
+        <p class="section-note">Live GEWC state, persistent permissions,
+          replay, recovery and schema contracts.</p>
+      </div>
+      <div class="grid">
+        <article class="panel">
+          <h3>Status</h3>
+          <p><span class="pill" id="status-pill">loading</span></p>
+          <ul class="list">
+            <li><span>ready</span><strong id="status-ready">...</strong></li>
+            <li><span>uptime</span><strong id="status-uptime">...</strong></li>
+            <li><span>latest decision</span><strong id="status-decision">...</strong></li>
+          </ul>
+          <a href="/api/operational/status">/api/operational/status</a>
+        </article>
+        <article class="panel">
+          <h3>Permissions</h3>
+          <ul class="list">
+            <li><span>allowed</span><strong id="permissions-allowed">...</strong></li>
+            <li><span>denied</span><strong id="permissions-denied">...</strong></li>
+            <li><span>remote network</span><strong id="permissions-network">...</strong></li>
+          </ul>
+          <a href="/api/operational/permissions">/api/operational/permissions</a>
+        </article>
+        <article class="panel">
+          <h3>Recovery</h3>
+          <ul class="list">
+            <li><span>degraded</span><strong id="recovery-degraded">...</strong></li>
+            <li><span>handlers</span><strong id="recovery-handlers">...</strong></li>
+            <li><span>mode</span><strong id="recovery-mode">...</strong></li>
+          </ul>
+          <a href="/api/operational/recovery">/api/operational/recovery</a>
+        </article>
+        <article class="panel">
+          <h3>Replay</h3>
+          <ul class="list">
+            <li><span>records</span><strong id="replay-records">...</strong></li>
+            <li><span>decisions</span><strong id="replay-decisions">...</strong></li>
+            <li><span>policy</span><strong id="replay-policy">...</strong></li>
+          </ul>
+          <a href="/api/operational/replay">/api/operational/replay</a>
+        </article>
+        <article class="panel">
+          <h3>Schemas</h3>
+          <ul class="list">
+            <li><span>registered</span><strong id="schemas-total">...</strong></li>
+            <li><span>status schema</span><strong id="schemas-status">...</strong></li>
+            <li><span>registry</span><strong id="schemas-registry">...</strong></li>
+          </ul>
+          <a href="/api/operational/schemas">/api/operational/schemas</a>
+        </article>
+        <article class="panel">
+          <h3>Demos</h3>
+          <ul class="list">
+            <li><span>present</span><strong id="demos-present">...</strong></li>
+            <li><span>passed</span><strong id="demos-passed">...</strong></li>
+            <li><span>total</span><strong id="demos-total">...</strong></li>
+          </ul>
+          <a href="/api/operational/demos">/api/operational/demos</a>
+        </article>
+        <article class="panel wide">
+          <h3>Latest Chain</h3>
+          <div class="mono-block" id="latest-chain">loading</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="spine">
+      <div class="section-title">
+        <h2>Runtime Spine</h2>
+        <p class="section-note">Common GEWC contracts for event bus,
+          global state, replay, safety, models, memory, simulation and agents.</p>
+      </div>
+      <div class="grid">
+        <article class="panel">
+          <h3>Spine</h3>
+          <ul class="list">
+            <li><span>authority</span><strong id="spine-authority">...</strong></li>
+            <li><span>interfaces</span><strong id="spine-interfaces">...</strong></li>
+            <li><span>artifacts</span><strong id="spine-artifacts">...</strong></li>
+          </ul>
+          <a href="/api/operational/spine">/api/operational/spine</a>
+        </article>
+        <article class="panel">
+          <h3>Event Bus</h3>
+          <ul class="list">
+            <li><span>events</span><strong id="spine-events">...</strong></li>
+            <li><span>message</span><strong id="spine-message">...</strong></li>
+            <li><span>queues</span><strong id="spine-queues">...</strong></li>
+          </ul>
+          <a href="/api/operational/events">/api/operational/events</a>
+        </article>
+        <article class="panel">
+          <h3>Global State</h3>
+          <ul class="list">
+            <li><span>mutations</span><strong id="spine-mutations">...</strong></li>
+            <li><span>locks</span><strong id="spine-locks">...</strong></li>
+            <li><span>rollback</span><strong id="spine-rollback">...</strong></li>
+          </ul>
+          <a href="/api/operational/global-state">/api/operational/global-state</a>
+        </article>
+        <article class="panel wide">
+          <h3>Replay Spine</h3>
+          <div class="mono-block" id="spine-replay">loading</div>
+        </article>
+        <article class="panel wide">
+          <h3>Spine Verification</h3>
+          <ul class="list">
+            <li><span>verdict</span><strong id="spine-verdict">...</strong></li>
+            <li><span>checks</span><strong id="spine-checks">...</strong></li>
+            <li><span>scope</span><strong id="spine-scope">...</strong></li>
+          </ul>
+          <a href="/api/operational/spine-verification">/api/operational/spine-verification</a>
+        </article>
+        <article class="panel">
+          <h3>Enforcement</h3>
+          <ul class="list">
+            <li><span>guard</span><strong id="spine-guard">...</strong></li>
+            <li><span>decisions</span><strong id="spine-decisions">...</strong></li>
+            <li><span>blocked</span><strong id="spine-blocked">...</strong></li>
+          </ul>
+          <a href="/api/operational/spine-enforcement">/api/operational/spine-enforcement</a>
+        </article>
+        <article class="panel">
+          <h3>Workflow Risk</h3>
+          <ul class="list">
+            <li><span>risk</span><strong id="spine-risk">...</strong></li>
+            <li><span>escalations</span><strong id="spine-escalations">...</strong></li>
+            <li><span>supervision</span><strong id="spine-supervision">...</strong></li>
+          </ul>
+          <a href="/api/operational/workflow-risk">/api/operational/workflow-risk</a>
+        </article>
+        <article class="panel">
+          <h3>Circuit Breakers</h3>
+          <ul class="list">
+            <li><span>active</span><strong id="spine-breakers">...</strong></li>
+            <li><span>mode</span><strong id="spine-breaker-mode">...</strong></li>
+            <li><span>max source</span><strong id="spine-max-source">...</strong></li>
+          </ul>
+          <a href="/api/operational/circuit-breakers">/api/operational/circuit-breakers</a>
+        </article>
+        <article class="panel wide">
+          <h3>Replay Reconstruction</h3>
+          <div class="mono-block" id="spine-reconstruction">loading</div>
+          <a href="/api/operational/spine-replay">/api/operational/spine-replay</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="paradise">
+      <div class="section-title">
+        <h2>Paradise Worldcell</h2>
+        <p class="section-note">Intent, plan, dry-run, approval, execution and
+          evidence sessions for governed autonomous work.</p>
+      </div>
+      <div class="grid">
+        <article class="panel">
+          <h3>Sessions</h3>
+          <ul class="list">
+            <li><span>total</span><strong id="paradise-total">...</strong></li>
+            <li><span>latest</span><strong id="paradise-latest">...</strong></li>
+            <li><span>completed</span><strong id="paradise-completed">...</strong></li>
+          </ul>
+          <a href="/api/paradise/sessions">/api/paradise/sessions</a>
+        </article>
+        <article class="panel">
+          <h3>Worldcell</h3>
+          <ul class="list">
+            <li><span>runtime</span><strong id="paradise-runtime">...</strong></li>
+            <li><span>claims</span><strong id="paradise-claims">...</strong></li>
+            <li><span>loop</span><strong id="paradise-loop">...</strong></li>
+          </ul>
+          <a href="/api/paradise/worldcell">/api/paradise/worldcell</a>
+        </article>
+        <article class="panel wide">
+          <h3>Latest Paradise Session</h3>
+          <div class="mono-block" id="paradise-session">loading</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="apis">
+      <div class="section-title">
+        <h2>Runtime Surfaces</h2>
+        <p class="section-note">Dense, inspectable endpoints for operators,
+          SDKs and CI conformance suites.</p>
+      </div>
+      <div class="grid">
+        <article class="panel">
+          <h3>Runtime State</h3>
+          <p>Catalog, snapshot, OpenAPI contract and whitelisted state reads.</p>
+          <a href="/api/runtime/catalog">/api/runtime/catalog</a>
+        </article>
+        <article class="panel">
+          <h3>Operational</h3>
+          <p>Capability, GEWC, validation and action-contract surfaces.</p>
+          <a href="/api/operational/catalog">/api/operational/catalog</a>
+        </article>
+        <article class="panel">
+          <h3>Artifacts</h3>
+          <p>Release evidence exposed by reproducible artifact name.</p>
+          <a href="/api/artifact/catalog">/api/artifact/catalog</a>
+        </article>
+        <article class="panel">
+          <h3>GEWC</h3>
+          <p>Runtime trace summary and handler topology.</p>
+          <a href="/api/gewc/handlers">/api/gewc/handlers</a>
+        </article>
+        <article class="panel">
+          <h3>Validation</h3>
+          <p>Evidence presence, package status and no-claim policy checks.</p>
+          <a href="/api/validation/status">/api/validation/status</a>
+        </article>
+        <article class="panel">
+          <h3>Actions</h3>
+          <p>Permission contracts and command classification without execution.</p>
+          <a href="/api/actions/dry-run?cmd=evolve">/api/actions/dry-run</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Execution Chain</h2>
+        <p class="section-note">The runtime is treated as a governed operating
+          surface, not a loose collection of modules.</p>
+      </div>
+      <div class="lane" aria-label="GEWC execution chain">
+        <div class="node"><strong>Input</strong>HTTP, REPL, SDK</div>
+        <div class="node"><strong>Router</strong>Command parse</div>
+        <div class="node"><strong>GEWC</strong>Executive cycle</div>
+        <div class="node"><strong>Body</strong>Domain handler</div>
+        <div class="node"><strong>Evidence</strong>Artifacts + traces</div>
+        <div class="node"><strong>Gate</strong>Policy + audit</div>
+      </div>
+    </section>
+
+    <section class="section" id="validation">
+      <div class="section-title">
+        <h2>Validation Gates</h2>
+        <p class="section-note">Local checks are evidence for engineering
+          quality and interoperability, not AGI certification.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Gate</th>
+              <th>Command</th>
+              <th>Result surface</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>API conformance</td>
+              <td><code>make eden-api-conformance</code></td>
+              <td><code>sdk_conformance_report.json</code></td>
+            </tr>
+            <tr>
+              <td>API contracts</td>
+              <td><code>make eden-api-contracts</code></td>
+              <td><code>readiness_package.json</code>, independent validation report</td>
+            </tr>
+            <tr>
+              <td>Runtime tests</td>
+              <td><code>make test</code></td>
+              <td>serialized GARM example tests</td>
+            </tr>
+            <tr>
+              <td>Full local verification</td>
+              <td><code>make verify</code></td>
+              <td>format, tests, check, smokes and security audits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      EDEN operator console. Local-first. Read APIs are inspection-only.
+      Mutation remains routed through GEWC command gates.
+    </footer>
+  </main>
+  <script>
+    const text = (id, value) => {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    };
+
+    const fetchJson = async (url) => {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) throw new Error(`${url} ${response.status}`);
+      return response.json();
+    };
+
+    const setStatusPill = (state) => {
+      const node = document.getElementById("status-pill");
+      if (!node) return;
+      node.textContent = state || "unknown";
+      node.classList.toggle("warn", state === "starting" || state === "degraded");
+      node.classList.toggle("danger", state === "failed");
+    };
+
+    const loadConsole = async () => {
+      try {
+        const [status, permissions, recovery, replay, schemas, demos, runtime, operational, paradiseSessions, paradiseWorldcell, spine, spineEvents, spineState, spineReplay, spineVerification, spineEnforcement, spineRisk, spineBreakers, spineReconstruction] = await Promise.all([
+          fetchJson("/api/operational/status"),
+          fetchJson("/api/operational/permissions"),
+          fetchJson("/api/operational/recovery"),
+          fetchJson("/api/operational/replay"),
+          fetchJson("/api/operational/schemas"),
+          fetchJson("/api/operational/demos"),
+          fetchJson("/api/runtime/catalog"),
+          fetchJson("/api/operational/catalog"),
+          fetchJson("/api/paradise/sessions"),
+          fetchJson("/api/paradise/worldcell"),
+          fetchJson("/api/operational/spine"),
+          fetchJson("/api/operational/events"),
+          fetchJson("/api/operational/global-state"),
+          fetchJson("/api/operational/replay-spine"),
+          fetchJson("/api/operational/spine-verification"),
+          fetchJson("/api/operational/spine-enforcement"),
+          fetchJson("/api/operational/workflow-risk"),
+          fetchJson("/api/operational/circuit-breakers"),
+          fetchJson("/api/operational/spine-replay")
+        ]);
+
+        const permissionRecords = permissions.capabilities || [];
+        const remote = permissionRecords.find((record) => record.id === "remote_network");
+
+        text("metric-runtime-states", runtime.total ?? "...");
+        text("metric-api-surfaces", operational.total ?? "...");
+        text("metric-schemas", schemas.total ?? "...");
+        text("metric-permissions", permissionRecords.length);
+        text("trace-policy", `claim_allowed=${status.claim_allowed}`);
+        text("trace-actions", remote?.allowed ? "remote network allowed" : "remote network denied");
+        text("trace-core", status.authority || "global_executive_workspace_core");
+
+        setStatusPill(status.state);
+        text("status-ready", String(status.health?.ready ?? false));
+        text("status-uptime", `${status.health?.uptime_sec ?? 0}s`);
+        text("status-decision", status.latest?.decision_id || "none");
+
+        text("permissions-allowed", status.permissions?.allowed ?? 0);
+        text("permissions-denied", status.permissions?.denied ?? 0);
+        text("permissions-network", remote?.allowed ? "allowed" : "denied");
+
+        text("recovery-degraded", String(recovery.degraded ?? false));
+        text("recovery-handlers", recovery.degraded_handlers?.length ?? 0);
+        text("recovery-mode", recovery.mode || "live_read");
+
+        text("replay-records", replay.records ?? 0);
+        text("replay-decisions", replay.decisions ?? 0);
+        text("replay-policy", replay.reexecution_policy || "inspect only");
+
+        text("schemas-total", schemas.total ?? 0);
+        text("schemas-status", "v1");
+        text("schemas-registry", schemas.schema || "eden-schema-registry-v1");
+
+        text("demos-present", String(demos.present !== false));
+        text("demos-passed", demos.passed ?? 0);
+        text("demos-total", demos.total ?? (demos.demos?.length ?? 0));
+
+        text("spine-authority", spine.authority || "GEWC");
+        text("spine-interfaces", spine.interfaces?.length ?? 0);
+        text("spine-artifacts", spine.artifacts?.length ?? 0);
+        text("spine-events", spineEvents.events ?? 0);
+        text("spine-message", spineEvents.message_contract || "eden-internal-message-v1");
+        text("spine-queues", spineEvents.rate_limit_policy?.critical_queue ? "segmented" : "pending");
+        text("spine-mutations", spineState.mutation_count ?? 0);
+        text("spine-locks", spineState.locks?.enabled ? "enabled" : "pending");
+        text("spine-rollback", spineState.rollback?.snapshots ? "snapshots" : "pending");
+        text("spine-replay", JSON.stringify({
+          replayable: spineReplay.replayable ?? false,
+          events: spineReplay.events ?? 0,
+          mutations: spineReplay.state_mutations ?? 0,
+          reconstruction: spineReplay.decision_reconstruction || []
+        }, null, 2));
+        text("spine-verdict", spineVerification.summary?.verdict || "pending");
+        text("spine-checks", `${spineVerification.summary?.passed_checks ?? 0}/${spineVerification.summary?.total_checks ?? 0}`);
+        text("spine-scope", spineVerification.verification_scope?.length ?? 0);
+        text("spine-guard", spineEnforcement.guard_mode || "pending");
+        text("spine-decisions", spineEnforcement.summary?.guard_decisions ?? 0);
+        text("spine-blocked", spineEnforcement.summary?.blocked_guard_decisions ?? 0);
+        text("spine-risk", spineRisk.summary?.effective_risk || "unknown");
+        text("spine-escalations", spineRisk.summary?.escalations ?? 0);
+        text("spine-supervision", String(spineRisk.summary?.requires_supervision ?? false));
+        text("spine-breakers", `${spineBreakers.summary?.active_breakers ?? 0}/${spineBreakers.summary?.total_breakers ?? 0}`);
+        text("spine-breaker-mode", spineBreakers.summary?.runtime_mode || "unknown");
+        text("spine-max-source", spineBreakers.summary?.max_source_events ?? 0);
+        text("spine-reconstruction", JSON.stringify({
+          timeline: spineReconstruction.summary?.timeline_records ?? 0,
+          cycles: spineReconstruction.summary?.reconstructed_cycles ?? 0,
+          sources: spineReconstruction.sources || []
+        }, null, 2));
+
+        const paradiseRecords = paradiseSessions.sessions || [];
+        const latestParadise = paradiseRecords.find((session) => session.id === paradiseSessions.latest_session_id) || paradiseRecords[paradiseRecords.length - 1] || null;
+        const completedParadise = paradiseRecords.filter((session) => session.status === "completed").length;
+        text("paradise-total", paradiseRecords.length);
+        text("paradise-latest", paradiseSessions.latest_session_id || "none");
+        text("paradise-completed", completedParadise);
+        text("paradise-runtime", paradiseWorldcell.present === false ? "not generated" : (paradiseWorldcell.name || "Paradise"));
+        text("paradise-claims", `claim_allowed=${paradiseWorldcell.claim_allowed ?? false}`);
+        text("paradise-loop", paradiseSessions.loop_contract?.length ?? paradiseWorldcell.worldcell_loop?.length ?? 0);
+        text("paradise-session", JSON.stringify(latestParadise || {
+          status: "no_session",
+          command: "make paradise-operational-loop"
+        }, null, 2));
+
+        const latest = status.latest || {};
+        text("latest-chain", JSON.stringify({
+          decision_id: latest.decision_id,
+          route: latest.decision?.route,
+          handler: latest.decision?.body_handler,
+          completion: latest.completion?.execution_status,
+          block: latest.block?.disposition || latest.block?.execution_status || null
+        }, null, 2));
+      } catch (error) {
+        setStatusPill("offline");
+        text("latest-chain", String(error.message || error));
+      }
+    };
+
+    loadConsole();
+    window.setInterval(loadConsole, 10000);
+  </script>
+</body>
+</html>

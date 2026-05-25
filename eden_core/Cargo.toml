@@ -1,0 +1,67 @@
+[package]
+name = "eden_core"
+version = "1.0.0"
+edition = "2021"
+authors = ["Paradise Contributors"]
+description = "Local-first Paradise runtime, SDK, operator CLI and validation surface"
+license = "MIT"
+
+[dependencies]
+rand = "0.8"
+dirs = "5"
+libc = "0.2"
+tokio = { version = "1", features = ["rt", "sync", "rt-multi-thread"] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+rustls = { version = "0.23", default-features = false, features = ["std", "aws_lc_rs", "tls12"] }
+webpki-roots = "0.26"
+petgraph = "0.6"
+hashbrown = "0.14"
+ort = "2.0.0-rc.12"
+reqwest = { version = "0.12", features = ["blocking"] }
+redis = "0.25"
+libloading = "0.8"
+capnp = "0.25"
+arrow = "58"
+arrow-array = "58"
+rayon = "1.10"
+
+[features]
+default = []
+external-tests = []
+swarm = []
+
+[[bin]]
+name = "eden"
+path = "src/bin/eden.rs"
+
+[[bin]]
+name = "eden_seed_generator"
+path = "src/bin/eden_seed_generator.rs"
+
+[[bin]]
+name = "edenctl"
+path = "src/bin/edenctl.rs"
+
+[[bin]]
+name = "eden-garm"
+path = "src/bin/eden_garm.rs"
+
+[[bin]]
+name = "eden-garm-api-conformance"
+path = "src/bin/eden_garm_api_conformance.rs"
+
+[[bin]]
+name = "eden-garm-package-validator"
+path = "src/bin/eden_garm_package_validator.rs"
+
+[[bin]]
+name = "main_cosmogonic"
+path = "src/main_cosmogonic.rs"
+
+[[bin]]
+name = "eden_philosophical"
+path = "src/eden_philosophical.rs"
+
+[dev-dependencies]
+tempfile = "3.27.0"

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden-paradise-worldcell-runtime-v1",
+  "title": "Paradise Worldcell Runtime",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "name",
+    "category",
+    "claim_allowed",
+    "agi_claim",
+    "tagline",
+    "public_positioning",
+    "internal_engine",
+    "worldcell_loop",
+    "membrane",
+    "passed",
+    "total",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden-paradise-worldcell-runtime-v1"
+    },
+    "artifact": {
+      "const": "paradise_worldcell_runtime"
+    },
+    "name": {
+      "const": "Paradise"
+    },
+    "category": {
+      "const": "worldcell_runtime"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "worldcell_loop": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "membrane": {
+      "type": "object"
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

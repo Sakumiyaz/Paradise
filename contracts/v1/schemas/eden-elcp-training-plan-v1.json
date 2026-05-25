@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.training_plan.v1",
+  "title": "EDEN ELCP Training Plan",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "objective_id",
+    "phase",
+    "training_executed",
+    "weights_present",
+    "gpu_job_submitted",
+    "explicit_4b_required",
+    "future_training_boundary",
+    "phases"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.training_plan.v1"
+    },
+    "artifact": {
+      "const": "elcp_training_plan"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "gpu_job_submitted": {
+      "const": false
+    },
+    "explicit_4b_required": {
+      "const": true
+    }
+  },
+  "additionalProperties": true
+}

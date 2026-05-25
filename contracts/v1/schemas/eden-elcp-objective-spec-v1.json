@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.objective_spec.v1",
+  "title": "EDEN ELCP Objective Spec",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "objective_id",
+    "phase",
+    "training_executed",
+    "weights_present",
+    "prediction_targets",
+    "loss_terms",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.objective_spec.v1"
+    },
+    "artifact": {
+      "const": "elcp_objective_spec"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "prediction_targets": {
+      "type": "array"
+    },
+    "loss_terms": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.model_checkpoint_manifest.v1",
+  "title": "EDEN Model Checkpoint Manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "model_id",
+    "checkpoint_policy",
+    "runtime_boundaries"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.model_checkpoint_manifest.v1"
+    },
+    "artifact": {
+      "const": "model_checkpoint_manifest"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "model_id": {
+      "type": "string"
+    },
+    "checkpoint_policy": {
+      "type": "object",
+      "required": [
+        "weights_present",
+        "training_executed",
+        "checkpoint_committed_to_git"
+      ],
+      "properties": {
+        "weights_present": {
+          "const": false
+        },
+        "training_executed": {
+          "const": false
+        },
+        "checkpoint_committed_to_git": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "runtime_boundaries": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,3 @@
+{"id":"eval_memory_001","query":"Who verifies model outputs before runtime action?","expected_substring":"GEWC routes model outputs"}
+{"id":"eval_memory_002","query":"Can the first memory module write goals directly?","expected_substring":"cannot write goals"}
+{"id":"eval_memory_003","query":"What does claim_allowed stay in training reports?","expected_substring":"keep claim_allowed false"}

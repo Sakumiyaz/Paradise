@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">EDEN Operator Console Preview</title>
+  <desc id="desc">Static preview of the Paradise operator console with runtime, API and conformance status panels.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d0f0c"/>
+      <stop offset="0.52" stop-color="#11150f"/>
+      <stop offset="1" stop-color="#17150e"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d2319"/>
+      <stop offset="1" stop-color="#11150f"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2b3328" stroke-width="1" opacity="0.55"/>
+    </pattern>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#grid)" opacity="0.72"/>
+  <circle cx="170" cy="60" r="250" fill="#8fd14f" opacity="0.09"/>
+  <circle cx="1060" cy="660" r="280" fill="#52c8bc" opacity="0.08"/>
+
+  <g transform="translate(70 52)">
+    <rect x="0" y="0" width="1140" height="616" rx="10" fill="#0f120d" stroke="#33402f"/>
+    <line x1="0" y1="68" x2="1140" y2="68" stroke="#33402f"/>
+    <rect x="24" y="18" width="34" height="34" rx="6" fill="#26321c" stroke="#6d7d55"/>
+    <text x="41" y="41" text-anchor="middle" font-family="Consolas, monospace" font-size="18" font-weight="700" fill="#8fd14f">E</text>
+    <text x="74" y="40" font-family="Consolas, monospace" font-size="16" font-weight="700" fill="#f2f2e8" letter-spacing="2">PARADISE</text>
+    <text x="875" y="40" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Runtime</text>
+    <text x="952" y="40" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">APIs</text>
+    <text x="1002" y="40" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Validation</text>
+
+    <text x="34" y="136" font-family="Consolas, monospace" font-size="12" fill="#8fd14f" letter-spacing="2">GEWC GOVERNED RUNTIME CONSOLE</text>
+    <text x="32" y="210" font-family="Georgia, serif" font-size="64" fill="#f2f2e8">Operational view</text>
+    <text x="32" y="276" font-family="Georgia, serif" font-size="64" fill="#f2f2e8">for Paradise.</text>
+    <text x="36" y="325" font-family="Aptos, Segoe UI, sans-serif" font-size="18" fill="#a8ad9a">Runtime state, GEWC topology, action contracts, artifacts and conformance evidence.</text>
+
+    <rect x="34" y="360" width="250" height="42" rx="6" fill="#080a07" stroke="#33402f"/>
+    <text x="52" y="386" font-family="Consolas, monospace" font-size="13" fill="#8fd14f">make eden-api-conformance</text>
+    <rect x="298" y="360" width="226" height="42" rx="6" fill="#080a07" stroke="#33402f"/>
+    <text x="316" y="386" font-family="Consolas, monospace" font-size="13" fill="#8fd14f">make eden-api-contracts</text>
+    <rect x="538" y="360" width="142" height="42" rx="6" fill="#8fd14f"/>
+    <text x="566" y="386" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#080a07">Read snapshot</text>
+
+    <g transform="translate(740 104)" filter="url(#softShadow)">
+      <rect width="352" height="390" rx="8" fill="url(#panel)" stroke="#33402f"/>
+      <line x1="0" y1="52" x2="352" y2="52" stroke="#33402f"/>
+      <text x="18" y="32" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Operator console</text>
+      <text x="262" y="32" font-family="Consolas, monospace" font-size="12" fill="#8fd14f">local only</text>
+
+      <g transform="translate(0 52)">
+        <rect x="0" y="0" width="176" height="112" fill="#151912" stroke="#33402f"/>
+        <text x="18" y="36" font-family="Consolas, monospace" font-size="11" fill="#a8ad9a">RUNTIME STATES</text>
+        <text x="18" y="76" font-family="Consolas, monospace" font-size="34" fill="#f2f2e8">42</text>
+        <rect x="176" y="0" width="176" height="112" fill="#151912" stroke="#33402f"/>
+        <text x="194" y="36" font-family="Consolas, monospace" font-size="11" fill="#a8ad9a">API SURFACES</text>
+        <text x="194" y="76" font-family="Consolas, monospace" font-size="34" fill="#f2f2e8">7</text>
+        <rect x="0" y="112" width="176" height="112" fill="#151912" stroke="#33402f"/>
+        <text x="18" y="148" font-family="Consolas, monospace" font-size="11" fill="#a8ad9a">ARTIFACTS</text>
+        <text x="18" y="188" font-family="Consolas, monospace" font-size="34" fill="#f2f2e8">96</text>
+        <rect x="176" y="112" width="176" height="112" fill="#151912" stroke="#33402f"/>
+        <text x="194" y="148" font-family="Consolas, monospace" font-size="11" fill="#a8ad9a">CONFORMANCE</text>
+        <text x="194" y="188" font-family="Consolas, monospace" font-size="34" fill="#f2f2e8">56</text>
+      </g>
+
+      <line x1="18" y1="306" x2="334" y2="306" stroke="#33402f"/>
+      <text x="18" y="334" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">policy</text>
+      <text x="104" y="334" font-family="Consolas, monospace" font-size="12" fill="#52c8bc">claim_allowed=false</text>
+      <line x1="18" y1="350" x2="334" y2="350" stroke="#33402f"/>
+      <text x="18" y="374" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">core</text>
+      <text x="104" y="374" font-family="Consolas, monospace" font-size="12" fill="#52c8bc">GEWC owns dispatch</text>
+    </g>
+
+    <g transform="translate(34 506)">
+      <rect width="166" height="74" rx="6" fill="#151912" stroke="#33402f"/>
+      <text x="14" y="30" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#f2f2e8">Input</text>
+      <text x="14" y="52" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">HTTP / REPL / SDK</text>
+      <rect x="182" width="166" height="74" rx="6" fill="#151912" stroke="#33402f"/>
+      <text x="196" y="30" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#f2f2e8">Router</text>
+      <text x="196" y="52" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Command parse</text>
+      <rect x="364" width="166" height="74" rx="6" fill="#151912" stroke="#33402f"/>
+      <text x="378" y="30" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#f2f2e8">GEWC</text>
+      <text x="378" y="52" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Executive cycle</text>
+      <rect x="546" width="166" height="74" rx="6" fill="#151912" stroke="#33402f"/>
+      <text x="560" y="30" font-family="Consolas, monospace" font-size="13" font-weight="700" fill="#f2f2e8">Evidence</text>
+      <text x="560" y="52" font-family="Consolas, monospace" font-size="12" fill="#a8ad9a">Artifacts + traces</text>
+    </g>
+  </g>
+</svg>

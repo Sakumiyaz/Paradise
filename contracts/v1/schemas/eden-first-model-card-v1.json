@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.first_model.card.v1",
+  "title": "EDEN First Model Card",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "model_id",
+    "phase",
+    "training_executed",
+    "weights_present",
+    "checkpoint_admitted",
+    "model_class",
+    "interfaces",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.first_model.card.v1"
+    },
+    "artifact": {
+      "const": "first_model_card"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "checkpoint_admitted": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.validation_report.v1",
+  "title": "EDEN ELCP Validation Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "objective",
+    "authority",
+    "datasets",
+    "checks",
+    "passed",
+    "total",
+    "errors"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.validation_report.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "errors": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

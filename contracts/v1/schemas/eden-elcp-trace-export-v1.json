@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.trace_export.v1",
+  "title": "EDEN ELCP Trace Export",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "authority",
+    "source_trace_present",
+    "source_trace_rows",
+    "candidate_rows",
+    "output",
+    "admission_status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.trace_export.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.model_governance.v1",
+  "title": "EDEN Model Governance",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "governance_principles",
+    "permission_matrix",
+    "verification",
+    "circuit_breakers",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.model_governance.v1"
+    },
+    "artifact": {
+      "const": "model_governance_report"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "governance_principles": {
+      "type": "array"
+    },
+    "permission_matrix": {
+      "type": "array"
+    },
+    "verification": {
+      "type": "object"
+    },
+    "circuit_breakers": {
+      "type": "array"
+    },
+    "safety_boundary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

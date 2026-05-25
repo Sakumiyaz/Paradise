@@ -1,0 +1,10 @@
+{
+  "schema": "eden-action-dry-run-v1",
+  "command": "evolve",
+  "would_execute": false,
+  "requires_human_approval": true,
+  "route": "gewc",
+  "domain": "runtime",
+  "claim_allowed": false,
+  "agi_claim": false
+}

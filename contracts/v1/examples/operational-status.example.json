@@ -1,0 +1,17 @@
+{
+  "schema": "eden-operational-status-v1",
+  "state": "ready",
+  "health": {
+    "ready": true,
+    "autonomous": false,
+    "uptime_sec": 12
+  },
+  "latest": {
+    "decision_id": "none"
+  },
+  "permissions": {
+    "permissions_endpoint": "/api/operational/permissions"
+  },
+  "claim_allowed": false,
+  "agi_claim": false
+}

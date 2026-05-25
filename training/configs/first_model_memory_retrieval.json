@@ -1,0 +1,29 @@
+{
+  "module": "eden-memory-retrieval-baseline",
+  "version": "0.1.0",
+  "role": "GEWC_SUBORDINATE_MODULE",
+  "seed": 1729,
+  "purpose": "First trainable EDEN module contract: memory retrieval only, no runtime authority.",
+  "backend_plan": {
+    "initial": "stdlib_tfidf_smoke",
+    "future": "pytorch_rocm"
+  },
+  "datasets": {
+    "manifest": "training/data/manifest.json",
+    "train": "training/data/first_model_memory_train.jsonl",
+    "eval": "training/data/first_model_memory_eval.jsonl"
+  },
+  "authority_boundaries": {
+    "owner": "global_executive_workspace_core",
+    "direct_memory_writes": false,
+    "direct_objective_writes": false,
+    "direct_tool_execution": false,
+    "requires_verification_before_runtime_state": true,
+    "outputs_are_hypotheses": true
+  },
+  "release_gate": {
+    "claim_allowed": false,
+    "agi_claim": false,
+    "minimum_smoke_score": 1.0
+  }
+}

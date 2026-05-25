@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-runtime-replay-reconstruction-v1.json",
+  "title": "EDEN Runtime Replay Reconstruction",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "summary", "sources", "timeline"],
+  "properties": {
+    "schema": { "const": "eden-runtime-replay-reconstruction-v1" },
+    "artifact": { "const": "runtime_replay_reconstruction" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "summary": {
+      "type": "object",
+      "required": ["timeline_records", "reconstructed_cycles"],
+      "properties": {
+        "timeline_records": { "type": "integer", "minimum": 0 },
+        "reconstructed_cycles": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "type": "string" }
+    },
+    "timeline": { "type": "array" }
+  },
+  "additionalProperties": true
+}

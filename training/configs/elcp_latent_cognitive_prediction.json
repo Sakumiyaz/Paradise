@@ -1,0 +1,43 @@
+{
+  "objective": "eden-latent-cognitive-prediction-v1",
+  "version": "0.1.0",
+  "role": "GEWC_SUBORDINATE_TRAINING_OBJECTIVE",
+  "seed": 2718,
+  "purpose": "Prepare EDEN's native latent cognitive transition objective without executing training.",
+  "backend_plan": {
+    "initial": "jsonl_contract_and_cpu_shape_smoke",
+    "future": "pytorch_rocm_multi_loss_training"
+  },
+  "datasets": {
+    "manifest": "training/data/manifest.json",
+    "train": "training/data/elcp_transition_train.jsonl",
+    "eval": "training/data/elcp_transition_eval.jsonl"
+  },
+  "prediction_targets": [
+    "surface_token",
+    "situation_state",
+    "goal_state",
+    "memory_transition",
+    "world_delta",
+    "plan_transition",
+    "action_affordance",
+    "risk_calibration",
+    "uncertainty_calibration",
+    "learning_update",
+    "safety_gate"
+  ],
+  "authority_boundaries": {
+    "owner": "global_executive_workspace_core",
+    "direct_memory_writes": false,
+    "direct_objective_writes": false,
+    "direct_tool_execution": false,
+    "requires_verification_before_runtime_state": true,
+    "outputs_are_hypotheses": true
+  },
+  "release_gate": {
+    "claim_allowed": false,
+    "agi_claim": false,
+    "training_allowed_in_4a": false,
+    "minimum_future_state_transition_score": "future_4b_threshold"
+  }
+}

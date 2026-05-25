@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.garm.training_evidence.v1",
+  "title": "EDEN GARM Training Evidence",
+  "type": "object",
+  "required": [
+    "schema",
+    "authority",
+    "source_schema",
+    "claim_allowed",
+    "agi_claim",
+    "accepted_as",
+    "summary",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.garm.training_evidence.v1"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "source_schema": {
+      "const": "eden.training.capability_report.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "accepted_as": {
+      "const": "training_pipeline_evidence"
+    },
+    "summary": {
+      "type": "object"
+    },
+    "safety_boundary": {
+      "type": "object",
+      "required": [
+        "direct_memory_writes",
+        "direct_objective_writes",
+        "direct_tool_execution",
+        "requires_gewc_admission"
+      ],
+      "properties": {
+        "direct_memory_writes": {
+          "const": false
+        },
+        "direct_objective_writes": {
+          "const": false
+        },
+        "direct_tool_execution": {
+          "const": false
+        },
+        "requires_gewc_admission": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

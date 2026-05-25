@@ -1,0 +1,115 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "EDEN Runtime API",
+    "version": "1.0.0",
+    "description": "Local-first runtime-state API for Paradise public contract v1."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080"
+    }
+  ],
+  "security": [
+    {},
+    {
+      "EdenBearer": []
+    },
+    {
+      "EdenLocalToken": []
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "readHealth",
+        "responses": {
+          "200": {
+            "description": "Runtime health marker"
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "operationId": "readReadiness",
+        "responses": {
+          "200": {
+            "description": "Runtime is ready"
+          },
+          "503": {
+            "description": "Runtime is still starting"
+          }
+        }
+      }
+    },
+    "/api/runtime/catalog": {
+      "get": {
+        "operationId": "readRuntimeCatalog",
+        "responses": {
+          "200": {
+            "description": "Whitelisted runtime-state artifact catalog"
+          }
+        }
+      }
+    },
+    "/api/runtime/state": {
+      "get": {
+        "operationId": "readRuntimeStateByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Runtime state artifact"
+          },
+          "404": {
+            "description": "Unknown or denied runtime state name"
+          }
+        }
+      }
+    },
+    "/api/runtime/snapshot": {
+      "get": {
+        "operationId": "readRuntimeSnapshot",
+        "responses": {
+          "200": {
+            "description": "Live runtime metrics snapshot"
+          }
+        }
+      }
+    },
+    "/api/runtime/openapi": {
+      "get": {
+        "operationId": "readRuntimeOpenApi",
+        "responses": {
+          "200": {
+            "description": "Runtime-generated OpenAPI snapshot"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "EdenBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Optional local token sourced from EDEN_API_TOKEN."
+      },
+      "EdenLocalToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-EDEN-API-Token",
+        "description": "Optional local token sourced from EDEN_API_TOKEN."
+      }
+    }
+  }
+}

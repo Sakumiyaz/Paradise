@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.trace_quality_gate.v1",
+  "title": "EDEN ELCP Trace Quality Gate",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "weights_present",
+    "source_candidate_rows",
+    "accepted_rows",
+    "rejected_rows",
+    "passed",
+    "total",
+    "checks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.trace_quality_gate.v1"
+    },
+    "artifact": {
+      "const": "elcp_trace_quality_gate"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "checks": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

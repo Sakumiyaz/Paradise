@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+ROOT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
+
+declare -a FAILURES=()
+declare -a WARNINGS=()
+
+record_failure() {
+    FAILURES+=("$1")
+    printf '[public-audit] FAIL: %s\n' "$1" >&2
+}
+
+record_warning() {
+    WARNINGS+=("$1")
+    printf '[public-audit] WARN: %s\n' "$1" >&2
+}
+
+run_required() {
+    local -r label="$1"
+    shift
+    printf '[public-audit] check: %s\n' "${label}"
+    if ! "$@"; then
+        record_failure "${label}"
+    fi
+}
+
+check_tracked_forbidden_paths() {
+    local matches
+    matches="$(
+        git -C "${ROOT_DIR}" ls-files |
+            rg '(^|/)\.git($|/)|(^|/)\.git\.bak($|/)|\.bundle$|(__pycache__|\.pyc$|\.bak$|\.debug$|\.tmp$|\.env|secret|token|credential|private|\.pem$|\.p12$|\.pfx$|Cargo\.toml\.v|/reports/|language_reports)' || true
+    )"
+    if [[ -n "${matches}" ]]; then
+        printf '%s\n' "${matches}" >&2
+        return 1
+    fi
+}
+
+check_forbidden_filesystem_artifacts() {
+    local matches
+    matches="$(
+        find "${ROOT_DIR}" \
+            -path "${ROOT_DIR}/.git" -prune -o \
+            -path "${ROOT_DIR}/target" -prune -o \
+            -path "${ROOT_DIR}/eden_core/target" -prune -o \
+            -path "${ROOT_DIR}/mnemosyne/target" -prune -o \
+            \( -name '.git.bak' -o -name '*.bundle' -o -name '*.git.backup' \) \
+            -print
+    )"
+    if [[ -n "${matches}" ]]; then
+        printf '%s\n' "${matches}" >&2
+        return 1
+    fi
+}
+
+check_untracked_secret_files() {
+    local matches
+    matches="$(
+        find "${ROOT_DIR}" \
+            -path "${ROOT_DIR}/.git" -prune -o \
+            -path "${ROOT_DIR}/target" -prune -o \
+            -path "${ROOT_DIR}/eden_core/target" -prune -o \
+            -path "${ROOT_DIR}/mnemosyne/target" -prune -o \
+            -type f \( -name '.env' -o -name '.env.*' -o -name '*.pem' -o -name '*.key' -o -name '*.p12' -o -name '*.pfx' \) \
+            -print
+    )"
+    if [[ -n "${matches}" ]]; then
+        printf '%s\n' "${matches}" >&2
+        return 1
+    fi
+}
+
+check_secret_patterns() {
+    ! rg -n --hidden \
+        -g '!.git' \
+        -g '!target' \
+        -g '!eden_core/target' \
+        -g '!mnemosyne/target' \
+        -g '!Cargo.lock' \
+        -g '!scripts/public_release_audit.sh' \
+        '(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|xox[baprs]-|ghp_[A-Za-z0-9_]{20,}|-----BEGIN (RSA |OPENSSH |EC |DSA |PRIVATE )?PRIVATE KEY-----|OPENAI_API_KEY=|ANTHROPIC_API_KEY=|GITHUB_TOKEN=|AWS_SECRET_ACCESS_KEY=)' \
+        "${ROOT_DIR}"
+}
+
+check_public_docs() {
+    local -a required=(
+        "LICENSE"
+        "SECURITY.md"
+        "CONTRIBUTING.md"
+        "CHANGELOG.md"
+        "CODE_OF_CONDUCT.md"
+        "PUBLIC_RELEASE.md"
+        "docs/CLAIMS_AND_LIMITATIONS.md"
+        "docs/THREAT_MODEL.md"
+        "docs/PROJECT_STRUCTURE.md"
+        "docs/HISTORY_REWRITE_PLAYBOOK.md"
+        "docs/releases/v0.1.0-public-draft.md"
+    )
+    local missing=false
+    for path in "${required[@]}"; do
+        if [[ ! -s "${ROOT_DIR}/${path}" ]]; then
+            printf 'missing required document: %s\n' "${path}" >&2
+            missing=true
+        fi
+    done
+    [[ "${missing}" == false ]]
+}
+
+check_optional_scanners() {
+    if command -v gitleaks >/dev/null 2>&1; then
+        printf '[public-audit] check: gitleaks detect\n'
+        gitleaks detect --source "${ROOT_DIR}" --redact --exit-code 1
+    else
+        record_warning "gitleaks not installed; fallback regex scan was used"
+    fi
+
+    if command -v trufflehog >/dev/null 2>&1; then
+        printf '[public-audit] check: trufflehog filesystem\n'
+        trufflehog filesystem "${ROOT_DIR}" --no-update --fail
+    else
+        record_warning "trufflehog not installed; fallback regex scan was used"
+    fi
+}
+
+main() {
+    cd "${ROOT_DIR}"
+    run_required "tracked forbidden path scan" check_tracked_forbidden_paths
+    run_required "forbidden filesystem artifact scan" check_forbidden_filesystem_artifacts
+    run_required "untracked secret file scan" check_untracked_secret_files
+    run_required "secret pattern scan" check_secret_patterns
+    run_required "public-ready document presence" check_public_docs
+    run_required "JavaScript package-manager policy" make js-policy
+    check_optional_scanners
+
+    printf '[public-audit] warnings=%s failures=%s\n' "${#WARNINGS[@]}" "${#FAILURES[@]}"
+    if ((${#FAILURES[@]} > 0)); then
+        printf '[public-audit] status=failed\n' >&2
+        exit 1
+    fi
+    printf '[public-audit] status=passed\n'
+}
+
+main "$@"

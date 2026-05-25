@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.elcp.training_dry_run.v1",
+  "title": "EDEN ELCP Training Dry Run",
+  "type": "object",
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "authority",
+    "objective",
+    "mode",
+    "training_executed",
+    "weights_present",
+    "weights_written",
+    "gpu_job_submitted",
+    "checkpoint_admitted",
+    "datasets",
+    "schedule_shape",
+    "blocked_until_4b"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.elcp.training_dry_run.v1"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "mode": {
+      "const": "dry_run_only"
+    },
+    "training_executed": {
+      "const": false
+    },
+    "weights_present": {
+      "const": false
+    },
+    "weights_written": {
+      "const": false
+    },
+    "gpu_job_submitted": {
+      "const": false
+    },
+    "checkpoint_admitted": {
+      "const": false
+    }
+  },
+  "additionalProperties": true
+}

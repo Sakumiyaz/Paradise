@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden-paradise-worldcell-session-v1",
+  "title": "Paradise Worldcell Sessions",
+  "type": "object",
+  "required": [
+    "schema",
+    "artifact",
+    "name",
+    "category",
+    "claim_allowed",
+    "agi_claim",
+    "authority",
+    "latest_session_id",
+    "sessions",
+    "loop_contract"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden-paradise-worldcell-session-v1"
+    },
+    "artifact": {
+      "const": "paradise_worldcell_sessions"
+    },
+    "name": {
+      "const": "Paradise"
+    },
+    "category": {
+      "const": "worldcell_operational_loop"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "latest_session_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sessions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "intent",
+          "status",
+          "current_stage",
+          "authority",
+          "claim_allowed",
+          "agi_claim"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "intent": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "current_stage": {
+            "type": "string"
+          },
+          "authority": {
+            "const": "global_executive_workspace_core"
+          },
+          "claim_allowed": {
+            "const": false
+          },
+          "agi_claim": {
+            "const": false
+          },
+          "candidate_command": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "approval": {
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "object"
+          },
+          "execution": {
+            "type": "object"
+          },
+          "steps": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "loop_contract": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}
