@@ -54,6 +54,12 @@ ad hoc notebooks or private scripts.
 - `make training-megatron-7b-evidence-json` is available for GPU-only hosts
   that can generate portable evidence but do not have the Rust runtime toolchain
   installed.
+- `make training-megatron-7b-inference-probe` loads the EDEN-owned 7B
+  checkpoint through Megatron Core inference and writes a local token-generation
+  report with Docker `--network none`.
+- `make training-megatron-7b-adapter` admits the checkpoint-load/token-generation
+  evidence into GEWC as a subordinate cognitive capacity while still blocking
+  semantic competence, production inference, checkpoint admission and autonomy.
 
 ## Future AMD GPU Use
 
@@ -95,6 +101,10 @@ The current model runtime path makes that boundary executable:
   `target/eden_elcp/metrics_board.json` and
   `target/eden_elcp/4b_readiness_contract.json` harden that evidence for
   operator review while still keeping `4b_training_allowed=false`.
+- `target/eden_megatron_7b_base_pilot/eden_7b_inference_report.json` proves only
+  that the checkpoint can be loaded and can generate candidate tokens. It is a
+  runtime usability signal, not evidence of AGI, semantic reliability or
+  release readiness.
 
 ## Validation Commands
 
@@ -105,6 +115,8 @@ make training-megatron-eden-corpus-pilot
 make training-megatron-eden-7b-base-pilot
 make training-megatron-7b-evidence-json
 make training-megatron-7b-evidence
+make training-megatron-7b-inference-probe
+make training-megatron-7b-adapter
 make training-smoke
 make training-evidence
 make model-runtime

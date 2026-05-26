@@ -39,9 +39,11 @@ measurable capability before expensive GPU work:
 | `models/README.md` | Checkpoint policy; generated model artifacts stay out of git. |
 | `rocm/rocm_env.sh` | Local ROCm environment probe; it reports availability without requiring a GPU. |
 | `rocm/build_megatron_7b_evidence.py` | Stdlib-only builder/validator for the 7B Megatron pilot evidence contract. |
+| `rocm/build_megatron_7b_inference_report.py` | Stdlib-only builder/validator for the 7B checkpoint inference probe contract. |
 | `rocm/megatron_offline_smoke.sh` | Optional MI300X/Megatron smoke launcher. It uses `NullTokenizer`, mock data, random initialization and Docker `--network none`; it does not pull images or use external models. |
 | `rocm/megatron_eden_corpus_pilot.sh` | Optional MI300X/Megatron pilot launcher. It trains a local SentencePiece tokenizer from `eden_core/corpus`, preprocesses EDEN-owned text into Megatron format and runs a tiny random-weight GPT pilot without network access or external models. |
 | `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models, formal evidence JSON and no checkpoint admission. |
+| `rocm/megatron_eden_7b_inference_probe.sh` | Optional MI300X/Megatron inference probe. It loads the EDEN-owned 7B checkpoint and generates tokens locally through Megatron Core inference with Docker `--network none`. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -65,6 +67,10 @@ Python training code:
 | `elcp_metrics_board.json` | Admits the aggregate metrics board into the runtime artifact API. |
 | `elcp_4b_readiness_contract.json` | Admits the final pre-training 4B contract while blocking training. |
 | `elcp_readiness.json` | Confirms ELCP 4A preparation while keeping training blocked. |
+| `megatron_7b_model_adapter.json` | Exposes the 7B checkpoint as a GEWC-subordinate candidate generator. |
+| `megatron_7b_inference_report.json` | Admits real checkpoint-load/token-generation evidence after the ROCm probe. |
+| `megatron_7b_capability_report.json` | Marks only the usable probe capability, not semantic competence or AGI. |
+| `megatron_7b_admission_gate.json` | Keeps checkpoint, production and autonomy admission blocked after the probe. |
 
 ## Local Smoke Run
 
@@ -213,6 +219,31 @@ agi_claim=false
 checkpoint_admission=false
 weights_admitted=false
 ```
+
+After a checkpoint exists, run a real local inference probe on the ROCm host:
+
+```bash
+make training-megatron-7b-inference-probe
+```
+
+This writes:
+
+```text
+target/eden_megatron_7b_base_pilot/eden_7b_inference_probe.log
+target/eden_megatron_7b_base_pilot/eden_7b_inference.summary
+target/eden_megatron_7b_base_pilot/eden_7b_inference_response.json
+target/eden_megatron_7b_base_pilot/eden_7b_inference_report.json
+```
+
+To admit that probe as a governed EDEN cognitive capacity on a host with Rust:
+
+```bash
+make training-megatron-7b-adapter
+```
+
+The adapter is intentionally narrow: GEWC may use it as a subordinate candidate
+token generator, but it still cannot write memory, change objectives, execute
+tools, claim semantic competence, or admit its own checkpoint.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

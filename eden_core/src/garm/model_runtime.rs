@@ -22,9 +22,14 @@ pub const ELCP_REPLAY_EVAL_SCHEMA: &str = "eden.elcp.replay_eval.v1";
 pub const ELCP_DATASET_FREEZE_MANIFEST_SCHEMA: &str = "eden.elcp.dataset_freeze_manifest.v1";
 pub const ELCP_METRICS_BOARD_SCHEMA: &str = "eden.elcp.metrics_board.v1";
 pub const ELCP_4B_READINESS_CONTRACT_SCHEMA: &str = "eden.elcp.4b_readiness_contract.v1";
+pub const MEGATRON_7B_MODEL_ADAPTER_SCHEMA: &str = "eden.megatron.7b.model_adapter.v1";
+pub const MEGATRON_7B_INFERENCE_REPORT_SCHEMA: &str = "eden.megatron.7b.inference_report.v1";
+pub const MEGATRON_7B_CAPABILITY_REPORT_SCHEMA: &str = "eden.megatron.7b.capability_report.v1";
+pub const MEGATRON_7B_ADMISSION_GATE_SCHEMA: &str = "eden.megatron.7b.admission_gate.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const DEFAULT_MODEL_ID: &str = "eden-memory-retrieval-baseline";
+const MEGATRON_7B_MODEL_ID: &str = "eden-megatron-7b-base-pilot";
 const DEFAULT_MODEL_CONFIG: &str = "training/configs/first_model_memory_retrieval.json";
 const DEFAULT_TRAIN_DATA: &str = "training/data/first_model_memory_train.jsonl";
 const DEFAULT_EVAL_DATA: &str = "training/data/first_model_memory_eval.jsonl";
@@ -33,6 +38,10 @@ const ELCP_CONFIG: &str = "training/configs/elcp_latent_cognitive_prediction.jso
 const ELCP_TRAIN_DATA: &str = "training/data/elcp_transition_train.jsonl";
 const ELCP_EVAL_DATA: &str = "training/data/elcp_transition_eval.jsonl";
 const ELCP_REPORT_DIR_ENV: &str = "EDEN_ELCP_REPORT_DIR";
+const DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH: &str =
+    "target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json";
+const DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH: &str =
+    "target/eden_megatron_7b_base_pilot/eden_7b_inference_report.json";
 
 pub fn run_all() -> String {
     let mut out = String::new();
@@ -98,6 +107,60 @@ pub fn prepare_elcp() -> String {
     out.push_str(&write_elcp_hardening());
     out.push_str(&write_elcp_readiness());
     out
+}
+
+pub fn prepare_megatron_7b_adapter() -> String {
+    let mut out = String::new();
+    out.push_str(&write_megatron_7b_model_adapter());
+    out.push_str(&write_megatron_7b_inference_report());
+    out.push_str(&write_megatron_7b_capability_report());
+    out.push_str(&write_megatron_7b_admission_gate());
+    out
+}
+
+pub fn write_megatron_7b_model_adapter() -> String {
+    let record = megatron_7b_model_adapter_value();
+    write_report(
+        "MEGATRON-7B-ADAPTER",
+        MEGATRON_7B_MODEL_ADAPTER_SCHEMA,
+        state_paths::megatron_7b_model_adapter_path(),
+        record,
+    )
+}
+
+pub fn write_megatron_7b_inference_report() -> String {
+    match copy_megatron_7b_inference_report_from_path(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH) {
+        Ok(path) => format!(
+            "[MEGATRON-7B-INFERENCE] schema={} status=accepted authority={} claim_allowed=false agi_claim=false checkpoint_admission=false path={}\n",
+            MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            AUTHORITY,
+            path.to_string_lossy()
+        ),
+        Err(err) => format!(
+            "[MEGATRON-7B-INFERENCE] schema={} status=rejected authority={} claim_allowed=false agi_claim=false checkpoint_admission=false reason={}\n",
+            MEGATRON_7B_INFERENCE_REPORT_SCHEMA, AUTHORITY, err
+        ),
+    }
+}
+
+pub fn write_megatron_7b_capability_report() -> String {
+    let record = megatron_7b_capability_report_value();
+    write_report(
+        "MEGATRON-7B-CAPABILITY",
+        MEGATRON_7B_CAPABILITY_REPORT_SCHEMA,
+        state_paths::megatron_7b_capability_report_path(),
+        record,
+    )
+}
+
+pub fn write_megatron_7b_admission_gate() -> String {
+    let record = megatron_7b_admission_gate_value();
+    write_report(
+        "MEGATRON-7B-ADMISSION-GATE",
+        MEGATRON_7B_ADMISSION_GATE_SCHEMA,
+        state_paths::megatron_7b_admission_gate_path(),
+        record,
+    )
 }
 
 pub fn write_first_model_card() -> String {
@@ -1305,6 +1368,278 @@ fn elcp_readiness_value() -> Value {
     })
 }
 
+fn megatron_7b_model_adapter_value() -> Value {
+    let training_status =
+        read_megatron_7b_training_evidence_status(DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH);
+    let inference_status =
+        read_megatron_7b_inference_report_status(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH);
+    serde_json::json!({
+        "schema": MEGATRON_7B_MODEL_ADAPTER_SCHEMA,
+        "artifact": "megatron_7b_model_adapter",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "runtime_role": "GEWC_SUBORDINATE_GENERATIVE_MODEL_ADAPTER",
+        "native_to_gewc": true,
+        "checkpoint_admitted": false,
+        "production_model": false,
+        "purpose": "Expose the EDEN-owned 7B Megatron checkpoint as a governed cognitive capacity: load checkpoint, generate candidate tokens and return hypotheses to GEWC without direct authority.",
+        "source_artifacts": {
+            "training_evidence_source": DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH,
+            "training_evidence_state": state_paths::megatron_7b_training_evidence_path(),
+            "inference_report_source": DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH,
+            "inference_report_state": state_paths::megatron_7b_inference_report_path(),
+            "capability_report": state_paths::megatron_7b_capability_report_path(),
+            "admission_gate": state_paths::megatron_7b_admission_gate_path(),
+        },
+        "model_shape": {
+            "family": "gpt_megatron_random_init",
+            "parameters": training_status.get("model_parameters").cloned().unwrap_or(Value::Null),
+            "layers": 32,
+            "hidden_size": 4096,
+            "ffn_hidden_size": 12288,
+            "attention_heads": 32,
+            "sequence_length": 128,
+            "tokenizer": "eden_sentencepiece_vocab_2048"
+        },
+        "usable_capacity_boundary": {
+            "accepted_for": [
+                "checkpoint_load_probe",
+                "token_generation_probe",
+                "model_adapter_contract_test",
+                "future_supervised_cognitive_candidate_generation"
+            ],
+            "not_accepted_for": [
+                "agi_claim",
+                "semantic_competence_claim",
+                "autonomous_runtime_authority",
+                "direct_memory_mutation",
+                "direct_objective_mutation",
+                "production_inference"
+            ]
+        },
+        "status": {
+            "training_evidence": training_status,
+            "inference_report": inference_status,
+            "adapter_prepared": training_status.get("accepted").and_then(Value::as_bool) == Some(true),
+            "inference_observed": inference_status.get("accepted").and_then(Value::as_bool) == Some(true),
+            "checkpoint_admission": false
+        },
+        "interfaces": {
+            "input": "GEWC-filtered prompt/context packet",
+            "output": "candidate token continuation with provenance and uncertainty metadata",
+            "state_write_policy": "read-only candidate generator; all state changes must go through GEWC transaction layers"
+        },
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn megatron_7b_capability_report_value() -> Value {
+    let inference_status =
+        read_megatron_7b_inference_report_status(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH);
+    let training_status =
+        read_megatron_7b_training_evidence_status(DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH);
+    let inference_accepted =
+        inference_status.get("accepted").and_then(Value::as_bool) == Some(true);
+    let training_accepted = training_status.get("accepted").and_then(Value::as_bool) == Some(true);
+    let checks = vec![
+        (
+            "training_evidence_accepted",
+            training_accepted,
+            DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH.to_string(),
+        ),
+        (
+            "checkpoint_written_but_not_admitted",
+            training_status
+                .get("checkpoint_written")
+                .and_then(Value::as_bool)
+                == Some(true),
+            "checkpoint_written=true checkpoint_admission=false".to_string(),
+        ),
+        (
+            "inference_report_accepted",
+            inference_accepted,
+            DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH.to_string(),
+        ),
+        (
+            "checkpoint_loaded_for_inference",
+            inference_status
+                .get("checkpoint_loaded")
+                .and_then(Value::as_bool)
+                == Some(true),
+            "inference_report.run.checkpoint_loaded=true".to_string(),
+        ),
+        (
+            "tokens_generated",
+            inference_status
+                .get("generated_count")
+                .and_then(Value::as_u64)
+                .map(|count| count > 0)
+                .unwrap_or(false),
+            "inference_report.run.generated_count > 0".to_string(),
+        ),
+        (
+            "no_claim_boundary_preserved",
+            inference_status
+                .get("claim_allowed")
+                .and_then(Value::as_bool)
+                == Some(false)
+                && inference_status.get("agi_claim").and_then(Value::as_bool) == Some(false),
+            "claim_allowed=false agi_claim=false".to_string(),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    let records: Vec<_> = checks
+        .iter()
+        .map(|(name, passed, evidence)| {
+            serde_json::json!({
+                "check": name,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        })
+        .collect();
+    serde_json::json!({
+        "schema": MEGATRON_7B_CAPABILITY_REPORT_SCHEMA,
+        "artifact": "megatron_7b_capability_report",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "capability_id": "eden_7b_checkpoint_token_generation_probe",
+        "capability_status": if passed == checks.len() { "usable_probe_path" } else { "pending_or_incomplete" },
+        "passed": passed,
+        "total": checks.len(),
+        "checks": records,
+        "training_evidence": training_status,
+        "inference_evidence": inference_status,
+        "accepted_capability": {
+            "checkpoint_load": inference_accepted,
+            "token_generation": inference_accepted,
+            "gewc_subordinate_adapter": true,
+            "semantic_quality_admitted": false,
+            "production_inference_admitted": false,
+            "checkpoint_admission": false
+        },
+        "not_evidence_for": [
+            "AGI",
+            "general intelligence",
+            "language competence",
+            "external benchmark performance",
+            "autonomous action authority"
+        ],
+        "next_required_evaluations": [
+            "token-level validation suite",
+            "held-out EDEN corpus perplexity",
+            "instruction-following probes after supervised training",
+            "safety prompt/adversarial probes",
+            "checkpoint reproducibility hash review"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn megatron_7b_admission_gate_value() -> Value {
+    let capability = read_json_file(&state_paths::megatron_7b_capability_report_path());
+    let capability_passed = capability.as_ref().is_some_and(|report| {
+        match (
+            report.get("passed").and_then(Value::as_u64),
+            report.get("total").and_then(Value::as_u64),
+        ) {
+            (Some(passed), Some(total)) => total > 0 && passed == total,
+            _ => false,
+        }
+    });
+    let checks = vec![
+        (
+            "capability_report_present",
+            capability.is_some(),
+            state_paths::megatron_7b_capability_report_path(),
+        ),
+        (
+            "capability_probe_passed",
+            capability_passed,
+            "megatron_7b_capability_report.passed == total".to_string(),
+        ),
+        (
+            "claim_boundary_false",
+            capability.as_ref().is_some_and(|report| {
+                report.get("claim_allowed").and_then(Value::as_bool) == Some(false)
+                    && report.get("agi_claim").and_then(Value::as_bool) == Some(false)
+            }),
+            "claim_allowed=false agi_claim=false".to_string(),
+        ),
+        (
+            "semantic_quality_not_admitted",
+            capability.as_ref().is_some_and(|report| {
+                report
+                    .get("accepted_capability")
+                    .and_then(Value::as_object)
+                    .and_then(|accepted| accepted.get("semantic_quality_admitted"))
+                    .and_then(Value::as_bool)
+                    == Some(false)
+            }),
+            "accepted_capability.semantic_quality_admitted=false".to_string(),
+        ),
+        (
+            "production_inference_not_admitted",
+            capability.as_ref().is_some_and(|report| {
+                report
+                    .get("accepted_capability")
+                    .and_then(Value::as_object)
+                    .and_then(|accepted| accepted.get("production_inference_admitted"))
+                    .and_then(Value::as_bool)
+                    == Some(false)
+            }),
+            "accepted_capability.production_inference_admitted=false".to_string(),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    let records: Vec<_> = checks
+        .iter()
+        .map(|(name, passed, evidence)| {
+            serde_json::json!({
+                "check": name,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        })
+        .collect();
+    serde_json::json!({
+        "schema": MEGATRON_7B_ADMISSION_GATE_SCHEMA,
+        "artifact": "megatron_7b_admission_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "mode": "post_training_probe_gate",
+        "passed": passed,
+        "total": checks.len(),
+        "checks": records,
+        "checkpoint_load_probe_usable": capability_passed,
+        "checkpoint_admission_allowed": false,
+        "weights_admitted": false,
+        "production_model": false,
+        "autonomous_runtime_authority": false,
+        "decision": "usable_as_governed_probe_only",
+        "blockers": [
+            "semantic_quality_not_evaluated",
+            "external_validation_missing",
+            "safety_eval_missing",
+            "checkpoint_hash_review_missing",
+            "human_release_review_missing"
+        ],
+        "allowed_next_steps": [
+            "run additional local inference probes",
+            "build EDEN-native token/cognitive evaluation set",
+            "prepare supervised cognitive-state training data",
+            "keep checkpoint outside git and outside production authority"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
 fn target(name: &str, description: &str) -> Value {
     serde_json::json!({
         "name": name,
@@ -1380,6 +1715,127 @@ fn read_training_report_status(path: &str) -> Value {
             "expected_command": "make training-smoke",
         }),
     }
+}
+
+fn read_megatron_7b_training_evidence_status(path: &str) -> Value {
+    match read_repo_json(path) {
+        Some(evidence) => match training_evidence::validate_megatron_7b_evidence_value(&evidence) {
+            Ok(summary) => serde_json::json!({
+                "accepted": true,
+                "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+                "train_iters": summary.train_iters,
+                "completed_iterations": summary.completed_iterations,
+                "model_parameters": summary.model_parameters,
+                "final_loss": summary.final_loss,
+                "checkpoint_written": summary.checkpoint_written,
+                "checkpoint_admission": false,
+                "source": path,
+            }),
+            Err(err) => serde_json::json!({
+                "accepted": false,
+                "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+                "reason": err,
+                "source": path,
+            }),
+        },
+        None => serde_json::json!({
+            "accepted": false,
+            "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+            "reason": "training evidence source missing",
+            "source": path,
+        }),
+    }
+}
+
+fn read_megatron_7b_inference_report_status(path: &str) -> Value {
+    match read_repo_json(path) {
+        Some(report) => match validate_megatron_7b_inference_report_value(&report) {
+            Ok(()) => {
+                let run = report.get("run").unwrap_or(&Value::Null);
+                serde_json::json!({
+                    "accepted": true,
+                    "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+                    "claim_allowed": false,
+                    "agi_claim": false,
+                    "checkpoint_loaded": run.get("checkpoint_loaded").and_then(Value::as_bool).unwrap_or(false),
+                    "generated_count": run.get("generated_count").and_then(Value::as_u64).unwrap_or(0),
+                    "tokens_to_generate": run.get("tokens_to_generate").and_then(Value::as_u64).unwrap_or(0),
+                    "checkpoint_admission": false,
+                    "source": path,
+                })
+            }
+            Err(err) => serde_json::json!({
+                "accepted": false,
+                "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+                "claim_allowed": false,
+                "agi_claim": false,
+                "reason": err,
+                "source": path,
+            }),
+        },
+        None => serde_json::json!({
+            "accepted": false,
+            "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            "claim_allowed": false,
+            "agi_claim": false,
+            "reason": "inference report source missing",
+            "source": path,
+        }),
+    }
+}
+
+fn copy_megatron_7b_inference_report_from_path(path: &str) -> Result<std::path::PathBuf, String> {
+    let report =
+        read_repo_json(path).ok_or_else(|| "inference report source missing".to_string())?;
+    validate_megatron_7b_inference_report_value(&report)?;
+    let target = std::path::PathBuf::from(state_paths::megatron_7b_inference_report_path());
+    state_paths::ensure_state_dir()?;
+    std::fs::write(
+        &target,
+        serde_json::to_string_pretty(&report).map_err(|e| e.to_string())?,
+    )
+    .map_err(|e| format!("failed to write Megatron 7B inference report: {}", e))?;
+    Ok(target)
+}
+
+fn validate_megatron_7b_inference_report_value(report: &Value) -> Result<(), String> {
+    require_value_string_eq(report, "schema", MEGATRON_7B_INFERENCE_REPORT_SCHEMA)?;
+    require_value_string_eq(report, "authority", AUTHORITY)?;
+    require_value_bool_eq(report, "claim_allowed", false)?;
+    require_value_bool_eq(report, "agi_claim", false)?;
+    require_value_string_eq(report, "accepted_as", "7b_checkpoint_inference_probe")?;
+
+    let run = require_value_object(report, "run")?;
+    require_map_bool_eq(run, "passed", true)?;
+    require_map_string_eq(run, "network", "none")?;
+    require_map_bool_eq(run, "external_model_dependency", false)?;
+    require_map_bool_eq(run, "checkpoint_loaded", true)?;
+    require_map_bool_eq(run, "checkpoint_admission", false)?;
+    require_map_bool_eq(run, "production_model", false)?;
+    let generated_count = require_map_u64(run, "generated_count")?;
+    let tokens_to_generate = require_map_u64(run, "tokens_to_generate")?;
+    if generated_count == 0 {
+        return Err("run.generated_count must be greater than zero".to_string());
+    }
+    if tokens_to_generate == 0 {
+        return Err("run.tokens_to_generate must be greater than zero".to_string());
+    }
+
+    let response = report
+        .get("responses")
+        .and_then(Value::as_array)
+        .ok_or_else(|| "responses.array required".to_string())?;
+    if response.len() != generated_count as usize {
+        return Err("responses length must match run.generated_count".to_string());
+    }
+
+    let safety_boundary = require_value_object(report, "safety_boundary")?;
+    require_map_bool_eq(safety_boundary, "direct_memory_writes", false)?;
+    require_map_bool_eq(safety_boundary, "direct_objective_writes", false)?;
+    require_map_bool_eq(safety_boundary, "direct_tool_execution", false)?;
+    require_map_bool_eq(safety_boundary, "requires_gewc_admission", true)?;
+    require_map_bool_eq(safety_boundary, "outputs_are_hypotheses", true)?;
+    Ok(())
 }
 
 fn existing_adapter_events() -> Vec<Value> {
@@ -1522,6 +1978,63 @@ fn read_repo_json(path: &str) -> Option<Value> {
 fn read_json_file(path: &str) -> Option<Value> {
     let body = std::fs::read_to_string(path).ok()?;
     serde_json::from_str::<Value>(&body).ok()
+}
+
+fn require_value_object<'a>(
+    value: &'a Value,
+    field: &str,
+) -> Result<&'a serde_json::Map<String, Value>, String> {
+    value
+        .get(field)
+        .and_then(Value::as_object)
+        .ok_or_else(|| format!("{}.object required", field))
+}
+
+fn require_value_string_eq(value: &Value, field: &str, expected: &str) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_str) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.string required", field)),
+    }
+}
+
+fn require_value_bool_eq(value: &Value, field: &str, expected: bool) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_bool) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.bool required", field)),
+    }
+}
+
+fn require_map_string_eq(
+    value: &serde_json::Map<String, Value>,
+    field: &str,
+    expected: &str,
+) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_str) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.string required", field)),
+    }
+}
+
+fn require_map_bool_eq(
+    value: &serde_json::Map<String, Value>,
+    field: &str,
+    expected: bool,
+) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_bool) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.bool required", field)),
+    }
+}
+
+fn require_map_u64(value: &serde_json::Map<String, Value>, field: &str) -> Result<u64, String> {
+    value
+        .get(field)
+        .and_then(Value::as_u64)
+        .ok_or_else(|| format!("{}.u64 required", field))
 }
 
 fn report_preserves_no_claim_boundary(report: &Value) -> bool {
@@ -1822,6 +2335,46 @@ mod tests {
         }
     }
 
+    fn valid_megatron_7b_inference_report() -> Value {
+        serde_json::json!({
+            "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            "authority": AUTHORITY,
+            "claim_allowed": false,
+            "agi_claim": false,
+            "accepted_as": "7b_checkpoint_inference_probe",
+            "source": {
+                "checkpoint_path": "target/eden_megatron_7b_base_pilot/checkpoints",
+                "response_path": "target/eden_megatron_7b_base_pilot/eden_7b_inference_response.json",
+                "log_path": "target/eden_megatron_7b_base_pilot/eden_7b_inference_probe.log"
+            },
+            "run": {
+                "passed": true,
+                "network": "none",
+                "external_model_dependency": false,
+                "checkpoint_loaded": true,
+                "checkpoint_admission": false,
+                "production_model": false,
+                "generated_count": 1,
+                "tokens_to_generate": 8
+            },
+            "responses": [
+                {
+                    "prompt": "EDEN state:",
+                    "generated_text": "EDEN state: candidate tokens",
+                    "generated_tokens": ["candidate", "tokens"]
+                }
+            ],
+            "safety_boundary": {
+                "direct_memory_writes": false,
+                "direct_objective_writes": false,
+                "direct_tool_execution": false,
+                "requires_gewc_admission": true,
+                "outputs_are_hypotheses": true,
+                "model_may_not_mutate_runtime_state": true
+            }
+        })
+    }
+
     #[test]
     fn run_all_writes_all_model_runtime_artifacts() {
         let _guard = state_paths::test_state_guard();
@@ -1983,6 +2536,45 @@ mod tests {
         assert_eq!(parsed["elcp_4a_complete"], false);
         assert_eq!(parsed["4b_training_allowed"], false);
         assert_eq!(parsed["training_executed"], false);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_accepts_checkpoint_load_probe_only() {
+        validate_megatron_7b_inference_report_value(&valid_megatron_7b_inference_report()).unwrap();
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_rejects_checkpoint_admission() {
+        let mut report = valid_megatron_7b_inference_report();
+        report["run"]["checkpoint_admission"] = Value::Bool(true);
+        let err = validate_megatron_7b_inference_report_value(&report).unwrap_err();
+        assert!(err.contains("checkpoint_admission"));
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_can_be_copied_into_state() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("eden_megatron_7b_inference_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let source = dir.join("source_inference_report.json");
+        std::fs::write(
+            &source,
+            serde_json::to_string_pretty(&valid_megatron_7b_inference_report()).unwrap(),
+        )
+        .unwrap();
+
+        let path = copy_megatron_7b_inference_report_from_path(&source.to_string_lossy()).unwrap();
+        let written = std::fs::read_to_string(path).unwrap();
+        let parsed: Value = serde_json::from_str(&written).unwrap();
+
+        assert_eq!(parsed["schema"], MEGATRON_7B_INFERENCE_REPORT_SCHEMA);
+        assert_eq!(parsed["run"]["checkpoint_admission"], false);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

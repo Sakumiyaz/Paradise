@@ -1439,6 +1439,10 @@ impl CommandProfile {
             | GarmCommand::ArtifactApiEval
             | GarmCommand::TrainingEvidenceEval
             | GarmCommand::Megatron7bEvidenceEval
+            | GarmCommand::Megatron7bAdapterPrepare
+            | GarmCommand::Megatron7bInferenceEval
+            | GarmCommand::Megatron7bCapabilityEval
+            | GarmCommand::Megatron7bAdmissionGateEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval

@@ -212,6 +212,22 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::megatron_7b_training_evidence_path(),
         ),
         artifact(
+            "megatron_7b_model_adapter",
+            state_paths::megatron_7b_model_adapter_path(),
+        ),
+        artifact(
+            "megatron_7b_inference_report",
+            state_paths::megatron_7b_inference_report_path(),
+        ),
+        artifact(
+            "megatron_7b_capability_report",
+            state_paths::megatron_7b_capability_report_path(),
+        ),
+        artifact(
+            "megatron_7b_admission_gate",
+            state_paths::megatron_7b_admission_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

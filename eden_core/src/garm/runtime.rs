@@ -449,6 +449,22 @@ impl GewcBodyExecutor {
                 eden_garm::training_evidence::run_megatron_7b_default(),
                 true,
             ),
+            eden_garm::nodes::command_router::GarmCommand::Megatron7bAdapterPrepare => (
+                eden_garm::model_runtime::prepare_megatron_7b_adapter(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::Megatron7bInferenceEval => (
+                eden_garm::model_runtime::write_megatron_7b_inference_report(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::Megatron7bCapabilityEval => (
+                eden_garm::model_runtime::write_megatron_7b_capability_report(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::Megatron7bAdmissionGateEval => (
+                eden_garm::model_runtime::write_megatron_7b_admission_gate(),
+                true,
+            ),
             eden_garm::nodes::command_router::GarmCommand::ModelRuntimeEval => {
                 (eden_garm::model_runtime::run_all(), true)
             }
@@ -6505,6 +6521,10 @@ mod tests {
             ArtifactApiEval,
             TrainingEvidenceEval,
             Megatron7bEvidenceEval,
+            Megatron7bAdapterPrepare,
+            Megatron7bInferenceEval,
+            Megatron7bCapabilityEval,
+            Megatron7bAdmissionGateEval,
             ModelRuntimeEval,
             RuntimeStateApiEval,
             OperationalApiEval,

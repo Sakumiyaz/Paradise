@@ -43,6 +43,10 @@ pub enum GarmCommand {
     ArtifactApiEval,
     TrainingEvidenceEval,
     Megatron7bEvidenceEval,
+    Megatron7bAdapterPrepare,
+    Megatron7bInferenceEval,
+    Megatron7bCapabilityEval,
+    Megatron7bAdmissionGateEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -512,6 +516,25 @@ impl CommandRouterNode {
             | "7b training evidence eval"
             | "7b evidence eval"
             | "evidencia 7b eval" => GarmCommand::Megatron7bEvidenceEval,
+            "megatron 7b adapter prepare"
+            | "megatron 7b adapter"
+            | "7b adapter prepare"
+            | "prepare 7b adapter"
+            | "adaptador 7b preparar" => GarmCommand::Megatron7bAdapterPrepare,
+            "megatron 7b inference eval"
+            | "megatron 7b inference"
+            | "7b inference eval"
+            | "7b inference report"
+            | "inferencia 7b eval" => GarmCommand::Megatron7bInferenceEval,
+            "megatron 7b capability eval"
+            | "megatron 7b capability"
+            | "7b capability eval"
+            | "capacidad 7b eval" => GarmCommand::Megatron7bCapabilityEval,
+            "megatron 7b admission gate eval"
+            | "megatron 7b admission"
+            | "7b admission gate eval"
+            | "7b admission"
+            | "admision 7b eval" => GarmCommand::Megatron7bAdmissionGateEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1464,6 +1487,22 @@ mod tests {
         assert_eq!(
             parse("megatron 7b evidence eval"),
             GarmCommand::Megatron7bEvidenceEval
+        );
+        assert_eq!(
+            parse("megatron 7b adapter prepare"),
+            GarmCommand::Megatron7bAdapterPrepare
+        );
+        assert_eq!(
+            parse("megatron 7b inference eval"),
+            GarmCommand::Megatron7bInferenceEval
+        );
+        assert_eq!(
+            parse("megatron 7b capability eval"),
+            GarmCommand::Megatron7bCapabilityEval
+        );
+        assert_eq!(
+            parse("megatron 7b admission gate eval"),
+            GarmCommand::Megatron7bAdmissionGateEval
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

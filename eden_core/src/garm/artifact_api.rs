@@ -181,6 +181,8 @@ fn domain_for(name: &str) -> &'static str {
         "sovereign_cognition"
     } else if name.contains("gewc") || name.contains("global_executive") {
         "global_executive_workspace"
+    } else if name.starts_with("megatron_7b") {
+        "model_runtime_governance"
     } else if name.starts_with("model_")
         || name.starts_with("first_model")
         || name.starts_with("elcp")
@@ -256,6 +258,14 @@ fn generator_command(name: &str) -> &'static str {
         "operational api eval"
     } else if name == "megatron_7b_training_evidence" {
         "megatron 7b evidence eval"
+    } else if name == "megatron_7b_model_adapter" {
+        "megatron 7b adapter prepare"
+    } else if name == "megatron_7b_inference_report" {
+        "megatron 7b inference eval"
+    } else if name == "megatron_7b_capability_report" {
+        "megatron 7b capability eval"
+    } else if name == "megatron_7b_admission_gate" {
+        "megatron 7b admission gate eval"
     } else if name.starts_with("elcp") {
         "elcp prepare"
     } else if name.starts_with("first_model") {

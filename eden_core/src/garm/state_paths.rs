@@ -355,6 +355,18 @@ pub fn training_capability_evidence_path() -> String {
 pub fn megatron_7b_training_evidence_path() -> String {
     path("megatron_7b_training_evidence.json")
 }
+pub fn megatron_7b_model_adapter_path() -> String {
+    path("megatron_7b_model_adapter.json")
+}
+pub fn megatron_7b_inference_report_path() -> String {
+    path("megatron_7b_inference_report.json")
+}
+pub fn megatron_7b_capability_report_path() -> String {
+    path("megatron_7b_capability_report.json")
+}
+pub fn megatron_7b_admission_gate_path() -> String {
+    path("megatron_7b_admission_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }
