@@ -208,6 +208,10 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::training_capability_evidence_path(),
         ),
         artifact(
+            "megatron_7b_training_evidence",
+            state_paths::megatron_7b_training_evidence_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

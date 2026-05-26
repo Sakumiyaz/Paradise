@@ -47,6 +47,10 @@ ad hoc notebooks or private scripts.
   7B-shape base-model path validation. It uses EDEN-owned corpus/tokenizer,
   random initialization and no external network, but remains evidence of
   training plumbing only, not AGI capability.
+- `make training-megatron-7b-evidence` converts the 7B Megatron run output into
+  `eden.megatron.7b.training_evidence.v1` and admits it through GEWC while
+  preserving `claim_allowed=false`, `agi_claim=false` and
+  `checkpoint_admission=false`.
 
 ## Future AMD GPU Use
 
@@ -96,6 +100,7 @@ make training-rocm-profile
 make training-megatron-offline-smoke
 make training-megatron-eden-corpus-pilot
 make training-megatron-eden-7b-base-pilot
+make training-megatron-7b-evidence
 make training-smoke
 make training-evidence
 make model-runtime

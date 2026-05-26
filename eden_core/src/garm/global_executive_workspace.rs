@@ -1438,6 +1438,7 @@ impl CommandProfile {
             | GarmCommand::SovereignCognitionEval
             | GarmCommand::ArtifactApiEval
             | GarmCommand::TrainingEvidenceEval
+            | GarmCommand::Megatron7bEvidenceEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval

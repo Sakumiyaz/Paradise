@@ -10,8 +10,11 @@ MASTER_PORT="${EDEN_MEGATRON_7B_MASTER_PORT:-6006}"
 TRAIN_ITERS="${EDEN_MEGATRON_7B_TRAIN_ITERS:-1}"
 SEQ_LENGTH="${EDEN_MEGATRON_7B_SEQ_LENGTH:-128}"
 VOCAB_SIZE="${EDEN_MEGATRON_7B_VOCAB_SIZE:-2048}"
+SAVE_CHECKPOINT="${EDEN_MEGATRON_7B_SAVE_CHECKPOINT:-false}"
+SAVE_INTERVAL="${EDEN_MEGATRON_7B_SAVE_INTERVAL:-100000}"
 LOG_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.log"
 SUMMARY_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.summary"
+EVIDENCE_FILE="${OUTPUT_DIR}/eden_7b_training_evidence.json"
 
 usage() {
   cat <<'EOF'
@@ -33,6 +36,9 @@ Environment:
   EDEN_MEGATRON_7B_TRAIN_ITERS   Pilot train iterations. Default: 1
   EDEN_MEGATRON_7B_SEQ_LENGTH    Sequence length. Default: 128
   EDEN_MEGATRON_7B_VOCAB_SIZE    SentencePiece vocab size. Default: 2048
+  EDEN_MEGATRON_7B_SAVE_CHECKPOINT
+                                  Write a pilot checkpoint. Default: false
+  EDEN_MEGATRON_7B_SAVE_INTERVAL  Checkpoint interval when saving. Default: 100000
 EOF
 }
 
@@ -55,9 +61,13 @@ require_command docker
 docker image inspect "$IMAGE" >/dev/null 2>&1 || {
   fail "Docker image not found locally: ${IMAGE}. Pull it explicitly before running this offline pilot."
 }
+case "$SAVE_CHECKPOINT" in
+  true | false) ;;
+  *) fail "EDEN_MEGATRON_7B_SAVE_CHECKPOINT must be true or false" ;;
+esac
 
 mkdir -p "$OUTPUT_DIR"
-rm -f -- "$LOG_FILE" "$SUMMARY_FILE"
+rm -f -- "$LOG_FILE" "$SUMMARY_FILE" "$EVIDENCE_FILE"
 
 printf 'eden_megatron_7b_base_pilot_start=true\n'
 printf 'image=%s\n' "$IMAGE"
@@ -67,6 +77,12 @@ printf 'model_scale=7b_shape\n'
 printf 'tokenizer=eden_sentencepiece\n'
 printf 'dataset=eden_core/corpus\n'
 printf 'external_model_dependency=false\n'
+printf 'save_checkpoint=%s\n' "$SAVE_CHECKPOINT"
+
+SAVE_ARGS="--save-interval ${SAVE_INTERVAL}"
+if [[ "$SAVE_CHECKPOINT" == "true" ]]; then
+  SAVE_ARGS="--save /eden-output/checkpoints ${SAVE_ARGS}"
+fi
 
 docker run --rm \
   --device /dev/dri \
@@ -179,7 +195,7 @@ torchrun --nproc_per_node 1 --nnodes 1 --node_rank 0 --master_addr 127.0.0.1 --m
   --log-interval 1 \
   --eval-interval 1000 \
   --eval-iters 0 \
-  --save-interval 100000 \
+  ${SAVE_ARGS} \
   --bf16 \
   --no-masked-softmax-fusion \
   --disable-bias-linear \
@@ -208,8 +224,18 @@ torchrun --nproc_per_node 1 --nnodes 1 --node_rank 0 --master_addr 127.0.0.1 --m
   printf 'mock_data=false\n'
   printf 'external_model_dependency=false\n'
   printf 'agi_evidence=false\n'
+  printf 'train_iters=%s\n' "$TRAIN_ITERS"
+  printf 'save_checkpoint=%s\n' "$SAVE_CHECKPOINT"
+  printf 'checkpoint_written=%s\n' "$([[ -d "${OUTPUT_DIR}/checkpoints" ]] && find "${OUTPUT_DIR}/checkpoints" -type f -print -quit | grep -q . && printf true || printf false)"
   printf 'checkpoint_admission=false\n'
   grep -E 'eden_corpus_|tokenizer_type|tokenizer_model|mock_data|data_path|train_iters|number of parameters|Total number of parameters|iteration[[:space:]]+1/|after training is done|memory \\(MB\\)' "$LOG_FILE" || true
 } >"$SUMMARY_FILE"
 
+python3 "${SCRIPT_DIR}/build_megatron_7b_evidence.py" \
+  --repo-root "$REPO_ROOT" \
+  --output-dir "$OUTPUT_DIR" \
+  --schema "${REPO_ROOT}/contracts/v1/schemas/eden-megatron-7b-training-evidence-v1.json" \
+  --evidence "$EVIDENCE_FILE"
+
 cat "$SUMMARY_FILE"
+printf 'evidence_file=%s\n' "$EVIDENCE_FILE"

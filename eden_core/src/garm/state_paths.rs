@@ -352,6 +352,9 @@ pub fn training_capability_markdown_report_path() -> String {
 pub fn training_capability_evidence_path() -> String {
     path("training_capability_evidence.json")
 }
+pub fn megatron_7b_training_evidence_path() -> String {
+    path("megatron_7b_training_evidence.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }

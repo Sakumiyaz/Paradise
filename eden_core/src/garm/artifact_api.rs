@@ -254,6 +254,8 @@ fn generator_command(name: &str) -> &'static str {
         "operational runtime eval"
     } else if name.starts_with("operational_api") || name.starts_with("operational_action") {
         "operational api eval"
+    } else if name == "megatron_7b_training_evidence" {
+        "megatron 7b evidence eval"
     } else if name.starts_with("elcp") {
         "elcp prepare"
     } else if name.starts_with("first_model") {

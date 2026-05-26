@@ -36,6 +36,7 @@
     "schemas/eden-locus-operator-bridge-v1.json",
     "schemas/eden-training-capability-report-v1.json",
     "schemas/eden-garm-training-evidence-v1.json",
+    "schemas/eden-megatron-7b-training-evidence-v1.json",
     "schemas/eden-model-adapter-runtime-v1.json",
     "schemas/eden-model-checkpoint-manifest-v1.json",
     "schemas/eden-training-harness-v1.json",

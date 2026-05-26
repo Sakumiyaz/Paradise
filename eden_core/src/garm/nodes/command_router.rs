@@ -42,6 +42,7 @@ pub enum GarmCommand {
     SovereignCognitionEval,
     ArtifactApiEval,
     TrainingEvidenceEval,
+    Megatron7bEvidenceEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -504,6 +505,13 @@ impl CommandRouterNode {
             | "training capability evidence"
             | "capability training evidence"
             | "evidencia entrenamiento eval" => GarmCommand::TrainingEvidenceEval,
+            "megatron 7b evidence eval"
+            | "megatron 7b evidence"
+            | "training megatron 7b evidence"
+            | "training 7b evidence eval"
+            | "7b training evidence eval"
+            | "7b evidence eval"
+            | "evidencia 7b eval" => GarmCommand::Megatron7bEvidenceEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1452,6 +1460,10 @@ mod tests {
         assert_eq!(
             parse("training evidence eval"),
             GarmCommand::TrainingEvidenceEval
+        );
+        assert_eq!(
+            parse("megatron 7b evidence eval"),
+            GarmCommand::Megatron7bEvidenceEval
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

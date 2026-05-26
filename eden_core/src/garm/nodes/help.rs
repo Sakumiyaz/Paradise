@@ -50,6 +50,7 @@ impl HelpNode {
             "  external ecosystem eval - formaliza ecosistema externo EDEN: contratos, interop, certificacion, onboarding, gobernanza y benchmark exchange",
             "  sovereign cognition eval - define 11 victorias arquitectonicas EDEN sobre Hyperon sin copiar AtomSpace/MeTTa",
             "  training evidence eval - admite capability_report.json como evidencia GEWC sin elevar claims",
+            "  megatron 7b evidence eval - admite evidencia formal del piloto 7B EDEN-only sin admitir checkpoints",
             "  model runtime eval - genera adapter runtime, checkpoint manifest, training harness y gobernanza de modelos sin entrenar pesos",
             "  first model prepare/readiness - prepara el primer modelo EDEN como 4A formal sin ejecutar entrenamiento",
             "  elcp prepare/objective/admission/hardening/readiness - prepara, endurece y mide ELCP sin entrenar ni admitir pesos",

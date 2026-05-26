@@ -445,6 +445,10 @@ impl GewcBodyExecutor {
             eden_garm::nodes::command_router::GarmCommand::TrainingEvidenceEval => {
                 (eden_garm::training_evidence::run_default(), true)
             }
+            eden_garm::nodes::command_router::GarmCommand::Megatron7bEvidenceEval => (
+                eden_garm::training_evidence::run_megatron_7b_default(),
+                true,
+            ),
             eden_garm::nodes::command_router::GarmCommand::ModelRuntimeEval => {
                 (eden_garm::model_runtime::run_all(), true)
             }
@@ -6499,6 +6503,9 @@ mod tests {
             ExternalEcosystemEval,
             SovereignCognitionEval,
             ArtifactApiEval,
+            TrainingEvidenceEval,
+            Megatron7bEvidenceEval,
+            ModelRuntimeEval,
             RuntimeStateApiEval,
             OperationalApiEval,
             OperationalRuntimeEval,

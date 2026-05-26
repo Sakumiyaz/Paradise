@@ -38,9 +38,10 @@ measurable capability before expensive GPU work:
 | `elcp/readiness_contract.py` | Writes the 4B readiness contract while keeping training blocked. |
 | `models/README.md` | Checkpoint policy; generated model artifacts stay out of git. |
 | `rocm/rocm_env.sh` | Local ROCm environment probe; it reports availability without requiring a GPU. |
+| `rocm/build_megatron_7b_evidence.py` | Stdlib-only builder/validator for the 7B Megatron pilot evidence contract. |
 | `rocm/megatron_offline_smoke.sh` | Optional MI300X/Megatron smoke launcher. It uses `NullTokenizer`, mock data, random initialization and Docker `--network none`; it does not pull images or use external models. |
 | `rocm/megatron_eden_corpus_pilot.sh` | Optional MI300X/Megatron pilot launcher. It trains a local SentencePiece tokenizer from `eden_core/corpus`, preprocesses EDEN-owned text into Megatron format and runs a tiny random-weight GPT pilot without network access or external models. |
-| `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models and no checkpoint admission. |
+| `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models, formal evidence JSON and no checkpoint admission. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -182,6 +183,39 @@ sequence_length=128 by default
 The run is intentionally tiny by default. It is useful as evidence that EDEN can
 build and step through a 7B-scale base-model path on ROCm; it is not evidence of
 AGI behavior, useful language competence or checkpoint admission.
+
+The script writes:
+
+```text
+target/eden_megatron_7b_base_pilot/eden_7b_base_pilot.log
+target/eden_megatron_7b_base_pilot/eden_7b_base_pilot.summary
+target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json
+```
+
+To rebuild and admit the formal evidence into GEWC after a run:
+
+```bash
+make training-megatron-7b-evidence
+```
+
+The resulting artifact remains claim-gated:
+
+```text
+claim_allowed=false
+agi_claim=false
+checkpoint_admission=false
+weights_admitted=false
+```
+
+For a longer controlled pilot that writes a checkpoint but keeps admission
+blocked:
+
+```bash
+EDEN_MEGATRON_7B_TRAIN_ITERS=50 \
+EDEN_MEGATRON_7B_SAVE_CHECKPOINT=true \
+EDEN_MEGATRON_7B_SAVE_INTERVAL=50 \
+make training-megatron-eden-7b-base-pilot
+```
 
 ## ROCm Direction
 
