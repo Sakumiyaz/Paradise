@@ -160,7 +160,7 @@ layer model and terminology.
 | Operator runtime | `eden_core/src/bin/eden_garm.rs` starts the native GARM runtime. |
 | Executive core | GEWC owns command routing, body handlers, runtime traces and safety gates. |
 | Locus/Forge | `locus ...`, `operator forge ...`, `edenctl locus ...` and `edenctl forge ...` expose governed context authority, formal synthesis artifacts and the Locus/Forge-to-CWM hypothesis bridge. |
-| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, ELCP data/eval hardening, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
+| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening`, `eden capable eval`, `eden capable operationalize` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, checkpoint probe routing, cognitive call contracts, eval surfaces, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
 | APIs | Runtime state, artifact, operational, capability, validation, GEWC and action-contract APIs. |
 | SDK | `eden_core::sdk` provides a lightweight Rust client over the public local API. |
 | Training surface | `training/` contains the CPU-safe smoke benchmark, first trainable-memory contract, ELCP cognitive-transition fixtures, ROCm profile and future AMD GPU training entry point. |
@@ -342,6 +342,18 @@ without executing training:
 ```bash
 make elcp-prepare
 ```
+
+To generate the local EDEN-capable runtime surface without GPU use:
+
+```bash
+make eden-capable
+make eden-capable-operationalize
+```
+
+These commands expose the 7B checkpoint only as a GEWC-subordinate hypothesis
+generator, then write the cognitive call contract, capability eval suite,
+memory/action loop and operational gate. They do not admit AGI, production
+inference or autonomous tool authority.
 
 Hardware and network tests are available separately:
 

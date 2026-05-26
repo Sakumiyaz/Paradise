@@ -494,6 +494,9 @@ impl GewcBodyExecutor {
             eden_garm::nodes::command_router::GarmCommand::EdenCapableGateEval => {
                 (eden_garm::eden_capable::write_capable_gate(), true)
             }
+            eden_garm::nodes::command_router::GarmCommand::EdenCapableOperationalize => {
+                (eden_garm::eden_capable::run_operationalization_all(), true)
+            }
             eden_garm::nodes::command_router::GarmCommand::ModelRuntimeEval => {
                 (eden_garm::model_runtime::run_all(), true)
             }
@@ -6563,6 +6566,7 @@ mod tests {
             EdenCheckpointRegistryEval,
             EdenSftElcpReadinessEval,
             EdenCapableGateEval,
+            EdenCapableOperationalize,
             ModelRuntimeEval,
             RuntimeStateApiEval,
             OperationalApiEval,

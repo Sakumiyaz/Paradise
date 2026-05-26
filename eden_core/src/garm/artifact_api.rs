@@ -187,6 +187,8 @@ fn domain_for(name: &str) -> &'static str {
         || name.starts_with("eden_native")
         || name.starts_with("eden_structured")
         || name.starts_with("eden_checkpoint")
+        || name.starts_with("eden_live")
+        || name.starts_with("eden_memory")
         || name.starts_with("eden_sft")
     {
         "eden_capable_runtime"
@@ -271,6 +273,8 @@ fn generator_command(name: &str) -> &'static str {
         || name.starts_with("eden_native")
         || name.starts_with("eden_structured")
         || name.starts_with("eden_checkpoint")
+        || name.starts_with("eden_live")
+        || name.starts_with("eden_memory")
         || name.starts_with("eden_sft")
     {
         "eden capable eval"

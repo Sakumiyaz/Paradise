@@ -79,6 +79,14 @@ Python training code:
 | `eden_checkpoint_registry.json` | Step 6: registers the checkpoint as a probe, not a release. |
 | `eden_sft_elcp_readiness.json` | Step 7: prepares SFT/ELCP readiness while keeping training blocked. |
 | `eden_capable_gate.json` | Aggregates the seven EDEN-capable steps under no-claim policy. |
+| `eden_live_inference_runtime.json` | Operational step 1: exposes the 7B probe as a callable subordinate runtime surface. |
+| `eden_cognitive_call_contract.json` | Operational step 2: defines the GEWC -> router -> model -> verifier -> memory/action transaction. |
+| `eden_cognitive_dataset_expansion.json` | Operational step 3: reports expanded synthetic cognitive coverage for future SFT/ELCP. |
+| `eden_capability_eval_suite.json` | Operational step 4: turns seed records into a local capability contract eval suite. |
+| `eden_sft_elcp_activation_gate.json` | Operational step 5: keeps future SFT/ELCP activation blocked until explicit GPU approval. |
+| `eden_memory_action_loop.json` | Operational step 6: demonstrates model packets passing through memory/action gates. |
+| `eden_capable_demo_trace.json` | Operational step 7: records a user-visible governed demo trace. |
+| `eden_capable_operational_gate.json` | Aggregates the seven operational EDEN-capable steps under no-claim policy. |
 
 ## Local Smoke Run
 
@@ -264,6 +272,16 @@ This does not start training. It writes the training-run contract, cognitive
 dataset manifest, native inference API boundary, before/after capability eval,
 structured output packets, checkpoint registry, SFT/ELCP readiness and aggregate
 gate.
+
+To generate only the operational "EDEN capable" runtime surface:
+
+```bash
+make eden-capable-operationalize
+```
+
+This also does not start training or use GPU. It writes the callable inference
+runtime contract, cognitive call contract, expanded dataset report, capability
+eval suite, SFT/ELCP activation gate, memory/action loop and demo trace.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

@@ -284,6 +284,46 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=eden_sft_elcp_readiness",
         ),
         curated(
+            "eden_live_inference_runtime",
+            crate::eden_garm::eden_capable::EDEN_LIVE_INFERENCE_RUNTIME_SCHEMA,
+            "/api/artifact?name=eden_live_inference_runtime",
+        ),
+        curated(
+            "eden_cognitive_call_contract",
+            crate::eden_garm::eden_capable::EDEN_COGNITIVE_CALL_CONTRACT_SCHEMA,
+            "/api/artifact?name=eden_cognitive_call_contract",
+        ),
+        curated(
+            "eden_cognitive_dataset_expansion",
+            crate::eden_garm::eden_capable::EDEN_COGNITIVE_DATASET_EXPANSION_SCHEMA,
+            "/api/artifact?name=eden_cognitive_dataset_expansion",
+        ),
+        curated(
+            "eden_capability_eval_suite",
+            crate::eden_garm::eden_capable::EDEN_CAPABILITY_EVAL_SUITE_SCHEMA,
+            "/api/artifact?name=eden_capability_eval_suite",
+        ),
+        curated(
+            "eden_sft_elcp_activation_gate",
+            crate::eden_garm::eden_capable::EDEN_SFT_ELCP_ACTIVATION_GATE_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_activation_gate",
+        ),
+        curated(
+            "eden_memory_action_loop",
+            crate::eden_garm::eden_capable::EDEN_MEMORY_ACTION_LOOP_SCHEMA,
+            "/api/artifact?name=eden_memory_action_loop",
+        ),
+        curated(
+            "eden_capable_demo_trace",
+            crate::eden_garm::eden_capable::EDEN_CAPABLE_DEMO_TRACE_SCHEMA,
+            "/api/artifact?name=eden_capable_demo_trace",
+        ),
+        curated(
+            "eden_capable_operational_gate",
+            crate::eden_garm::eden_capable::EDEN_CAPABLE_OPERATIONAL_GATE_SCHEMA,
+            "/api/artifact?name=eden_capable_operational_gate",
+        ),
+        curated(
             "paradise_worldcell_runtime",
             crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
             "/api/artifact?name=paradise_worldcell_runtime",

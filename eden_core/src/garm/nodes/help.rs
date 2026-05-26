@@ -52,6 +52,7 @@ impl HelpNode {
             "  training evidence eval - admite capability_report.json como evidencia GEWC sin elevar claims",
             "  megatron 7b evidence eval - admite evidencia formal del piloto 7B EDEN-only sin admitir checkpoints",
             "  eden capable eval - genera los 7 artefactos que convierten checkpoint, datos, inferencia estructurada, registry y ELCP/SFT en capacidad gobernada",
+            "  eden capable operationalize - genera el ciclo usable: runtime inference, llamada cognitiva, eval suite, memoria/accion y demo trace",
             "  model runtime eval - genera adapter runtime, checkpoint manifest, training harness y gobernanza de modelos sin entrenar pesos",
             "  first model prepare/readiness - prepara el primer modelo EDEN como 4A formal sin ejecutar entrenamiento",
             "  elcp prepare/objective/admission/hardening/readiness - prepara, endurece y mide ELCP sin entrenar ni admitir pesos",

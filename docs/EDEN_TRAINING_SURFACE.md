@@ -64,6 +64,10 @@ ad hoc notebooks or private scripts.
   longer-training contract, cognitive dataset manifest, native structured
   inference boundary, capability delta eval, structured output packets,
   checkpoint registry and SFT/ELCP readiness.
+- `make eden-capable-operationalize` prepares the seven no-GPU operational
+  steps: callable probe-backed inference runtime, GEWC cognitive call contract,
+  expanded cognitive dataset report, capability eval suite, SFT/ELCP activation
+  gate, memory/action loop and governed demo trace.
 
 ## Future AMD GPU Use
 
@@ -112,6 +116,9 @@ The current model runtime path makes that boundary executable:
 - `/tmp/eden_garm_capable/eden_capable_gate.json` aggregates the seven
   EDEN-capable preparation artifacts while preserving `claim_allowed=false` and
   `agi_claim=false`.
+- `/tmp/eden_garm_capable_operational/eden_capable_operational_gate.json`
+  aggregates the seven operational artifacts and keeps the checkpoint as a
+  subordinate hypothesis generator, not a production model.
 
 ## Validation Commands
 
@@ -125,6 +132,7 @@ make training-megatron-7b-evidence
 make training-megatron-7b-inference-probe
 make training-megatron-7b-adapter
 make eden-capable
+make eden-capable-operationalize
 make training-smoke
 make training-evidence
 make model-runtime

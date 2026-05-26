@@ -257,6 +257,38 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
         ),
         artifact("eden_capable_gate", state_paths::eden_capable_gate_path()),
         artifact(
+            "eden_live_inference_runtime",
+            state_paths::eden_live_inference_runtime_path(),
+        ),
+        artifact(
+            "eden_cognitive_call_contract",
+            state_paths::eden_cognitive_call_contract_path(),
+        ),
+        artifact(
+            "eden_cognitive_dataset_expansion",
+            state_paths::eden_cognitive_dataset_expansion_path(),
+        ),
+        artifact(
+            "eden_capability_eval_suite",
+            state_paths::eden_capability_eval_suite_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_activation_gate",
+            state_paths::eden_sft_elcp_activation_gate_path(),
+        ),
+        artifact(
+            "eden_memory_action_loop",
+            state_paths::eden_memory_action_loop_path(),
+        ),
+        artifact(
+            "eden_capable_demo_trace",
+            state_paths::eden_capable_demo_trace_path(),
+        ),
+        artifact(
+            "eden_capable_operational_gate",
+            state_paths::eden_capable_operational_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

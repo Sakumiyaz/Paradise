@@ -45,7 +45,20 @@
       "path": "training/data/eden_cognitive_capability_seed.jsonl",
       "split": "seed",
       "format": "jsonl",
-      "source": "synthetic repo-local governed capability examples"
+      "source": "synthetic repo-local governed capability examples",
+      "records": 10,
+      "coverage": [
+        "planning",
+        "claim_safety",
+        "checkpoint_probe_routing",
+        "tool_injection",
+        "rollback",
+        "world_model",
+        "multiagent_coordination",
+        "permissions",
+        "safe_continual_learning",
+        "metacognition"
+      ]
     }
   ],
   "policy": {

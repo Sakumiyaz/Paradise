@@ -10,6 +10,15 @@ pub const EDEN_STRUCTURED_OUTPUT_REPORT_SCHEMA: &str = "eden.capable.structured_
 pub const EDEN_CHECKPOINT_REGISTRY_SCHEMA: &str = "eden.capable.checkpoint_registry.v1";
 pub const EDEN_SFT_ELCP_READINESS_SCHEMA: &str = "eden.capable.sft_elcp_readiness.v1";
 pub const EDEN_CAPABLE_GATE_SCHEMA: &str = "eden.capable.gate.v1";
+pub const EDEN_LIVE_INFERENCE_RUNTIME_SCHEMA: &str = "eden.capable.live_inference_runtime.v1";
+pub const EDEN_COGNITIVE_CALL_CONTRACT_SCHEMA: &str = "eden.capable.cognitive_call_contract.v1";
+pub const EDEN_COGNITIVE_DATASET_EXPANSION_SCHEMA: &str =
+    "eden.capable.cognitive_dataset_expansion.v1";
+pub const EDEN_CAPABILITY_EVAL_SUITE_SCHEMA: &str = "eden.capable.capability_eval_suite.v1";
+pub const EDEN_SFT_ELCP_ACTIVATION_GATE_SCHEMA: &str = "eden.capable.sft_elcp_activation_gate.v1";
+pub const EDEN_MEMORY_ACTION_LOOP_SCHEMA: &str = "eden.capable.memory_action_loop.v1";
+pub const EDEN_CAPABLE_DEMO_TRACE_SCHEMA: &str = "eden.capable.demo_trace.v1";
+pub const EDEN_CAPABLE_OPERATIONAL_GATE_SCHEMA: &str = "eden.capable.operational_gate.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const MODEL_ID: &str = "eden-megatron-7b-base-pilot";
@@ -29,6 +38,20 @@ pub fn run_all() -> String {
     out.push_str(&write_checkpoint_registry());
     out.push_str(&write_sft_elcp_readiness());
     out.push_str(&write_capable_gate());
+    out.push_str(&run_operationalization_all());
+    out
+}
+
+pub fn run_operationalization_all() -> String {
+    let mut out = String::new();
+    out.push_str(&write_live_inference_runtime());
+    out.push_str(&write_cognitive_call_contract());
+    out.push_str(&write_cognitive_dataset_expansion());
+    out.push_str(&write_capability_eval_suite());
+    out.push_str(&write_sft_elcp_activation_gate());
+    out.push_str(&write_memory_action_loop());
+    out.push_str(&write_capable_demo_trace());
+    out.push_str(&write_capable_operational_gate());
     out
 }
 
@@ -101,6 +124,78 @@ pub fn write_capable_gate() -> String {
         EDEN_CAPABLE_GATE_SCHEMA,
         state_paths::eden_capable_gate_path(),
         capable_gate_value(),
+    )
+}
+
+pub fn write_live_inference_runtime() -> String {
+    write_report(
+        "EDEN-LIVE-INFERENCE-RUNTIME",
+        EDEN_LIVE_INFERENCE_RUNTIME_SCHEMA,
+        state_paths::eden_live_inference_runtime_path(),
+        live_inference_runtime_value(),
+    )
+}
+
+pub fn write_cognitive_call_contract() -> String {
+    write_report(
+        "EDEN-COGNITIVE-CALL-CONTRACT",
+        EDEN_COGNITIVE_CALL_CONTRACT_SCHEMA,
+        state_paths::eden_cognitive_call_contract_path(),
+        cognitive_call_contract_value(),
+    )
+}
+
+pub fn write_cognitive_dataset_expansion() -> String {
+    write_report(
+        "EDEN-COGNITIVE-DATASET-EXPANSION",
+        EDEN_COGNITIVE_DATASET_EXPANSION_SCHEMA,
+        state_paths::eden_cognitive_dataset_expansion_path(),
+        cognitive_dataset_expansion_value(),
+    )
+}
+
+pub fn write_capability_eval_suite() -> String {
+    write_report(
+        "EDEN-CAPABILITY-EVAL-SUITE",
+        EDEN_CAPABILITY_EVAL_SUITE_SCHEMA,
+        state_paths::eden_capability_eval_suite_path(),
+        capability_eval_suite_value(),
+    )
+}
+
+pub fn write_sft_elcp_activation_gate() -> String {
+    write_report(
+        "EDEN-SFT-ELCP-ACTIVATION-GATE",
+        EDEN_SFT_ELCP_ACTIVATION_GATE_SCHEMA,
+        state_paths::eden_sft_elcp_activation_gate_path(),
+        sft_elcp_activation_gate_value(),
+    )
+}
+
+pub fn write_memory_action_loop() -> String {
+    write_report(
+        "EDEN-MEMORY-ACTION-LOOP",
+        EDEN_MEMORY_ACTION_LOOP_SCHEMA,
+        state_paths::eden_memory_action_loop_path(),
+        memory_action_loop_value(),
+    )
+}
+
+pub fn write_capable_demo_trace() -> String {
+    write_report(
+        "EDEN-CAPABLE-DEMO-TRACE",
+        EDEN_CAPABLE_DEMO_TRACE_SCHEMA,
+        state_paths::eden_capable_demo_trace_path(),
+        capable_demo_trace_value(),
+    )
+}
+
+pub fn write_capable_operational_gate() -> String {
+    write_report(
+        "EDEN-CAPABLE-OPERATIONAL-GATE",
+        EDEN_CAPABLE_OPERATIONAL_GATE_SCHEMA,
+        state_paths::eden_capable_operational_gate_path(),
+        capable_operational_gate_value(),
     )
 }
 
@@ -521,6 +616,373 @@ fn capable_gate_value() -> Value {
     })
 }
 
+fn live_inference_runtime_value() -> Value {
+    let inference = read_repo_json(INFERENCE_REPORT_PATH);
+    let packets = structured_packets_from_inference(inference.as_ref());
+    let checkpoint_loaded = checkpoint_loaded(inference.as_ref());
+    serde_json::json!({
+        "schema": EDEN_LIVE_INFERENCE_RUNTIME_SCHEMA,
+        "artifact": "eden_live_inference_runtime",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 1,
+        "status": if checkpoint_loaded { "probe_backed_callable" } else { "blocked_missing_probe" },
+        "runtime_mode": "local_report_backed_candidate_generator",
+        "model_id": MODEL_ID,
+        "checkpoint_loaded": checkpoint_loaded,
+        "callable_inside_runtime": checkpoint_loaded && !packets.is_empty(),
+        "new_gpu_inference_started": false,
+        "external_model_dependency": false,
+        "input_boundary": "eden.structured_inference_request.v1",
+        "output_boundary": "eden.structured_inference_packet.v1",
+        "available_probe_packets": packets.len(),
+        "authority_rules": {
+            "model_is_subordinate": true,
+            "raw_text_is_never_state": true,
+            "GEWC_must_select_or_reject": true,
+            "verifier_required_before_memory_or_action": true
+        },
+        "limitations": [
+            "does_not_generate_new_tokens_without_gpu",
+            "does_not_admit_semantic_competence",
+            "does_not_release_checkpoint"
+        ],
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn cognitive_call_contract_value() -> Value {
+    serde_json::json!({
+        "schema": EDEN_COGNITIVE_CALL_CONTRACT_SCHEMA,
+        "artifact": "eden_cognitive_call_contract",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 2,
+        "purpose": "Make the GEWC-to-model call a typed cognitive transaction instead of a direct text prompt.",
+        "pipeline": [
+            {"index": 1, "component": "GEWC", "effect": "accepts_goal_and_permission_context"},
+            {"index": 2, "component": "model_router", "effect": "selects_eden_7b_probe_only_when_cost_risk_and_checkpoint_state_allow"},
+            {"index": 3, "component": "eden_7b_candidate_generator", "effect": "returns_candidate_text_without_state_authority"},
+            {"index": 4, "component": "structured_packet_parser", "effect": "wraps_text_as_untrusted_hypothesis_packet"},
+            {"index": 5, "component": "verifier", "effect": "checks_claims_permissions_risk_and_schema"},
+            {"index": 6, "component": "memory_action_gate", "effect": "admits_only_audit_memory_or_draft_plan_without_explicit_approval"}
+        ],
+        "request": {
+            "required": ["task_id", "goal", "situation", "permission_context", "risk_class"],
+            "optional": ["working_memory_refs", "world_state_refs", "allowed_output_modes", "max_tokens"]
+        },
+        "response": {
+            "required": ["packet_id", "candidate_structure", "verification", "admission"],
+            "admission_values": ["reject", "audit_only", "draft_plan", "needs_human_approval"]
+        },
+        "forbidden_direct_effects": [
+            "write_memory",
+            "change_objective",
+            "execute_tool",
+            "claim_truth",
+            "escalate_autonomy"
+        ],
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn cognitive_dataset_expansion_value() -> Value {
+    let records = read_cognitive_records();
+    let domains = unique_record_domains(&records);
+    let valid = records
+        .iter()
+        .filter(|record| cognitive_record_valid(record))
+        .count();
+    serde_json::json!({
+        "schema": EDEN_COGNITIVE_DATASET_EXPANSION_SCHEMA,
+        "artifact": "eden_cognitive_dataset_expansion",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 3,
+        "dataset": COGNITIVE_DATASET_PATH,
+        "records": records.len(),
+        "valid_records": valid,
+        "domains": domains,
+        "coverage_targets": [
+            "planning",
+            "memory_governance",
+            "claim_safety",
+            "tool_use",
+            "world_model",
+            "rollback",
+            "metacognition",
+            "multiagent_coordination",
+            "permission_escalation",
+            "checkpoint_probe_routing"
+        ],
+        "ready_for": [
+            "structured_parser_tests",
+            "capability_eval_suite",
+            "future_reviewed_SFT_seed",
+            "future_ELCP_transition_seed"
+        ],
+        "not_ready_for": [
+            "unsupervised_production_training",
+            "private_personal_memory",
+            "AGI_claim"
+        ],
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn capability_eval_suite_value() -> Value {
+    let records = read_cognitive_records();
+    let tasks: Vec<Value> = records
+        .iter()
+        .enumerate()
+        .map(|(idx, record)| {
+            let id = record
+                .get("id")
+                .and_then(Value::as_str)
+                .unwrap_or("unknown_record");
+            let domain = record
+                .pointer("/input/world_state/domain")
+                .and_then(Value::as_str)
+                .unwrap_or("unknown");
+            serde_json::json!({
+                "task_id": format!("capability-eval-{:02}", idx + 1),
+                "source_record": id,
+                "domain": domain,
+                "dimensions": [
+                    "structured_state",
+                    "permission_gate",
+                    "memory_action_boundary",
+                    "uncertainty",
+                    "auditability"
+                ],
+                "current_status": if cognitive_record_valid(record) { "contract_passed" } else { "invalid_record" },
+                "semantic_model_score": null,
+                "notes": "This eval validates operational capability contracts now; semantic model scores require a future governed model run."
+            })
+        })
+        .collect();
+    let passed = tasks
+        .iter()
+        .filter(|task| task["current_status"] == Value::String("contract_passed".to_string()))
+        .count();
+    serde_json::json!({
+        "schema": EDEN_CAPABILITY_EVAL_SUITE_SCHEMA,
+        "artifact": "eden_capability_eval_suite",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 4,
+        "passed": passed,
+        "total": tasks.len(),
+        "tasks": tasks,
+        "measures": [
+            "generality_surface",
+            "transfer_surface",
+            "autonomy_boundary",
+            "safe_memory",
+            "tool_governance",
+            "world_model_contract",
+            "metacognitive_uncertainty"
+        ],
+        "current_scope": "runtime_contract_eval_not_semantic_benchmark",
+        "future_scope": "compare_pre_sft_vs_post_sft_outputs_with_same_tasks",
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn sft_elcp_activation_gate_value() -> Value {
+    let dataset_manifest = cognitive_dataset_manifest_value();
+    let valid_records = dataset_manifest
+        .pointer("/dataset/valid_records")
+        .and_then(Value::as_u64)
+        .unwrap_or(0);
+    let inference = read_repo_json(INFERENCE_REPORT_PATH);
+    let checkpoint_ready = checkpoint_loaded(inference.as_ref());
+    let readiness_checks = vec![
+        check("dataset_present", valid_records > 0, COGNITIVE_DATASET_PATH),
+        check(
+            "checkpoint_probe_present",
+            checkpoint_ready,
+            INFERENCE_REPORT_PATH,
+        ),
+        check(
+            "operator_gpu_approval_absent",
+            true,
+            "no GPU training is started by this local command",
+        ),
+        check(
+            "no_claim_boundary",
+            true,
+            "training remains blocked until reviewed data and explicit approval",
+        ),
+    ];
+    let passed = readiness_checks
+        .iter()
+        .filter(|check| check["passed"] == Value::Bool(true))
+        .count();
+    serde_json::json!({
+        "schema": EDEN_SFT_ELCP_ACTIVATION_GATE_SCHEMA,
+        "artifact": "eden_sft_elcp_activation_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 5,
+        "passed": passed,
+        "total": readiness_checks.len(),
+        "checks": readiness_checks,
+        "training_allowed_now": false,
+        "gpu_job_submitted": false,
+        "activation_requirements": [
+            "operator_approves_gpu_budget",
+            "dataset_review_passes",
+            "held_out_eval_split_exists",
+            "pre_train_eval_snapshot_written",
+            "rollback_checkpoint_policy_written"
+        ],
+        "prepared_training_modes": [
+            "SFT_structured_packet_following",
+            "ELCP_latent_cognitive_state_prediction"
+        ],
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn memory_action_loop_value() -> Value {
+    let inference = read_repo_json(INFERENCE_REPORT_PATH);
+    let packet = structured_packets_from_inference(inference.as_ref())
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| {
+            serde_json::json!({
+                "packet_id": "missing-probe-packet",
+                "candidate_structure": {
+                    "kind": "missing_probe",
+                    "requires_verification": true
+                },
+                "authority": {
+                    "accepted_as_truth": false
+                }
+            })
+        });
+    serde_json::json!({
+        "schema": EDEN_MEMORY_ACTION_LOOP_SCHEMA,
+        "artifact": "eden_memory_action_loop",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 6,
+        "cycle": [
+            {"stage": "observe", "result": "task_context_loaded"},
+            {"stage": "route", "result": "eden_7b_probe_available_as_candidate_generator"},
+            {"stage": "generate", "result": "candidate_packet_created", "packet_id": packet["packet_id"]},
+            {"stage": "verify", "result": "raw_text_not_accepted_as_truth"},
+            {"stage": "plan", "result": "draft_plan_allowed"},
+            {"stage": "memory", "result": "audit_metadata_allowed_model_content_not_persisted_as_fact"},
+            {"stage": "action", "result": "external_or_mutating_actions_require_approval"},
+            {"stage": "learn", "result": "only_eval_metadata_can_update_without_training"}
+        ],
+        "packet": packet,
+        "admission": {
+            "memory_fact_write": "blocked",
+            "objective_update": "blocked",
+            "tool_execution": "blocked",
+            "audit_metadata": "allowed",
+            "draft_plan": "allowed"
+        },
+        "rollback": {
+            "required_for_mutating_actions": true,
+            "available_for_memory_transactions": true
+        },
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn capable_demo_trace_value() -> Value {
+    serde_json::json!({
+        "schema": EDEN_CAPABLE_DEMO_TRACE_SCHEMA,
+        "artifact": "eden_capable_demo_trace",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "step": 7,
+        "demo": "safe_repo_change_with_7b_probe_candidate",
+        "steps": [
+            {"index": 1, "name": "receive_task", "observable": "operator asks EDEN to improve a repo safely"},
+            {"index": 2, "name": "build_situation", "observable": "GEWC creates structured context and risk class"},
+            {"index": 3, "name": "retrieve_memory", "observable": "only approved memory refs enter working context"},
+            {"index": 4, "name": "route_model", "observable": "7B checkpoint is callable as probe-backed candidate generator"},
+            {"index": 5, "name": "parse_packet", "observable": "raw text becomes untrusted structured hypothesis"},
+            {"index": 6, "name": "verify", "observable": "claim, permission and memory gates run before admission"},
+            {"index": 7, "name": "dry_run_action", "observable": "mutating action remains draft-only"},
+            {"index": 8, "name": "audit", "observable": "evidence artifact records what was accepted, blocked and why"}
+        ],
+        "expected_user_visible_result": "EDEN can show a governed plan and evidence bundle, while blocking direct state mutation from the model.",
+        "not_demonstrated": [
+            "new 7B generation in this no-GPU run",
+            "semantic competence",
+            "autonomous production execution",
+            "AGI"
+        ],
+        "safety_boundary": safety_boundary(),
+    })
+}
+
+fn capable_operational_gate_value() -> Value {
+    let checks = vec![
+        artifact_check(
+            "live_inference_runtime",
+            state_paths::eden_live_inference_runtime_path(),
+        ),
+        artifact_check(
+            "cognitive_call_contract",
+            state_paths::eden_cognitive_call_contract_path(),
+        ),
+        artifact_check(
+            "cognitive_dataset_expansion",
+            state_paths::eden_cognitive_dataset_expansion_path(),
+        ),
+        artifact_check(
+            "capability_eval_suite",
+            state_paths::eden_capability_eval_suite_path(),
+        ),
+        artifact_check(
+            "sft_elcp_activation_gate",
+            state_paths::eden_sft_elcp_activation_gate_path(),
+        ),
+        artifact_check(
+            "memory_action_loop",
+            state_paths::eden_memory_action_loop_path(),
+        ),
+        artifact_check(
+            "capable_demo_trace",
+            state_paths::eden_capable_demo_trace_path(),
+        ),
+    ];
+    let passed = checks
+        .iter()
+        .filter(|check| check["passed"] == Value::Bool(true))
+        .count();
+    serde_json::json!({
+        "schema": EDEN_CAPABLE_OPERATIONAL_GATE_SCHEMA,
+        "artifact": "eden_capable_operational_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "passed": passed,
+        "total": checks.len(),
+        "checks": checks,
+        "eden_capable_operational_surface_ready": passed == checks.len(),
+        "capability_class": "governed_cognitive_runtime_surface",
+        "model_authority": "subordinate_hypothesis_generator",
+        "production_release": false,
+        "next_recommended_step": "run a reviewed SFT/ELCP pilot only after explicit GPU approval",
+        "safety_boundary": safety_boundary(),
+    })
+}
+
 fn structured_packets_from_inference(inference: Option<&Value>) -> Vec<Value> {
     inference
         .and_then(|value| value.get("responses"))
@@ -584,6 +1046,29 @@ fn cognitive_record_valid(record: &Value) -> bool {
             .pointer("/governance/agi_claim")
             .and_then(Value::as_bool)
             == Some(false)
+}
+
+fn unique_record_domains(records: &[Value]) -> Vec<String> {
+    let mut domains = Vec::new();
+    for record in records {
+        let Some(domain) = record
+            .pointer("/input/world_state/domain")
+            .and_then(Value::as_str)
+        else {
+            continue;
+        };
+        if !domains.iter().any(|known| known == domain) {
+            domains.push(domain.to_string());
+        }
+    }
+    domains
+}
+
+fn checkpoint_loaded(inference: Option<&Value>) -> bool {
+    inference
+        .and_then(|value| value.pointer("/run/checkpoint_loaded"))
+        .and_then(Value::as_bool)
+        .unwrap_or(false)
 }
 
 fn training_summary(training: Option<&Value>) -> Value {
@@ -747,5 +1232,35 @@ mod tests {
             packets[0]["candidate_structure"]["requires_verification"],
             true
         );
+    }
+
+    #[test]
+    fn operationalization_writes_seven_step_gate() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("eden_capable_operational_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = run_operationalization_all();
+        let gate = read_json_file(&state_paths::eden_capable_operational_gate_path()).unwrap();
+
+        assert!(out.contains("[EDEN-CAPABLE-OPERATIONAL-GATE]"));
+        assert_eq!(gate["claim_allowed"], false);
+        assert_eq!(gate["agi_claim"], false);
+        assert_eq!(gate["total"], 7);
+        assert_eq!(gate["eden_capable_operational_surface_ready"], true);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn memory_action_loop_blocks_model_side_effects() {
+        let loop_record = memory_action_loop_value();
+
+        assert_eq!(loop_record["admission"]["memory_fact_write"], "blocked");
+        assert_eq!(loop_record["admission"]["tool_execution"], "blocked");
+        assert_eq!(loop_record["admission"]["draft_plan"], "allowed");
     }
 }

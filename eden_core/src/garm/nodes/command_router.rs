@@ -56,6 +56,7 @@ pub enum GarmCommand {
     EdenCheckpointRegistryEval,
     EdenSftElcpReadinessEval,
     EdenCapableGateEval,
+    EdenCapableOperationalize,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -573,6 +574,12 @@ impl CommandRouterNode {
             | "eden capable gate eval"
             | "eden capacity gate"
             | "eden capaz gate" => GarmCommand::EdenCapableGateEval,
+            "eden capable operationalize"
+            | "eden capable operationalize eval"
+            | "eden capable runtime"
+            | "eden capable run"
+            | "eden capaz operativo"
+            | "eden operativo capaz" => GarmCommand::EdenCapableOperationalize,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1554,6 +1561,10 @@ mod tests {
         assert_eq!(
             parse("eden checkpoint registry eval"),
             GarmCommand::EdenCheckpointRegistryEval
+        );
+        assert_eq!(
+            parse("eden capable operationalize"),
+            GarmCommand::EdenCapableOperationalize
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

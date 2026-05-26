@@ -1452,6 +1452,7 @@ impl CommandProfile {
             | GarmCommand::EdenCheckpointRegistryEval
             | GarmCommand::EdenSftElcpReadinessEval
             | GarmCommand::EdenCapableGateEval
+            | GarmCommand::EdenCapableOperationalize
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval
