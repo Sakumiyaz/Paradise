@@ -39,6 +39,13 @@
       "split": "eval",
       "format": "jsonl",
       "source": "synthetic repo-local cognitive transition examples"
+    },
+    {
+      "name": "eden_cognitive_capability_seed",
+      "path": "training/data/eden_cognitive_capability_seed.jsonl",
+      "split": "seed",
+      "format": "jsonl",
+      "source": "synthetic repo-local governed capability examples"
     }
   ],
   "policy": {

@@ -367,6 +367,30 @@ pub fn megatron_7b_capability_report_path() -> String {
 pub fn megatron_7b_admission_gate_path() -> String {
     path("megatron_7b_admission_gate.json")
 }
+pub fn eden_capable_training_run_contract_path() -> String {
+    path("eden_capable_training_run_contract.json")
+}
+pub fn eden_cognitive_dataset_manifest_path() -> String {
+    path("eden_cognitive_dataset_manifest.json")
+}
+pub fn eden_native_inference_api_path() -> String {
+    path("eden_native_inference_api.json")
+}
+pub fn eden_capability_delta_eval_path() -> String {
+    path("eden_capability_delta_eval.json")
+}
+pub fn eden_structured_output_report_path() -> String {
+    path("eden_structured_output_report.json")
+}
+pub fn eden_checkpoint_registry_path() -> String {
+    path("eden_checkpoint_registry.json")
+}
+pub fn eden_sft_elcp_readiness_path() -> String {
+    path("eden_sft_elcp_readiness.json")
+}
+pub fn eden_capable_gate_path() -> String {
+    path("eden_capable_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }

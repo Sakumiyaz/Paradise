@@ -1443,6 +1443,15 @@ impl CommandProfile {
             | GarmCommand::Megatron7bInferenceEval
             | GarmCommand::Megatron7bCapabilityEval
             | GarmCommand::Megatron7bAdmissionGateEval
+            | GarmCommand::EdenCapableEval
+            | GarmCommand::EdenCapableTrainingRunContract
+            | GarmCommand::EdenCognitiveDatasetEval
+            | GarmCommand::EdenNativeInferenceEval
+            | GarmCommand::EdenCapabilityDeltaEval
+            | GarmCommand::EdenStructuredOutputEval
+            | GarmCommand::EdenCheckpointRegistryEval
+            | GarmCommand::EdenSftElcpReadinessEval
+            | GarmCommand::EdenCapableGateEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval

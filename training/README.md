@@ -71,6 +71,14 @@ Python training code:
 | `megatron_7b_inference_report.json` | Admits real checkpoint-load/token-generation evidence after the ROCm probe. |
 | `megatron_7b_capability_report.json` | Marks only the usable probe capability, not semantic competence or AGI. |
 | `megatron_7b_admission_gate.json` | Keeps checkpoint, production and autonomy admission blocked after the probe. |
+| `eden_capable_training_run_contract.json` | Step 1: prepares the longer 7B training run contract without starting GPU work. |
+| `eden_cognitive_dataset_manifest.json` | Step 2: admits the synthetic cognitive capability seed dataset. |
+| `eden_native_inference_api.json` | Step 3: defines native GEWC structured inference request/response boundaries. |
+| `eden_capability_delta_eval.json` | Step 4: compares architecture-only state against checkpoint-load/token-generation evidence. |
+| `eden_structured_output_report.json` | Step 5: converts raw model text into untrusted EDEN hypothesis packets. |
+| `eden_checkpoint_registry.json` | Step 6: registers the checkpoint as a probe, not a release. |
+| `eden_sft_elcp_readiness.json` | Step 7: prepares SFT/ELCP readiness while keeping training blocked. |
+| `eden_capable_gate.json` | Aggregates the seven EDEN-capable steps under no-claim policy. |
 
 ## Local Smoke Run
 
@@ -244,6 +252,18 @@ make training-megatron-7b-adapter
 The adapter is intentionally narrow: GEWC may use it as a subordinate candidate
 token generator, but it still cannot write memory, change objectives, execute
 tools, claim semantic competence, or admit its own checkpoint.
+
+To prepare the seven no-GPU steps that make the checkpoint usable as an EDEN
+capability surface:
+
+```bash
+make eden-capable
+```
+
+This does not start training. It writes the training-run contract, cognitive
+dataset manifest, native inference API boundary, before/after capability eval,
+structured output packets, checkpoint registry, SFT/ELCP readiness and aggregate
+gate.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

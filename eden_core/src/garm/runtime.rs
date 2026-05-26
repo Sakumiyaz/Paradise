@@ -465,6 +465,35 @@ impl GewcBodyExecutor {
                 eden_garm::model_runtime::write_megatron_7b_admission_gate(),
                 true,
             ),
+            eden_garm::nodes::command_router::GarmCommand::EdenCapableEval => {
+                (eden_garm::eden_capable::run_all(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenCapableTrainingRunContract => {
+                (eden_garm::eden_capable::write_training_run_contract(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenCognitiveDatasetEval => (
+                eden_garm::eden_capable::write_cognitive_dataset_manifest(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::EdenNativeInferenceEval => {
+                (eden_garm::eden_capable::write_native_inference_api(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenCapabilityDeltaEval => {
+                (eden_garm::eden_capable::write_capability_delta_eval(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenStructuredOutputEval => (
+                eden_garm::eden_capable::write_structured_output_report(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::EdenCheckpointRegistryEval => {
+                (eden_garm::eden_capable::write_checkpoint_registry(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenSftElcpReadinessEval => {
+                (eden_garm::eden_capable::write_sft_elcp_readiness(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenCapableGateEval => {
+                (eden_garm::eden_capable::write_capable_gate(), true)
+            }
             eden_garm::nodes::command_router::GarmCommand::ModelRuntimeEval => {
                 (eden_garm::model_runtime::run_all(), true)
             }
@@ -6525,6 +6554,15 @@ mod tests {
             Megatron7bInferenceEval,
             Megatron7bCapabilityEval,
             Megatron7bAdmissionGateEval,
+            EdenCapableEval,
+            EdenCapableTrainingRunContract,
+            EdenCognitiveDatasetEval,
+            EdenNativeInferenceEval,
+            EdenCapabilityDeltaEval,
+            EdenStructuredOutputEval,
+            EdenCheckpointRegistryEval,
+            EdenSftElcpReadinessEval,
+            EdenCapableGateEval,
             ModelRuntimeEval,
             RuntimeStateApiEval,
             OperationalApiEval,

@@ -228,6 +228,35 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::megatron_7b_admission_gate_path(),
         ),
         artifact(
+            "eden_capable_training_run_contract",
+            state_paths::eden_capable_training_run_contract_path(),
+        ),
+        artifact(
+            "eden_cognitive_dataset_manifest",
+            state_paths::eden_cognitive_dataset_manifest_path(),
+        ),
+        artifact(
+            "eden_native_inference_api",
+            state_paths::eden_native_inference_api_path(),
+        ),
+        artifact(
+            "eden_capability_delta_eval",
+            state_paths::eden_capability_delta_eval_path(),
+        ),
+        artifact(
+            "eden_structured_output_report",
+            state_paths::eden_structured_output_report_path(),
+        ),
+        artifact(
+            "eden_checkpoint_registry",
+            state_paths::eden_checkpoint_registry_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_readiness",
+            state_paths::eden_sft_elcp_readiness_path(),
+        ),
+        artifact("eden_capable_gate", state_paths::eden_capable_gate_path()),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

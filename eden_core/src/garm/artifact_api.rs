@@ -181,6 +181,15 @@ fn domain_for(name: &str) -> &'static str {
         "sovereign_cognition"
     } else if name.contains("gewc") || name.contains("global_executive") {
         "global_executive_workspace"
+    } else if name.starts_with("eden_capable")
+        || name.starts_with("eden_capability")
+        || name.starts_with("eden_cognitive")
+        || name.starts_with("eden_native")
+        || name.starts_with("eden_structured")
+        || name.starts_with("eden_checkpoint")
+        || name.starts_with("eden_sft")
+    {
+        "eden_capable_runtime"
     } else if name.starts_with("megatron_7b") {
         "model_runtime_governance"
     } else if name.starts_with("model_")
@@ -256,6 +265,15 @@ fn generator_command(name: &str) -> &'static str {
         "operational runtime eval"
     } else if name.starts_with("operational_api") || name.starts_with("operational_action") {
         "operational api eval"
+    } else if name.starts_with("eden_capable")
+        || name.starts_with("eden_capability")
+        || name.starts_with("eden_cognitive")
+        || name.starts_with("eden_native")
+        || name.starts_with("eden_structured")
+        || name.starts_with("eden_checkpoint")
+        || name.starts_with("eden_sft")
+    {
+        "eden capable eval"
     } else if name == "megatron_7b_training_evidence" {
         "megatron 7b evidence eval"
     } else if name == "megatron_7b_model_adapter" {

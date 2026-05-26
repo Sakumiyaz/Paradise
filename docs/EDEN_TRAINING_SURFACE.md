@@ -60,6 +60,10 @@ ad hoc notebooks or private scripts.
 - `make training-megatron-7b-adapter` admits the checkpoint-load/token-generation
   evidence into GEWC as a subordinate cognitive capacity while still blocking
   semantic competence, production inference, checkpoint admission and autonomy.
+- `make eden-capable` prepares the seven remaining no-GPU capability steps:
+  longer-training contract, cognitive dataset manifest, native structured
+  inference boundary, capability delta eval, structured output packets,
+  checkpoint registry and SFT/ELCP readiness.
 
 ## Future AMD GPU Use
 
@@ -105,6 +109,9 @@ The current model runtime path makes that boundary executable:
   that the checkpoint can be loaded and can generate candidate tokens. It is a
   runtime usability signal, not evidence of AGI, semantic reliability or
   release readiness.
+- `/tmp/eden_garm_capable/eden_capable_gate.json` aggregates the seven
+  EDEN-capable preparation artifacts while preserving `claim_allowed=false` and
+  `agi_claim=false`.
 
 ## Validation Commands
 
@@ -117,6 +124,7 @@ make training-megatron-7b-evidence-json
 make training-megatron-7b-evidence
 make training-megatron-7b-inference-probe
 make training-megatron-7b-adapter
+make eden-capable
 make training-smoke
 make training-evidence
 make model-runtime

@@ -259,6 +259,31 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=elcp_readiness",
         ),
         curated(
+            "eden_capable_gate",
+            crate::eden_garm::eden_capable::EDEN_CAPABLE_GATE_SCHEMA,
+            "/api/artifact?name=eden_capable_gate",
+        ),
+        curated(
+            "eden_cognitive_dataset_manifest",
+            crate::eden_garm::eden_capable::EDEN_COGNITIVE_DATASET_MANIFEST_SCHEMA,
+            "/api/artifact?name=eden_cognitive_dataset_manifest",
+        ),
+        curated(
+            "eden_structured_output_report",
+            crate::eden_garm::eden_capable::EDEN_STRUCTURED_OUTPUT_REPORT_SCHEMA,
+            "/api/artifact?name=eden_structured_output_report",
+        ),
+        curated(
+            "eden_checkpoint_registry",
+            crate::eden_garm::eden_capable::EDEN_CHECKPOINT_REGISTRY_SCHEMA,
+            "/api/artifact?name=eden_checkpoint_registry",
+        ),
+        curated(
+            "eden_sft_elcp_readiness",
+            crate::eden_garm::eden_capable::EDEN_SFT_ELCP_READINESS_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_readiness",
+        ),
+        curated(
             "paradise_worldcell_runtime",
             crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
             "/api/artifact?name=paradise_worldcell_runtime",
