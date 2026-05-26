@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -122,11 +122,17 @@ training-megatron-eden-corpus-pilot:
 training-megatron-eden-7b-base-pilot:
 	bash training/rocm/megatron_eden_7b_base_pilot.sh
 
-training-megatron-7b-evidence:
+training-megatron-7b-evidence-json:
 	python3 training/rocm/build_megatron_7b_evidence.py \
 		--repo-root . \
 		--output-dir target/eden_megatron_7b_base_pilot \
 		--schema contracts/v1/schemas/eden-megatron-7b-training-evidence-v1.json
+
+training-megatron-7b-evidence: training-megatron-7b-evidence-json
+	@command -v cargo >/dev/null 2>&1 || { \
+		printf 'cargo is required for GEWC admission; JSON evidence was generated. Install Rust or copy target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json to a runtime host.\n' >&2; \
+		exit 127; \
+	}
 	printf 'megatron 7b evidence eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_megatron_7b_evidence --api-port 0
 
 operational-blackbox:

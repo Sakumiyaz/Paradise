@@ -198,6 +198,13 @@ To rebuild and admit the formal evidence into GEWC after a run:
 make training-megatron-7b-evidence
 ```
 
+On a GPU-only VM without the Rust toolchain, build just the portable JSON
+evidence and copy it to a runtime host for GEWC admission:
+
+```bash
+make training-megatron-7b-evidence-json
+```
+
 The resulting artifact remains claim-gated:
 
 ```text

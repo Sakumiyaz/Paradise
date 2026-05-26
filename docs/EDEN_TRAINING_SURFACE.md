@@ -51,6 +51,9 @@ ad hoc notebooks or private scripts.
   `eden.megatron.7b.training_evidence.v1` and admits it through GEWC while
   preserving `claim_allowed=false`, `agi_claim=false` and
   `checkpoint_admission=false`.
+- `make training-megatron-7b-evidence-json` is available for GPU-only hosts
+  that can generate portable evidence but do not have the Rust runtime toolchain
+  installed.
 
 ## Future AMD GPU Use
 
@@ -100,6 +103,7 @@ make training-rocm-profile
 make training-megatron-offline-smoke
 make training-megatron-eden-corpus-pilot
 make training-megatron-eden-7b-base-pilot
+make training-megatron-7b-evidence-json
 make training-megatron-7b-evidence
 make training-smoke
 make training-evidence
