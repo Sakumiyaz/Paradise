@@ -289,6 +289,38 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::eden_capable_operational_gate_path(),
         ),
         artifact(
+            "eden_sft_elcp_dataset_v2_manifest",
+            state_paths::eden_sft_elcp_dataset_v2_manifest_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_gpu_training_report",
+            state_paths::eden_sft_elcp_gpu_training_report_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_prepost_eval",
+            state_paths::eden_sft_elcp_prepost_eval_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_repeated_inference_eval",
+            state_paths::eden_sft_elcp_repeated_inference_eval_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_checkpoint_admission_review",
+            state_paths::eden_sft_elcp_checkpoint_admission_review_path(),
+        ),
+        artifact(
+            "eden_sft_elcp_operational_demo",
+            state_paths::eden_sft_elcp_operational_demo_path(),
+        ),
+        artifact(
+            "eden_external_tests_ci_gate",
+            state_paths::eden_external_tests_ci_gate_path(),
+        ),
+        artifact(
+            "eden_learned_capability_gate",
+            state_paths::eden_learned_capability_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

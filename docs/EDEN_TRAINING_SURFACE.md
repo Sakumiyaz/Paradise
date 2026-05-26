@@ -68,6 +68,14 @@ ad hoc notebooks or private scripts.
   steps: callable probe-backed inference runtime, GEWC cognitive call contract,
   expanded cognitive dataset report, capability eval suite, SFT/ELCP activation
   gate, memory/action loop and governed demo trace.
+- `make training-eden-sft-elcp-dataset` generates the deterministic SFT/ELCP v2
+  train/eval split and validates it against the ELCP transition contract.
+- `make training-eden-sft-elcp-gpu-pilot` runs the compact learned-capability
+  pilot on a ROCm GPU with Docker `--network none`. It writes pre/post eval,
+  repeated hypothesis packets and checkpoint-admission review evidence.
+- `make eden-learned-capability` admits that evidence into GEWC as a governed
+  learned-capability surface while preserving `claim_allowed=false`,
+  `agi_claim=false` and `checkpoint_admission_allowed=false`.
 
 ## Future AMD GPU Use
 
@@ -119,6 +127,12 @@ The current model runtime path makes that boundary executable:
 - `/tmp/eden_garm_capable_operational/eden_capable_operational_gate.json`
   aggregates the seven operational artifacts and keeps the checkpoint as a
   subordinate hypothesis generator, not a production model.
+- `/tmp/eden_garm_learned_capability/eden_learned_capability_gate.json`
+  aggregates the seven learned-capability checks. It only passes when the
+  SFT/ELCP v2 dataset exists, GPU training evidence exists, pre/post eval
+  improves, repeated inference packets stay hypothesis-gated, checkpoint
+  admission stays blocked, the demo has a packet and the external-tests CI gate
+  exists.
 
 ## Validation Commands
 
@@ -133,6 +147,9 @@ make training-megatron-7b-inference-probe
 make training-megatron-7b-adapter
 make eden-capable
 make eden-capable-operationalize
+make training-eden-sft-elcp-dataset
+make training-eden-sft-elcp-gpu-pilot
+make eden-learned-capability
 make training-smoke
 make training-evidence
 make model-runtime

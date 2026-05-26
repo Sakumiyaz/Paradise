@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-learned-capability-gate-v1.json",
+  "title": "EDEN Learned Capability Gate",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed", "total", "checkpoint_admission_allowed"],
+  "properties": {
+    "schema": {"const": "eden.learned_capability.gate.v1"},
+    "artifact": {"const": "eden_learned_capability_gate"},
+    "authority": {"const": "global_executive_workspace_core"},
+    "claim_allowed": {"const": false},
+    "agi_claim": {"const": false},
+    "passed": {"type": "integer", "minimum": 0},
+    "total": {"type": "integer", "minimum": 1},
+    "checkpoint_admission_allowed": {"const": false}
+  }
+}

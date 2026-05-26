@@ -59,6 +59,24 @@
         "safe_continual_learning",
         "metacognition"
       ]
+    },
+    {
+      "name": "eden_cognitive_sft_elcp_train",
+      "path": "training/data/eden_cognitive_sft_elcp_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "deterministic repo-local SFT/ELCP cognitive transition generator",
+      "records": 80,
+      "generator": "training/data/build_eden_cognitive_sft_elcp.py"
+    },
+    {
+      "name": "eden_cognitive_sft_elcp_eval",
+      "path": "training/data/eden_cognitive_sft_elcp_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "deterministic repo-local SFT/ELCP cognitive transition generator",
+      "records": 20,
+      "generator": "training/data/build_eden_cognitive_sft_elcp.py"
     }
   ],
   "policy": {

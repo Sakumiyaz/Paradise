@@ -24,6 +24,8 @@ measurable capability before expensive GPU work:
 | `data/capability_smoke.jsonl` | Tiny deterministic benchmark dataset for current operational capabilities. |
 | `data/first_model_memory_*.jsonl` | Tiny train/eval fixtures for the first memory-retrieval baseline. |
 | `data/elcp_transition_*.jsonl` | Tiny train/eval fixtures for ELCP cognitive-transition contracts. |
+| `data/eden_cognitive_sft_elcp_*.jsonl` | Deterministic SFT/ELCP v2 train/eval data for the learned-capability pilot. |
+| `data/build_eden_cognitive_sft_elcp.py` | Stdlib-only SFT/ELCP v2 generator; no private data and no external model. |
 | `benchmarks/eden_capability_benchmark.py` | Stdlib-only benchmark runner and tiny trainable memory baseline. |
 | `benchmarks/validate_capability_report.py` | Stdlib-only contract validator for `capability_report.json`. |
 | `benchmarks/validate_elcp_transitions.py` | Stdlib-only validator for ELCP cognitive-transition fixtures. |
@@ -44,6 +46,7 @@ measurable capability before expensive GPU work:
 | `rocm/megatron_eden_corpus_pilot.sh` | Optional MI300X/Megatron pilot launcher. It trains a local SentencePiece tokenizer from `eden_core/corpus`, preprocesses EDEN-owned text into Megatron format and runs a tiny random-weight GPT pilot without network access or external models. |
 | `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models, formal evidence JSON and no checkpoint admission. |
 | `rocm/megatron_eden_7b_inference_probe.sh` | Optional MI300X/Megatron inference probe. It loads the EDEN-owned 7B checkpoint and generates tokens locally through Megatron Core inference with Docker `--network none`. |
+| `rocm/eden_sft_elcp_gpu_pilot.sh` | Optional MI300X learned-capability pilot. It trains a compact EDEN-owned SFT/ELCP transition module on GPU and writes pre/post eval, repeated inference packets and checkpoint-admission evidence. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -87,6 +90,14 @@ Python training code:
 | `eden_memory_action_loop.json` | Operational step 6: demonstrates model packets passing through memory/action gates. |
 | `eden_capable_demo_trace.json` | Operational step 7: records a user-visible governed demo trace. |
 | `eden_capable_operational_gate.json` | Aggregates the seven operational EDEN-capable steps under no-claim policy. |
+| `eden_sft_elcp_dataset_v2_manifest.json` | Learned step 1: admits the deterministic SFT/ELCP v2 train/eval split. |
+| `eden_sft_elcp_gpu_training_report.json` | Learned step 2: admits the GPU pilot training report without checkpoint admission. |
+| `eden_sft_elcp_prepost_eval.json` | Learned step 3: records pre/post contract performance. |
+| `eden_sft_elcp_repeated_inference_eval.json` | Learned step 4: records repeatable hypothesis packets from the trained module. |
+| `eden_sft_elcp_checkpoint_admission_review.json` | Learned step 5: keeps checkpoint admission blocked after the pilot. |
+| `eden_sft_elcp_operational_demo.json` | Learned step 6: demonstrates the learned packet flowing through GEWC boundaries. |
+| `eden_external_tests_ci_gate.json` | Learned step 7: confirms external tests are explicit CI/manual gates, not ignored evidence. |
+| `eden_learned_capability_gate.json` | Aggregates the seven learned-capability checks under no-claim policy. |
 
 ## Local Smoke Run
 
@@ -143,6 +154,12 @@ To prepare ELCP as EDEN's native latent cognitive objective without training:
 
 ```bash
 make elcp-prepare
+```
+
+To generate and validate the SFT/ELCP v2 learned-capability dataset:
+
+```bash
+make training-eden-sft-elcp-dataset
 ```
 
 ## Optional MI300X Megatron Smoke
@@ -282,6 +299,24 @@ make eden-capable-operationalize
 This also does not start training or use GPU. It writes the callable inference
 runtime contract, cognitive call contract, expanded dataset report, capability
 eval suite, SFT/ELCP activation gate, memory/action loop and demo trace.
+
+To run the compact learned-capability pilot on a ROCm GPU:
+
+```bash
+make training-eden-sft-elcp-gpu-pilot
+```
+
+To admit the pilot evidence through GEWC after the GPU run:
+
+```bash
+make eden-learned-capability
+```
+
+The learned-capability gate remains narrow: it requires dataset, GPU training,
+pre/post eval, repeated inference packets, blocked checkpoint admission,
+operational demo evidence and the explicit external-tests CI gate. It does not
+permit production model release, direct memory writes, tool authority or AGI
+claims.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

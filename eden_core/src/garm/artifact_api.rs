@@ -181,6 +181,16 @@ fn domain_for(name: &str) -> &'static str {
         "sovereign_cognition"
     } else if name.contains("gewc") || name.contains("global_executive") {
         "global_executive_workspace"
+    } else if name.starts_with("eden_sft_elcp_dataset_v2")
+        || name.starts_with("eden_sft_elcp_gpu")
+        || name.starts_with("eden_sft_elcp_prepost")
+        || name.starts_with("eden_sft_elcp_repeated")
+        || name.starts_with("eden_sft_elcp_checkpoint")
+        || name.starts_with("eden_sft_elcp_operational")
+        || name.starts_with("eden_external_tests")
+        || name.starts_with("eden_learned_capability")
+    {
+        "eden_learned_capability"
     } else if name.starts_with("eden_capable")
         || name.starts_with("eden_capability")
         || name.starts_with("eden_cognitive")
@@ -270,6 +280,8 @@ fn generator_command(name: &str) -> &'static str {
     } else if name.starts_with("eden_capable")
         || name.starts_with("eden_capability")
         || name.starts_with("eden_cognitive")
+        || name.starts_with("eden_external_tests")
+        || name.starts_with("eden_learned_capability")
         || name.starts_with("eden_native")
         || name.starts_with("eden_structured")
         || name.starts_with("eden_checkpoint")
@@ -277,7 +289,19 @@ fn generator_command(name: &str) -> &'static str {
         || name.starts_with("eden_memory")
         || name.starts_with("eden_sft")
     {
-        "eden capable eval"
+        if name.starts_with("eden_sft_elcp_dataset_v2")
+            || name.starts_with("eden_sft_elcp_gpu")
+            || name.starts_with("eden_sft_elcp_prepost")
+            || name.starts_with("eden_sft_elcp_repeated")
+            || name.starts_with("eden_sft_elcp_checkpoint")
+            || name.starts_with("eden_sft_elcp_operational")
+            || name.starts_with("eden_external_tests")
+            || name.starts_with("eden_learned_capability")
+        {
+            "eden learned capability eval"
+        } else {
+            "eden capable eval"
+        }
     } else if name == "megatron_7b_training_evidence" {
         "megatron 7b evidence eval"
     } else if name == "megatron_7b_model_adapter" {

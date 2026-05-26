@@ -415,6 +415,30 @@ pub fn eden_capable_demo_trace_path() -> String {
 pub fn eden_capable_operational_gate_path() -> String {
     path("eden_capable_operational_gate.json")
 }
+pub fn eden_sft_elcp_dataset_v2_manifest_path() -> String {
+    path("eden_sft_elcp_dataset_v2_manifest.json")
+}
+pub fn eden_sft_elcp_gpu_training_report_path() -> String {
+    path("eden_sft_elcp_gpu_training_report.json")
+}
+pub fn eden_sft_elcp_prepost_eval_path() -> String {
+    path("eden_sft_elcp_prepost_eval.json")
+}
+pub fn eden_sft_elcp_repeated_inference_eval_path() -> String {
+    path("eden_sft_elcp_repeated_inference_eval.json")
+}
+pub fn eden_sft_elcp_checkpoint_admission_review_path() -> String {
+    path("eden_sft_elcp_checkpoint_admission_review.json")
+}
+pub fn eden_sft_elcp_operational_demo_path() -> String {
+    path("eden_sft_elcp_operational_demo.json")
+}
+pub fn eden_external_tests_ci_gate_path() -> String {
+    path("eden_external_tests_ci_gate.json")
+}
+pub fn eden_learned_capability_gate_path() -> String {
+    path("eden_learned_capability_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }

@@ -15,6 +15,7 @@ pub mod capability_registry;
 pub mod client_sdk;
 pub mod cognitive_architecture;
 pub mod eden_capable;
+pub mod eden_learned_capability;
 pub mod eden_locus_layer;
 pub mod eden_operator_forge;
 pub mod embodied_grounding;

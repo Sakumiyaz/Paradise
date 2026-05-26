@@ -324,6 +324,46 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=eden_capable_operational_gate",
         ),
         curated(
+            "eden_sft_elcp_dataset_v2_manifest",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_DATASET_V2_MANIFEST_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_dataset_v2_manifest",
+        ),
+        curated(
+            "eden_sft_elcp_gpu_training_report",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_GPU_TRAINING_REPORT_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_gpu_training_report",
+        ),
+        curated(
+            "eden_sft_elcp_prepost_eval",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_PREPOST_EVAL_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_prepost_eval",
+        ),
+        curated(
+            "eden_sft_elcp_repeated_inference_eval",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_REPEATED_INFERENCE_EVAL_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_repeated_inference_eval",
+        ),
+        curated(
+            "eden_sft_elcp_checkpoint_admission_review",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_CHECKPOINT_ADMISSION_REVIEW_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_checkpoint_admission_review",
+        ),
+        curated(
+            "eden_sft_elcp_operational_demo",
+            crate::eden_garm::eden_learned_capability::EDEN_SFT_ELCP_OPERATIONAL_DEMO_SCHEMA,
+            "/api/artifact?name=eden_sft_elcp_operational_demo",
+        ),
+        curated(
+            "eden_external_tests_ci_gate",
+            crate::eden_garm::eden_learned_capability::EDEN_EXTERNAL_TESTS_CI_GATE_SCHEMA,
+            "/api/artifact?name=eden_external_tests_ci_gate",
+        ),
+        curated(
+            "eden_learned_capability_gate",
+            crate::eden_garm::eden_learned_capability::EDEN_LEARNED_CAPABILITY_GATE_SCHEMA,
+            "/api/artifact?name=eden_learned_capability_gate",
+        ),
+        curated(
             "paradise_worldcell_runtime",
             crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
             "/api/artifact?name=paradise_worldcell_runtime",
