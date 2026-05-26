@@ -82,6 +82,14 @@ ad hoc notebooks or private scripts.
 - `make eden-real-capability` admits the seven real-capability artifacts into
   GEWC: dataset, 7B training, inference bridge, operational eval, checkpoint
   decision, demo and scaling ladder.
+- `make training-eden-v01-stage` builds the larger semantic corpus and requires
+  7B evidence beyond the 50-iteration pilot before semantic runtime candidate
+  admission can pass. With `EDEN_V01_RUN_GPU=true`, it runs the bounded 7B
+  continuation, checkpoint inference, semantic eval, operational demo and GPU
+  hygiene report.
+- `make eden-v01-capability` admits the v0.1 artifacts into GEWC: dataset,
+  semantic eval, training beyond pilot, native inference runtime, operational
+  demo, checkpoint candidate admission, scaling plan, GPU hygiene and gate.
 
 ## Future AMD GPU Use
 
@@ -143,6 +151,10 @@ The current model runtime path makes that boundary executable:
   the next seven checks: real repo-owned corpus, bounded 7B training,
   checkpoint-load inference, operational eval, reviewable-but-blocked checkpoint
   decision, governed demo and scaling ladder.
+- `/tmp/eden_garm_v01_capability/eden_v01_capability_gate.json` aggregates the
+  semantic runtime candidate checks: larger curated dataset, semantic eval,
+  `>=100` 7B iterations, native inference, candidate checkpoint admission,
+  demo trace, 14B scaling cap and non-destructive GPU hygiene.
 
 ## Validation Commands
 
@@ -162,6 +174,8 @@ make training-eden-sft-elcp-gpu-pilot
 make eden-learned-capability
 make training-eden-real-capability-stage
 make eden-real-capability
+make training-eden-v01-stage
+make eden-v01-capability
 make training-smoke
 make training-evidence
 make model-runtime

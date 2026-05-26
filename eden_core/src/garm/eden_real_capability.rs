@@ -14,13 +14,29 @@ pub const EDEN_REAL_CAPABILITY_DEMO_SCHEMA: &str = "eden.real_capability.demo.v1
 pub const EDEN_REAL_CAPABILITY_SCALING_LADDER_SCHEMA: &str =
     "eden.real_capability.scaling_ladder.v1";
 pub const EDEN_REAL_CAPABILITY_GATE_SCHEMA: &str = "eden.real_capability.gate.v1";
+pub const EDEN_V01_DATASET_MANIFEST_SCHEMA: &str = "eden.v01.dataset_manifest.v1";
+pub const EDEN_V01_SEMANTIC_EVAL_SCHEMA: &str = "eden.v01.semantic_eval.v1";
+pub const EDEN_V01_TRAINING_BEYOND_PILOT_SCHEMA: &str = "eden.v01.training_beyond_pilot.v1";
+pub const EDEN_V01_NATIVE_INFERENCE_RUNTIME_SCHEMA: &str = "eden.v01.native_inference_runtime.v1";
+pub const EDEN_V01_OPERATIONAL_DEMO_SCHEMA: &str = "eden.v01.operational_demo.v1";
+pub const EDEN_V01_CHECKPOINT_ADMISSION_SCHEMA: &str = "eden.v01.checkpoint_admission.v1";
+pub const EDEN_V01_SCALING_PLAN_SCHEMA: &str = "eden.v01.scaling_plan.v1";
+pub const EDEN_V01_GPU_WORKSPACE_HYGIENE_SCHEMA: &str = "eden.v01.gpu_workspace_hygiene.v1";
+pub const EDEN_V01_CAPABILITY_GATE_SCHEMA: &str = "eden.v01.capability_gate.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const TRAIN_DATA: &str = "training/data/eden_real_capability_train.jsonl";
 const EVAL_DATA: &str = "training/data/eden_real_capability_eval.jsonl";
 const CHALLENGE_DATA: &str = "training/data/eden_real_capability_challenge.jsonl";
+const V01_TRAIN_DATA: &str = "training/data/eden_v01_semantic_train.jsonl";
+const V01_EVAL_DATA: &str = "training/data/eden_v01_semantic_eval.jsonl";
+const V01_CHALLENGE_DATA: &str = "training/data/eden_v01_semantic_challenge.jsonl";
 const CORPUS_MANIFEST: &str = "target/eden_real_capability/corpus_manifest.json";
 const OPERATIONAL_EVAL_REPORT: &str = "target/eden_real_capability/capability_eval_report.json";
+const V01_CORPUS_MANIFEST: &str = "target/eden_v01/semantic_corpus_manifest.json";
+const V01_SEMANTIC_EVAL_REPORT: &str = "target/eden_v01/semantic_eval_report.json";
+const V01_OPERATIONAL_DEMO_REPORT: &str = "target/eden_v01/operational_demo_trace.json";
+const V01_GPU_HYGIENE_REPORT: &str = "target/eden_v01/gpu_workspace_hygiene_report.json";
 const MEGATRON_7B_TRAINING_EVIDENCE: &str =
     "target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json";
 const MEGATRON_7B_INFERENCE_REPORT: &str =
@@ -41,6 +57,20 @@ pub fn run_all() -> String {
     out.push_str(&write_operational_demo());
     out.push_str(&write_scaling_ladder());
     out.push_str(&write_real_capability_gate());
+    out
+}
+
+pub fn run_v01_all() -> String {
+    let mut out = String::new();
+    out.push_str(&write_v01_dataset_manifest());
+    out.push_str(&write_v01_semantic_eval());
+    out.push_str(&write_v01_training_beyond_pilot());
+    out.push_str(&write_v01_native_inference_runtime());
+    out.push_str(&write_v01_operational_demo());
+    out.push_str(&write_v01_checkpoint_admission());
+    out.push_str(&write_v01_scaling_plan());
+    out.push_str(&write_v01_gpu_workspace_hygiene());
+    out.push_str(&write_v01_capability_gate());
     out
 }
 
@@ -113,6 +143,87 @@ pub fn write_real_capability_gate() -> String {
         EDEN_REAL_CAPABILITY_GATE_SCHEMA,
         state_paths::eden_real_capability_gate_path(),
         gate_value(),
+    )
+}
+
+pub fn write_v01_dataset_manifest() -> String {
+    write_report(
+        "EDEN-V01-DATASET",
+        EDEN_V01_DATASET_MANIFEST_SCHEMA,
+        state_paths::eden_v01_dataset_manifest_path(),
+        v01_dataset_manifest_value(),
+    )
+}
+
+pub fn write_v01_semantic_eval() -> String {
+    write_report(
+        "EDEN-V01-SEMANTIC-EVAL",
+        EDEN_V01_SEMANTIC_EVAL_SCHEMA,
+        state_paths::eden_v01_semantic_eval_path(),
+        v01_semantic_eval_value(),
+    )
+}
+
+pub fn write_v01_training_beyond_pilot() -> String {
+    write_report(
+        "EDEN-V01-TRAINING-BEYOND-PILOT",
+        EDEN_V01_TRAINING_BEYOND_PILOT_SCHEMA,
+        state_paths::eden_v01_training_beyond_pilot_path(),
+        v01_training_beyond_pilot_value(),
+    )
+}
+
+pub fn write_v01_native_inference_runtime() -> String {
+    write_report(
+        "EDEN-V01-NATIVE-INFERENCE-RUNTIME",
+        EDEN_V01_NATIVE_INFERENCE_RUNTIME_SCHEMA,
+        state_paths::eden_v01_native_inference_runtime_path(),
+        v01_native_inference_runtime_value(),
+    )
+}
+
+pub fn write_v01_operational_demo() -> String {
+    write_report(
+        "EDEN-V01-OPERATIONAL-DEMO",
+        EDEN_V01_OPERATIONAL_DEMO_SCHEMA,
+        state_paths::eden_v01_operational_demo_path(),
+        v01_operational_demo_value(),
+    )
+}
+
+pub fn write_v01_checkpoint_admission() -> String {
+    write_report(
+        "EDEN-V01-CHECKPOINT-ADMISSION",
+        EDEN_V01_CHECKPOINT_ADMISSION_SCHEMA,
+        state_paths::eden_v01_checkpoint_admission_path(),
+        v01_checkpoint_admission_value(),
+    )
+}
+
+pub fn write_v01_scaling_plan() -> String {
+    write_report(
+        "EDEN-V01-SCALING-PLAN",
+        EDEN_V01_SCALING_PLAN_SCHEMA,
+        state_paths::eden_v01_scaling_plan_path(),
+        v01_scaling_plan_value(),
+    )
+}
+
+pub fn write_v01_gpu_workspace_hygiene() -> String {
+    write_report(
+        "EDEN-V01-GPU-HYGIENE",
+        EDEN_V01_GPU_WORKSPACE_HYGIENE_SCHEMA,
+        state_paths::eden_v01_gpu_workspace_hygiene_path(),
+        v01_gpu_workspace_hygiene_value(),
+    )
+}
+
+pub fn write_v01_capability_gate() -> String {
+    write_report(
+        "EDEN-V01-CAPABILITY-GATE",
+        EDEN_V01_CAPABILITY_GATE_SCHEMA,
+        state_paths::eden_v01_capability_gate_path(),
+        v01_gate_value(),
     )
 }
 
@@ -407,6 +518,313 @@ fn gate_value() -> Value {
     })
 }
 
+fn v01_dataset_manifest_value() -> Value {
+    let source = read_repo_json(V01_CORPUS_MANIFEST);
+    let train_rows = count_jsonl(V01_TRAIN_DATA);
+    let eval_rows = count_jsonl(V01_EVAL_DATA);
+    let challenge_rows = count_jsonl(V01_CHALLENGE_DATA);
+    serde_json::json!({
+        "schema": EDEN_V01_DATASET_MANIFEST_SCHEMA,
+        "artifact": "eden_v01_dataset_manifest",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "contains_private_data": false,
+        "external_model_dependency": false,
+        "source_manifest_path": V01_CORPUS_MANIFEST,
+        "source_manifest_present": source.is_some(),
+        "rows": {
+            "train": train_rows,
+            "eval": eval_rows,
+            "challenge": challenge_rows,
+            "total": train_rows + eval_rows + challenge_rows
+        },
+        "task_types": source.as_ref().and_then(|v| v.get("task_types")).cloned().unwrap_or(Value::Null),
+        "categories": source.as_ref().and_then(|v| v.get("categories")).cloned().unwrap_or(Value::Null),
+        "paths": {
+            "train": V01_TRAIN_DATA,
+            "eval": V01_EVAL_DATA,
+            "challenge": V01_CHALLENGE_DATA
+        },
+        "accepted_for": [
+            "semantic_capability_eval",
+            "native_inference_runtime_candidate_admission",
+            "checkpoint_candidate_review"
+        ],
+        "not_accepted_for": [
+            "AGI_claim",
+            "private_user_memory_training",
+            "production_release"
+        ],
+    })
+}
+
+fn v01_semantic_eval_value() -> Value {
+    let source = read_repo_json(V01_SEMANTIC_EVAL_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V01_SEMANTIC_EVAL_SCHEMA,
+        "artifact": "eden_v01_semantic_eval",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V01_SEMANTIC_EVAL_REPORT,
+        "source_present": source.is_some(),
+        "score": source_f64(source.as_ref(), "/score"),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "weighted_passed": source_u64(source.as_ref(), "/weighted_passed"),
+        "weighted_total": source_u64(source.as_ref(), "/weighted_total"),
+        "rows": source.as_ref().and_then(|v| v.get("rows")).cloned().unwrap_or(Value::Null),
+        "task_types": source.as_ref().and_then(|v| v.get("task_types")).cloned().unwrap_or(Value::Null),
+        "training": source.as_ref().and_then(|v| v.get("training")).cloned().unwrap_or(Value::Null),
+        "checks": source.as_ref().and_then(|v| v.get("checks")).cloned().unwrap_or(Value::Null),
+        "not_measured": [
+            "AGI",
+            "human_level_autonomy",
+            "production_release_safety"
+        ],
+    })
+}
+
+fn v01_training_beyond_pilot_value() -> Value {
+    let training = read_repo_json(MEGATRON_7B_TRAINING_EVIDENCE);
+    let completed = source_u64(training.as_ref(), "/run/completed_iterations").unwrap_or(0);
+    let model_parameters = source_u64(training.as_ref(), "/run/model_parameters").unwrap_or(0);
+    serde_json::json!({
+        "schema": EDEN_V01_TRAINING_BEYOND_PILOT_SCHEMA,
+        "artifact": "eden_v01_training_beyond_pilot",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": MEGATRON_7B_TRAINING_EVIDENCE,
+        "source_present": training.is_some(),
+        "completed_iterations": completed,
+        "minimum_iterations": 100,
+        "beyond_50_iter_pilot": completed >= 100,
+        "model_parameters": model_parameters,
+        "within_14b_dense_ceiling": (6_900_000_000..=14_000_000_000).contains(&model_parameters),
+        "final_loss": source_f64(training.as_ref(), "/run/final_loss"),
+        "checkpoint_written": source_bool(training.as_ref(), "/checkpoint_policy/checkpoint_written"),
+        "network": source_string(training.as_ref(), "/run/network"),
+        "external_model_dependency": source_bool(training.as_ref(), "/run/external_model_dependency"),
+        "accepted_as": "training_beyond_pilot_evidence_not_production_model",
+    })
+}
+
+fn v01_native_inference_runtime_value() -> Value {
+    let inference = read_repo_json(MEGATRON_7B_INFERENCE_REPORT);
+    let semantic_eval = read_repo_json(V01_SEMANTIC_EVAL_REPORT);
+    let sample_response = inference
+        .as_ref()
+        .and_then(|value| value.get("responses"))
+        .and_then(Value::as_array)
+        .and_then(|values| values.first())
+        .cloned()
+        .unwrap_or(Value::Null);
+    let available = source_bool(inference.as_ref(), "/run/checkpoint_loaded") == Some(true)
+        && source_u64(inference.as_ref(), "/run/generated_count").unwrap_or(0) >= 2
+        && source_bool(semantic_eval.as_ref(), "/passed") == Some(true);
+    serde_json::json!({
+        "schema": EDEN_V01_NATIVE_INFERENCE_RUNTIME_SCHEMA,
+        "artifact": "eden_v01_native_inference_runtime",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "runtime_candidate_available": available,
+        "source_path": MEGATRON_7B_INFERENCE_REPORT,
+        "checkpoint_loaded": source_bool(inference.as_ref(), "/run/checkpoint_loaded"),
+        "generated_count": source_u64(inference.as_ref(), "/run/generated_count"),
+        "semantic_eval_passed": source_bool(semantic_eval.as_ref(), "/passed"),
+        "request_contract": {
+            "schema": "eden.v01.native_inference_request.v1",
+            "fields": ["task_id", "goal", "situation", "memory_refs", "risk_class", "max_tokens", "allowed_modes"]
+        },
+        "response_contract": {
+            "schema": "eden.v01.native_inference_packet.v1",
+            "fields": ["candidate_text", "structured_hypothesis", "confidence", "requires_verification", "source_model", "trace_id"]
+        },
+        "authority_rules": {
+            "model_outputs_are_hypotheses": true,
+            "gewc_verifies_before_state_change": true,
+            "direct_memory_write_allowed": false,
+            "direct_tool_execution_allowed": false,
+            "direct_objective_update_allowed": false
+        },
+        "sample_response": sample_response,
+    })
+}
+
+fn v01_operational_demo_value() -> Value {
+    let demo = read_repo_json(V01_OPERATIONAL_DEMO_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V01_OPERATIONAL_DEMO_SCHEMA,
+        "artifact": "eden_v01_operational_demo",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V01_OPERATIONAL_DEMO_REPORT,
+        "source_present": demo.is_some(),
+        "passed": source_bool(demo.as_ref(), "/passed"),
+        "steps": demo.as_ref().and_then(|v| v.get("steps")).cloned().unwrap_or(Value::Null),
+        "task": demo.as_ref().and_then(|v| v.get("task")).cloned().unwrap_or(Value::Null),
+        "safety_boundary": demo.as_ref().and_then(|v| v.get("safety_boundary")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v01_checkpoint_admission_value() -> Value {
+    let semantic_eval = read_json_file(&state_paths::eden_v01_semantic_eval_path());
+    let training = read_json_file(&state_paths::eden_v01_training_beyond_pilot_path());
+    let inference = read_json_file(&state_paths::eden_v01_native_inference_runtime_path());
+    let demo = read_json_file(&state_paths::eden_v01_operational_demo_path());
+    let candidate_allowed = source_bool(semantic_eval.as_ref(), "/passed") == Some(true)
+        && source_bool(training.as_ref(), "/beyond_50_iter_pilot") == Some(true)
+        && source_bool(training.as_ref(), "/checkpoint_written") == Some(true)
+        && source_bool(inference.as_ref(), "/runtime_candidate_available") == Some(true)
+        && source_bool(demo.as_ref(), "/passed") == Some(true);
+    serde_json::json!({
+        "schema": EDEN_V01_CHECKPOINT_ADMISSION_SCHEMA,
+        "artifact": "eden_v01_checkpoint_admission",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "candidate_runtime_admission_allowed": candidate_allowed,
+        "production_model_allowed": false,
+        "autonomous_authority_allowed": false,
+        "weights_committed_to_repo": false,
+        "decision": if candidate_allowed { "admit_as_gewc_subordinate_candidate_generator" } else { "blocked_until_v01_evidence_passes" },
+        "required_before_production_release": [
+            "longer_training_run",
+            "held_out_external_eval",
+            "prompt_injection_eval",
+            "rollback_drill",
+            "model_card_release_review",
+            "operator_release_approval"
+        ],
+    })
+}
+
+fn v01_scaling_plan_value() -> Value {
+    let training = read_repo_json(MEGATRON_7B_TRAINING_EVIDENCE);
+    let current_iters = source_u64(training.as_ref(), "/run/completed_iterations").unwrap_or(0);
+    let params = source_u64(training.as_ref(), "/run/model_parameters").unwrap_or(0);
+    serde_json::json!({
+        "schema": EDEN_V01_SCALING_PLAN_SCHEMA,
+        "artifact": "eden_v01_scaling_plan",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "max_dense_parameters": 14_000_000_000u64,
+        "current_model": {
+            "model_id": "eden-megatron-7b-base-pilot",
+            "parameters": params,
+            "completed_iterations": current_iters,
+            "within_max_dense_ceiling": params <= 14_000_000_000u64,
+            "production_admitted": false
+        },
+        "next_runs": [
+            {"stage": "eden_7b_stability_250", "parameters": 6_996_365_312u64, "train_iters": 250, "requires": ["semantic_eval_delta", "rollback_drill", "checkpoint_compare"]},
+            {"stage": "eden_7b_capability_1000", "parameters": 6_996_365_312u64, "train_iters": 1000, "requires": ["held_out_eval", "safety_eval", "operator_budget"]},
+            {"stage": "eden_14b_pretraining_prototype", "parameters": 14_000_000_000u64, "train_iters": "operator_budgeted", "requires": ["7b_eval_win", "dataset_freeze", "multi_gpu_plan"]}
+        ],
+        "policy": "improve by pretraining, curated data and GEWC integration before increasing dense parameter count beyond 7B; never exceed 14B dense without a new ADR",
+    })
+}
+
+fn v01_gpu_workspace_hygiene_value() -> Value {
+    let source = read_repo_json(V01_GPU_HYGIENE_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V01_GPU_WORKSPACE_HYGIENE_SCHEMA,
+        "artifact": "eden_v01_gpu_workspace_hygiene",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V01_GPU_HYGIENE_REPORT,
+        "source_present": source.is_some(),
+        "destructive_apply": source_bool(source.as_ref(), "/destructive_apply").unwrap_or(false),
+        "repo": source.as_ref().and_then(|v| v.get("repo")).cloned().unwrap_or(Value::Null),
+        "gpu_workspace": source.as_ref().and_then(|v| v.get("gpu_workspace")).cloned().unwrap_or(Value::Null),
+        "cleanup_policy": source.as_ref().and_then(|v| v.get("cleanup_policy")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v01_gate_value() -> Value {
+    let dataset = read_json_file(&state_paths::eden_v01_dataset_manifest_path());
+    let semantic_eval = read_json_file(&state_paths::eden_v01_semantic_eval_path());
+    let training = read_json_file(&state_paths::eden_v01_training_beyond_pilot_path());
+    let inference = read_json_file(&state_paths::eden_v01_native_inference_runtime_path());
+    let demo = read_json_file(&state_paths::eden_v01_operational_demo_path());
+    let checkpoint = read_json_file(&state_paths::eden_v01_checkpoint_admission_path());
+    let scaling = read_json_file(&state_paths::eden_v01_scaling_plan_path());
+    let hygiene = read_json_file(&state_paths::eden_v01_gpu_workspace_hygiene_path());
+    let checks = vec![
+        check(
+            "large_curated_dataset_2048_plus_rows",
+            source_u64(dataset.as_ref(), "/rows/total").unwrap_or(0) >= 2048,
+            V01_TRAIN_DATA,
+        ),
+        check(
+            "strong_semantic_eval_passed",
+            source_bool(semantic_eval.as_ref(), "/passed") == Some(true),
+            V01_SEMANTIC_EVAL_REPORT,
+        ),
+        check(
+            "training_beyond_pilot_100_iters_checkpointed",
+            source_bool(training.as_ref(), "/beyond_50_iter_pilot") == Some(true)
+                && source_bool(training.as_ref(), "/checkpoint_written") == Some(true),
+            MEGATRON_7B_TRAINING_EVIDENCE,
+        ),
+        check(
+            "native_inference_runtime_candidate_available",
+            source_bool(inference.as_ref(), "/runtime_candidate_available") == Some(true),
+            MEGATRON_7B_INFERENCE_REPORT,
+        ),
+        check(
+            "candidate_admission_real_but_production_blocked",
+            source_bool(checkpoint.as_ref(), "/candidate_runtime_admission_allowed") == Some(true)
+                && source_bool(checkpoint.as_ref(), "/production_model_allowed") == Some(false),
+            "eden_v01_checkpoint_admission.json",
+        ),
+        check(
+            "operational_demo_passed_without_mutation",
+            source_bool(demo.as_ref(), "/passed") == Some(true),
+            V01_OPERATIONAL_DEMO_REPORT,
+        ),
+        check(
+            "scaling_plan_caps_dense_model_at_14b",
+            source_u64(scaling.as_ref(), "/max_dense_parameters") == Some(14_000_000_000u64),
+            "eden_v01_scaling_plan.json",
+        ),
+        check(
+            "gpu_workspace_hygiene_recorded_non_destructive",
+            hygiene.is_some() && source_bool(hygiene.as_ref(), "/destructive_apply") == Some(false),
+            V01_GPU_HYGIENE_REPORT,
+        ),
+    ];
+    let passed = checks
+        .iter()
+        .filter(|check| check["passed"] == Value::Bool(true))
+        .count();
+    serde_json::json!({
+        "schema": EDEN_V01_CAPABILITY_GATE_SCHEMA,
+        "artifact": "eden_v01_capability_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "passed": passed,
+        "total": checks.len(),
+        "checks": checks,
+        "candidate_runtime_admission_allowed": source_bool(checkpoint.as_ref(), "/candidate_runtime_admission_allowed").unwrap_or(false),
+        "production_model_allowed": false,
+        "max_dense_parameters": 14_000_000_000u64,
+        "capability_class": "eden_v01_semantic_runtime_candidate",
+        "not_yet": [
+            "production_checkpoint_release",
+            "external_AGI_benchmark",
+            "fully_autonomous_tool_authority",
+            "AGI"
+        ],
+    })
+}
+
 fn check(name: &str, passed: bool, evidence: &str) -> Value {
     serde_json::json!({
         "check": name,
@@ -520,6 +938,35 @@ mod tests {
         assert_eq!(gate["claim_allowed"], false);
         assert_eq!(gate["agi_claim"], false);
         assert_eq!(gate["checkpoint_admission_allowed"], false);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn v01_dataset_manifest_counts_large_semantic_rows() {
+        let manifest = v01_dataset_manifest_value();
+
+        assert_eq!(manifest["claim_allowed"], false);
+        assert_eq!(manifest["agi_claim"], false);
+        assert!(manifest["rows"]["total"].as_u64().unwrap_or(0) >= 2048);
+    }
+
+    #[test]
+    fn v01_gate_keeps_production_release_blocked() {
+        let _guard = state_paths::test_state_guard();
+        let dir = std::env::temp_dir().join(format!("eden_v01_capability_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = run_v01_all();
+        let gate = read_json_file(&state_paths::eden_v01_capability_gate_path()).unwrap();
+
+        assert!(out.contains("[EDEN-V01-CAPABILITY-GATE]"));
+        assert_eq!(gate["claim_allowed"], false);
+        assert_eq!(gate["agi_claim"], false);
+        assert_eq!(gate["production_model_allowed"], false);
+        assert_eq!(gate["max_dense_parameters"], 14_000_000_000u64);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

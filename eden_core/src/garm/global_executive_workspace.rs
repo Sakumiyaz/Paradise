@@ -1455,6 +1455,7 @@ impl CommandProfile {
             | GarmCommand::EdenCapableOperationalize
             | GarmCommand::EdenLearnedCapabilityEval
             | GarmCommand::EdenRealCapabilityEval
+            | GarmCommand::EdenV01CapabilityEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval

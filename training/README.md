@@ -28,11 +28,15 @@ measurable capability before expensive GPU work:
 | `data/build_eden_cognitive_sft_elcp.py` | Stdlib-only SFT/ELCP v2 generator; no private data and no external model. |
 | `data/eden_real_capability_*.jsonl` | Repo-owned capability corpus built from EDEN docs, ADRs, training configs and runtime source excerpts. |
 | `data/build_eden_real_capability_corpus.py` | Stdlib-only real-capability corpus builder; no private data and no external model. |
+| `data/eden_v01_semantic_*.jsonl` | Larger curated semantic capability corpus for situation modeling, planning, memory, world model, tool policy, uncertainty, admission and rollback. |
+| `data/build_eden_v01_semantic_corpus.py` | Stdlib-only EDEN v0.1 semantic corpus builder; no private data and no external model. |
 | `benchmarks/eden_capability_benchmark.py` | Stdlib-only benchmark runner and tiny trainable memory baseline. |
 | `benchmarks/validate_capability_report.py` | Stdlib-only contract validator for `capability_report.json`. |
 | `benchmarks/validate_elcp_transitions.py` | Stdlib-only validator for ELCP cognitive-transition fixtures. |
 | `benchmarks/elcp_baseline_eval.py` | CPU-safe rule baseline for ELCP target fields. |
 | `benchmarks/eden_real_capability_eval.py` | Operational eval for dataset coverage, 7B evidence, inference, SFT/ELCP packets and no-claim gates. |
+| `benchmarks/eden_v01_semantic_eval.py` | Stronger semantic eval requiring the larger corpus, 7B training beyond the pilot, checkpoint inference and no-claim gates. |
+| `demos/eden_v01_operational_demo.py` | Non-mutating operational demo trace that connects semantic eval, inference and SFT/ELCP packets through GEWC. |
 | `elcp/export_trace_candidates.py` | Redacted GEWC trace exporter for candidate ELCP transitions. |
 | `elcp/train_elcp.py` | Dry-run-only training interface for future ELCP 4B work. |
 | `elcp/admission_gate.py` | Pre-checkpoint ELCP admission policy report. |
@@ -51,6 +55,8 @@ measurable capability before expensive GPU work:
 | `rocm/megatron_eden_7b_inference_probe.sh` | Optional MI300X/Megatron inference probe. It loads the EDEN-owned 7B checkpoint and generates tokens locally through Megatron Core inference with Docker `--network none`. |
 | `rocm/eden_sft_elcp_gpu_pilot.sh` | Optional MI300X learned-capability pilot. It trains a compact EDEN-owned SFT/ELCP transition module on GPU and writes pre/post eval, repeated inference packets and checkpoint-admission evidence. |
 | `rocm/eden_real_capability_stage.sh` | Seven-part capability stage wrapper. It builds the real corpus, optionally runs the bounded 7B ROCm job, evaluates evidence and keeps checkpoint admission blocked. |
+| `rocm/eden_v01_capability_stage.sh` | EDEN v0.1 stage wrapper. It builds the semantic corpus, optionally runs 7B training beyond the pilot, evaluates, writes demo evidence and records GPU hygiene. |
+| `rocm/eden_gpu_workspace_hygiene.sh` | Non-destructive GPU workspace hygiene report for run roots, Docker image presence and cleanup policy. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -110,6 +116,15 @@ Python training code:
 | `eden_real_capability_demo.json` | Real step 6: records the governed operational demo. |
 | `eden_real_capability_scaling_ladder.json` | Real step 7: defines the next scaling runs and comparison policy. |
 | `eden_real_capability_gate.json` | Aggregates the seven real-capability checks under no-claim policy. |
+| `eden_v01_dataset_manifest.json` | v0.1 step 1: admits the larger curated semantic corpus. |
+| `eden_v01_semantic_eval.json` | v0.1 step 2: admits semantic eval evidence requiring `>=100` training iterations. |
+| `eden_v01_training_beyond_pilot.json` | v0.1 step 3: confirms the 7B run moved beyond the 50-iteration pilot. |
+| `eden_v01_native_inference_runtime.json` | v0.1 step 4: exposes checkpoint inference as a GEWC-subordinate runtime candidate. |
+| `eden_v01_operational_demo.json` | v0.1 step 5: records a non-mutating operational demo trace. |
+| `eden_v01_checkpoint_admission.json` | v0.1 step 6: can admit candidate runtime use while production release remains blocked. |
+| `eden_v01_scaling_plan.json` | v0.1 step 7: keeps dense-model scaling capped at 14B. |
+| `eden_v01_gpu_workspace_hygiene.json` | v0.1 step 8: records GPU workspace hygiene and non-destructive cleanup policy. |
+| `eden_v01_capability_gate.json` | Aggregates the v0.1 semantic runtime candidate gate. |
 
 ## Local Smoke Run
 
@@ -343,6 +358,20 @@ first, set:
 
 ```bash
 EDEN_REAL_CAPABILITY_RUN_GPU=true make training-eden-real-capability-stage
+```
+
+To move from the 50-iteration pilot to the EDEN v0.1 semantic runtime candidate:
+
+```bash
+make training-eden-v01-stage
+make eden-v01-capability
+```
+
+By default this consumes existing evidence and will fail until the 7B evidence
+has at least 100 completed iterations. To run the bounded ROCm continuation:
+
+```bash
+EDEN_V01_RUN_GPU=true make training-eden-v01-stage
 ```
 
 For a longer controlled pilot that writes a checkpoint but keeps admission

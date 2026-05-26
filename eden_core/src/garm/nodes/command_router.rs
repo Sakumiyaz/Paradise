@@ -59,6 +59,7 @@ pub enum GarmCommand {
     EdenCapableOperationalize,
     EdenLearnedCapabilityEval,
     EdenRealCapabilityEval,
+    EdenV01CapabilityEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -597,6 +598,13 @@ impl CommandRouterNode {
             | "eden capability stage"
             | "eden capacidad real"
             | "capacidad real eden" => GarmCommand::EdenRealCapabilityEval,
+            "eden v01 capability"
+            | "eden v01 capability eval"
+            | "eden v0.1 capability"
+            | "eden v0.1 capability eval"
+            | "eden semantic capability eval"
+            | "eden capability v01"
+            | "eden capacidad v01" => GarmCommand::EdenV01CapabilityEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1590,6 +1598,10 @@ mod tests {
         assert_eq!(
             parse("eden real capability eval"),
             GarmCommand::EdenRealCapabilityEval
+        );
+        assert_eq!(
+            parse("eden v01 capability eval"),
+            GarmCommand::EdenV01CapabilityEval
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

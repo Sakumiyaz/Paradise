@@ -463,6 +463,33 @@ pub fn eden_real_capability_scaling_ladder_path() -> String {
 pub fn eden_real_capability_gate_path() -> String {
     path("eden_real_capability_gate.json")
 }
+pub fn eden_v01_dataset_manifest_path() -> String {
+    path("eden_v01_dataset_manifest.json")
+}
+pub fn eden_v01_semantic_eval_path() -> String {
+    path("eden_v01_semantic_eval.json")
+}
+pub fn eden_v01_training_beyond_pilot_path() -> String {
+    path("eden_v01_training_beyond_pilot.json")
+}
+pub fn eden_v01_native_inference_runtime_path() -> String {
+    path("eden_v01_native_inference_runtime.json")
+}
+pub fn eden_v01_operational_demo_path() -> String {
+    path("eden_v01_operational_demo.json")
+}
+pub fn eden_v01_checkpoint_admission_path() -> String {
+    path("eden_v01_checkpoint_admission.json")
+}
+pub fn eden_v01_scaling_plan_path() -> String {
+    path("eden_v01_scaling_plan.json")
+}
+pub fn eden_v01_gpu_workspace_hygiene_path() -> String {
+    path("eden_v01_gpu_workspace_hygiene.json")
+}
+pub fn eden_v01_capability_gate_path() -> String {
+    path("eden_v01_capability_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }
