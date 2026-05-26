@@ -364,6 +364,46 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=eden_learned_capability_gate",
         ),
         curated(
+            "eden_real_capability_dataset_manifest",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_DATASET_MANIFEST_SCHEMA,
+            "/api/artifact?name=eden_real_capability_dataset_manifest",
+        ),
+        curated(
+            "eden_real_capability_7b_training",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_7B_TRAINING_SCHEMA,
+            "/api/artifact?name=eden_real_capability_7b_training",
+        ),
+        curated(
+            "eden_real_capability_inference_bridge",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_INFERENCE_BRIDGE_SCHEMA,
+            "/api/artifact?name=eden_real_capability_inference_bridge",
+        ),
+        curated(
+            "eden_real_capability_operational_eval",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_OPERATIONAL_EVAL_SCHEMA,
+            "/api/artifact?name=eden_real_capability_operational_eval",
+        ),
+        curated(
+            "eden_real_capability_checkpoint_decision",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_CHECKPOINT_DECISION_SCHEMA,
+            "/api/artifact?name=eden_real_capability_checkpoint_decision",
+        ),
+        curated(
+            "eden_real_capability_demo",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_DEMO_SCHEMA,
+            "/api/artifact?name=eden_real_capability_demo",
+        ),
+        curated(
+            "eden_real_capability_scaling_ladder",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_SCALING_LADDER_SCHEMA,
+            "/api/artifact?name=eden_real_capability_scaling_ladder",
+        ),
+        curated(
+            "eden_real_capability_gate",
+            crate::eden_garm::eden_real_capability::EDEN_REAL_CAPABILITY_GATE_SCHEMA,
+            "/api/artifact?name=eden_real_capability_gate",
+        ),
+        curated(
             "paradise_worldcell_runtime",
             crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
             "/api/artifact?name=paradise_worldcell_runtime",

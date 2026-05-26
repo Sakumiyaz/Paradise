@@ -189,8 +189,13 @@ fn domain_for(name: &str) -> &'static str {
         || name.starts_with("eden_sft_elcp_operational")
         || name.starts_with("eden_external_tests")
         || name.starts_with("eden_learned_capability")
+        || name.starts_with("eden_real_capability")
     {
-        "eden_learned_capability"
+        if name.starts_with("eden_real_capability") {
+            "eden_real_capability"
+        } else {
+            "eden_learned_capability"
+        }
     } else if name.starts_with("eden_capable")
         || name.starts_with("eden_capability")
         || name.starts_with("eden_cognitive")
@@ -282,6 +287,7 @@ fn generator_command(name: &str) -> &'static str {
         || name.starts_with("eden_cognitive")
         || name.starts_with("eden_external_tests")
         || name.starts_with("eden_learned_capability")
+        || name.starts_with("eden_real_capability")
         || name.starts_with("eden_native")
         || name.starts_with("eden_structured")
         || name.starts_with("eden_checkpoint")
@@ -297,8 +303,13 @@ fn generator_command(name: &str) -> &'static str {
             || name.starts_with("eden_sft_elcp_operational")
             || name.starts_with("eden_external_tests")
             || name.starts_with("eden_learned_capability")
+            || name.starts_with("eden_real_capability")
         {
-            "eden learned capability eval"
+            if name.starts_with("eden_real_capability") {
+                "eden real capability eval"
+            } else {
+                "eden learned capability eval"
+            }
         } else {
             "eden capable eval"
         }

@@ -18,6 +18,7 @@ pub mod eden_capable;
 pub mod eden_learned_capability;
 pub mod eden_locus_layer;
 pub mod eden_operator_forge;
+pub mod eden_real_capability;
 pub mod embodied_grounding;
 pub mod external_ecosystem;
 pub mod external_validation;

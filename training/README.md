@@ -26,10 +26,13 @@ measurable capability before expensive GPU work:
 | `data/elcp_transition_*.jsonl` | Tiny train/eval fixtures for ELCP cognitive-transition contracts. |
 | `data/eden_cognitive_sft_elcp_*.jsonl` | Deterministic SFT/ELCP v2 train/eval data for the learned-capability pilot. |
 | `data/build_eden_cognitive_sft_elcp.py` | Stdlib-only SFT/ELCP v2 generator; no private data and no external model. |
+| `data/eden_real_capability_*.jsonl` | Repo-owned capability corpus built from EDEN docs, ADRs, training configs and runtime source excerpts. |
+| `data/build_eden_real_capability_corpus.py` | Stdlib-only real-capability corpus builder; no private data and no external model. |
 | `benchmarks/eden_capability_benchmark.py` | Stdlib-only benchmark runner and tiny trainable memory baseline. |
 | `benchmarks/validate_capability_report.py` | Stdlib-only contract validator for `capability_report.json`. |
 | `benchmarks/validate_elcp_transitions.py` | Stdlib-only validator for ELCP cognitive-transition fixtures. |
 | `benchmarks/elcp_baseline_eval.py` | CPU-safe rule baseline for ELCP target fields. |
+| `benchmarks/eden_real_capability_eval.py` | Operational eval for dataset coverage, 7B evidence, inference, SFT/ELCP packets and no-claim gates. |
 | `elcp/export_trace_candidates.py` | Redacted GEWC trace exporter for candidate ELCP transitions. |
 | `elcp/train_elcp.py` | Dry-run-only training interface for future ELCP 4B work. |
 | `elcp/admission_gate.py` | Pre-checkpoint ELCP admission policy report. |
@@ -47,6 +50,7 @@ measurable capability before expensive GPU work:
 | `rocm/megatron_eden_7b_base_pilot.sh` | Optional MI300X/Megatron 7B-shape launcher. It uses EDEN-owned corpus/tokenizer, random initialization, Docker `--network none`, no external models, formal evidence JSON and no checkpoint admission. |
 | `rocm/megatron_eden_7b_inference_probe.sh` | Optional MI300X/Megatron inference probe. It loads the EDEN-owned 7B checkpoint and generates tokens locally through Megatron Core inference with Docker `--network none`. |
 | `rocm/eden_sft_elcp_gpu_pilot.sh` | Optional MI300X learned-capability pilot. It trains a compact EDEN-owned SFT/ELCP transition module on GPU and writes pre/post eval, repeated inference packets and checkpoint-admission evidence. |
+| `rocm/eden_real_capability_stage.sh` | Seven-part capability stage wrapper. It builds the real corpus, optionally runs the bounded 7B ROCm job, evaluates evidence and keeps checkpoint admission blocked. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
 Python training code:
@@ -98,6 +102,14 @@ Python training code:
 | `eden_sft_elcp_operational_demo.json` | Learned step 6: demonstrates the learned packet flowing through GEWC boundaries. |
 | `eden_external_tests_ci_gate.json` | Learned step 7: confirms external tests are explicit CI/manual gates, not ignored evidence. |
 | `eden_learned_capability_gate.json` | Aggregates the seven learned-capability checks under no-claim policy. |
+| `eden_real_capability_dataset_manifest.json` | Real step 1: admits the repo-owned capability corpus. |
+| `eden_real_capability_7b_training.json` | Real step 2: admits bounded 7B training evidence. |
+| `eden_real_capability_inference_bridge.json` | Real step 3: integrates 7B checkpoint inference and SFT/ELCP packets as hypotheses. |
+| `eden_real_capability_operational_eval.json` | Real step 4: admits the operational eval report. |
+| `eden_real_capability_checkpoint_decision.json` | Real step 5: marks the checkpoint reviewable but not admitted. |
+| `eden_real_capability_demo.json` | Real step 6: records the governed operational demo. |
+| `eden_real_capability_scaling_ladder.json` | Real step 7: defines the next scaling runs and comparison policy. |
+| `eden_real_capability_gate.json` | Aggregates the seven real-capability checks under no-claim policy. |
 
 ## Local Smoke Run
 
@@ -317,6 +329,21 @@ pre/post eval, repeated inference packets, blocked checkpoint admission,
 operational demo evidence and the explicit external-tests CI gate. It does not
 permit production model release, direct memory writes, tool authority or AGI
 claims.
+
+To build the larger repo-owned capability corpus and evaluate the current 7B
+and SFT/ELCP evidence:
+
+```bash
+make training-eden-real-capability-stage
+make eden-real-capability
+```
+
+By default this consumes existing 7B evidence. To launch the bounded ROCm 7B job
+first, set:
+
+```bash
+EDEN_REAL_CAPABILITY_RUN_GPU=true make training-eden-real-capability-stage
+```
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

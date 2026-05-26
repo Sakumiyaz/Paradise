@@ -321,6 +321,38 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::eden_learned_capability_gate_path(),
         ),
         artifact(
+            "eden_real_capability_dataset_manifest",
+            state_paths::eden_real_capability_dataset_manifest_path(),
+        ),
+        artifact(
+            "eden_real_capability_7b_training",
+            state_paths::eden_real_capability_7b_training_path(),
+        ),
+        artifact(
+            "eden_real_capability_inference_bridge",
+            state_paths::eden_real_capability_inference_bridge_path(),
+        ),
+        artifact(
+            "eden_real_capability_operational_eval",
+            state_paths::eden_real_capability_operational_eval_path(),
+        ),
+        artifact(
+            "eden_real_capability_checkpoint_decision",
+            state_paths::eden_real_capability_checkpoint_decision_path(),
+        ),
+        artifact(
+            "eden_real_capability_demo",
+            state_paths::eden_real_capability_demo_path(),
+        ),
+        artifact(
+            "eden_real_capability_scaling_ladder",
+            state_paths::eden_real_capability_scaling_ladder_path(),
+        ),
+        artifact(
+            "eden_real_capability_gate",
+            state_paths::eden_real_capability_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

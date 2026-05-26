@@ -439,6 +439,30 @@ pub fn eden_external_tests_ci_gate_path() -> String {
 pub fn eden_learned_capability_gate_path() -> String {
     path("eden_learned_capability_gate.json")
 }
+pub fn eden_real_capability_dataset_manifest_path() -> String {
+    path("eden_real_capability_dataset_manifest.json")
+}
+pub fn eden_real_capability_7b_training_path() -> String {
+    path("eden_real_capability_7b_training.json")
+}
+pub fn eden_real_capability_inference_bridge_path() -> String {
+    path("eden_real_capability_inference_bridge.json")
+}
+pub fn eden_real_capability_operational_eval_path() -> String {
+    path("eden_real_capability_operational_eval.json")
+}
+pub fn eden_real_capability_checkpoint_decision_path() -> String {
+    path("eden_real_capability_checkpoint_decision.json")
+}
+pub fn eden_real_capability_demo_path() -> String {
+    path("eden_real_capability_demo.json")
+}
+pub fn eden_real_capability_scaling_ladder_path() -> String {
+    path("eden_real_capability_scaling_ladder.json")
+}
+pub fn eden_real_capability_gate_path() -> String {
+    path("eden_real_capability_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }

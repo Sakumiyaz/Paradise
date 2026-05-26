@@ -54,6 +54,7 @@ impl HelpNode {
             "  eden capable eval - genera los 7 artefactos que convierten checkpoint, datos, inferencia estructurada, registry y ELCP/SFT en capacidad gobernada",
             "  eden capable operationalize - genera el ciclo usable: runtime inference, llamada cognitiva, eval suite, memoria/accion y demo trace",
             "  eden learned capability eval - admite dataset SFT/ELCP v2, entrenamiento GPU, pre/post eval, inferencia repetible, demo y gate de capacidad aprendida sin claims",
+            "  eden real capability eval - integra corpus real, evidencia 7B, inferencia, eval, admision bloqueada, demo y escalado",
             "  model runtime eval - genera adapter runtime, checkpoint manifest, training harness y gobernanza de modelos sin entrenar pesos",
             "  first model prepare/readiness - prepara el primer modelo EDEN como 4A formal sin ejecutar entrenamiento",
             "  elcp prepare/objective/admission/hardening/readiness - prepara, endurece y mide ELCP sin entrenar ni admitir pesos",

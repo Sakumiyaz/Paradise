@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -168,6 +168,18 @@ training-eden-sft-elcp-gpu-pilot: training-eden-sft-elcp-dataset
 
 eden-learned-capability:
 	printf 'eden learned capability eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_learned_capability --api-port 0
+
+training-eden-real-capability-dataset:
+	python3 training/data/build_eden_real_capability_corpus.py
+
+training-eden-real-capability-eval: training-eden-real-capability-dataset
+	python3 training/benchmarks/eden_real_capability_eval.py
+
+training-eden-real-capability-stage:
+	bash training/rocm/eden_real_capability_stage.sh
+
+eden-real-capability: training-eden-real-capability-eval
+	printf 'eden real capability eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_real_capability --api-port 0
 
 operational-blackbox:
 	bash eden_core/src/garm/scripts/operational_blackbox.sh

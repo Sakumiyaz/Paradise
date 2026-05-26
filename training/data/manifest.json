@@ -77,6 +77,33 @@
       "source": "deterministic repo-local SFT/ELCP cognitive transition generator",
       "records": 20,
       "generator": "training/data/build_eden_cognitive_sft_elcp.py"
+    },
+    {
+      "name": "eden_real_capability_train",
+      "path": "training/data/eden_real_capability_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 294,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
+    },
+    {
+      "name": "eden_real_capability_eval",
+      "path": "training/data/eden_real_capability_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 84,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
+    },
+    {
+      "name": "eden_real_capability_challenge",
+      "path": "training/data/eden_real_capability_challenge.jsonl",
+      "split": "challenge",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 42,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
     }
   ],
   "policy": {

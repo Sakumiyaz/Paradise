@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-real-capability-scaling-ladder-v1.json",
+  "title": "EDEN Real Capability Scaling Ladder",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "current_stage", "next_runs"],
+  "properties": {
+    "schema": {"const": "eden.real_capability.scaling_ladder.v1"},
+    "artifact": {"const": "eden_real_capability_scaling_ladder"},
+    "authority": {"const": "global_executive_workspace_core"},
+    "claim_allowed": {"const": false},
+    "agi_claim": {"const": false},
+    "current_stage": {"type": "object"},
+    "next_runs": {"type": "array"}
+  }
+}

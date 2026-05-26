@@ -76,6 +76,12 @@ ad hoc notebooks or private scripts.
 - `make eden-learned-capability` admits that evidence into GEWC as a governed
   learned-capability surface while preserving `claim_allowed=false`,
   `agi_claim=false` and `checkpoint_admission_allowed=false`.
+- `make training-eden-real-capability-stage` builds the repo-owned capability
+  corpus, optionally runs the bounded 7B ROCm job, evaluates real evidence and
+  keeps checkpoint admission blocked.
+- `make eden-real-capability` admits the seven real-capability artifacts into
+  GEWC: dataset, 7B training, inference bridge, operational eval, checkpoint
+  decision, demo and scaling ladder.
 
 ## Future AMD GPU Use
 
@@ -133,6 +139,10 @@ The current model runtime path makes that boundary executable:
   improves, repeated inference packets stay hypothesis-gated, checkpoint
   admission stays blocked, the demo has a packet and the external-tests CI gate
   exists.
+- `/tmp/eden_garm_real_capability/eden_real_capability_gate.json` aggregates
+  the next seven checks: real repo-owned corpus, bounded 7B training,
+  checkpoint-load inference, operational eval, reviewable-but-blocked checkpoint
+  decision, governed demo and scaling ladder.
 
 ## Validation Commands
 
@@ -150,6 +160,8 @@ make eden-capable-operationalize
 make training-eden-sft-elcp-dataset
 make training-eden-sft-elcp-gpu-pilot
 make eden-learned-capability
+make training-eden-real-capability-stage
+make eden-real-capability
 make training-smoke
 make training-evidence
 make model-runtime
