@@ -68,6 +68,9 @@ esac
 
 mkdir -p "$OUTPUT_DIR"
 rm -f -- "$LOG_FILE" "$SUMMARY_FILE" "$EVIDENCE_FILE"
+if [[ "$SAVE_CHECKPOINT" == "true" ]]; then
+  rm -rf -- "${OUTPUT_DIR}/checkpoints"
+fi
 
 printf 'eden_megatron_7b_base_pilot_start=true\n'
 printf 'image=%s\n' "$IMAGE"
