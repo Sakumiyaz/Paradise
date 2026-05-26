@@ -233,6 +233,8 @@ export HSA_NO_SCRATCH_RECLAIM=1
 export TOKENIZERS_PARALLELISM=false
 export GLOO_SOCKET_IFNAME=lo
 export NCCL_SOCKET_IFNAME=lo
+# Megatron torch checkpoints include argparse.Namespace metadata. This probe only
+# loads the EDEN-owned local checkpoint produced by the paired training script.
 export TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1
 
 torchrun --nproc_per_node 1 --nnodes 1 --node_rank 0 --master_addr 127.0.0.1 --master_port '${MASTER_PORT}' /tmp/eden_megatron_7b_infer.py \

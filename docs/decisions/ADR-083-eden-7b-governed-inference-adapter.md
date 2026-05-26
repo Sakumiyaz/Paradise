@@ -24,6 +24,9 @@ Add a governed 7B inference path:
 - `training/rocm/megatron_eden_7b_inference_probe.sh` loads the checkpoint in the
   ROCm Megatron container with Docker `--network none` and runs Megatron Core
   batch inference.
+- The probe sets `TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1` because Megatron's torch
+  checkpoint contains trusted local training metadata such as
+  `argparse.Namespace`; no external checkpoint source is accepted by this path.
 - `training/rocm/build_megatron_7b_inference_report.py` validates the inference
   output and writes `eden.megatron.7b.inference_report.v1`.
 - GEWC/GARM commands admit the checkpoint as `megatron_7b_model_adapter`,
