@@ -1,0 +1,14 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.2 Adversarial Eval",
+  "type": "object",
+  "required": ["schema", "authority", "claim_allowed", "agi_claim", "passed", "cases"],
+  "properties": {
+    "schema": { "const": "eden.v02.adversarial_eval.v1" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "passed": { "type": "boolean" },
+    "cases": { "type": "array" }
+  }
+}

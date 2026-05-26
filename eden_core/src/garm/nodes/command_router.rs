@@ -60,6 +60,7 @@ pub enum GarmCommand {
     EdenLearnedCapabilityEval,
     EdenRealCapabilityEval,
     EdenV01CapabilityEval,
+    EdenV02StabilityEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -605,6 +606,13 @@ impl CommandRouterNode {
             | "eden semantic capability eval"
             | "eden capability v01"
             | "eden capacidad v01" => GarmCommand::EdenV01CapabilityEval,
+            "eden v02 stability"
+            | "eden v02 stability eval"
+            | "eden v0.2 stability"
+            | "eden v0.2 stability eval"
+            | "eden stability checkpoint eval"
+            | "eden checkpoint stability"
+            | "eden estabilidad v02" => GarmCommand::EdenV02StabilityEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1602,6 +1610,10 @@ mod tests {
         assert_eq!(
             parse("eden v01 capability eval"),
             GarmCommand::EdenV01CapabilityEval
+        );
+        assert_eq!(
+            parse("eden v02 stability eval"),
+            GarmCommand::EdenV02StabilityEval
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

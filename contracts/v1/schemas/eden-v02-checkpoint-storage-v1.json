@@ -1,0 +1,14 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.2 Checkpoint Storage",
+  "type": "object",
+  "required": ["schema", "authority", "claim_allowed", "agi_claim", "weights_committed_to_repo"],
+  "properties": {
+    "schema": { "const": "eden.v02.checkpoint_storage.v1" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "weights_committed_to_repo": { "const": false },
+    "weights_retained_on_gpu_vm": { "type": "boolean" }
+  }
+}

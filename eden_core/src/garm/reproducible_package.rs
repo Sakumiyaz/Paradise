@@ -389,6 +389,46 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::eden_v01_capability_gate_path(),
         ),
         artifact(
+            "eden_v02_stability_corpus_manifest",
+            state_paths::eden_v02_stability_corpus_manifest_path(),
+        ),
+        artifact(
+            "eden_v02_stability_eval",
+            state_paths::eden_v02_stability_eval_path(),
+        ),
+        artifact(
+            "eden_v02_checkpoint_comparison",
+            state_paths::eden_v02_checkpoint_comparison_path(),
+        ),
+        artifact(
+            "eden_v02_adversarial_eval",
+            state_paths::eden_v02_adversarial_eval_path(),
+        ),
+        artifact(
+            "eden_v02_rollback_drill",
+            state_paths::eden_v02_rollback_drill_path(),
+        ),
+        artifact(
+            "eden_v02_model_card_internal",
+            state_paths::eden_v02_model_card_internal_path(),
+        ),
+        artifact(
+            "eden_v02_checkpoint_storage",
+            state_paths::eden_v02_checkpoint_storage_path(),
+        ),
+        artifact(
+            "eden_v02_native_inference_service",
+            state_paths::eden_v02_native_inference_service_path(),
+        ),
+        artifact(
+            "eden_v02_stability_demo",
+            state_paths::eden_v02_stability_demo_path(),
+        ),
+        artifact(
+            "eden_v02_stability_gate",
+            state_paths::eden_v02_stability_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),

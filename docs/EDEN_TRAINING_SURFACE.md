@@ -90,6 +90,13 @@ ad hoc notebooks or private scripts.
 - `make eden-v01-capability` admits the v0.1 artifacts into GEWC: dataset,
   semantic eval, training beyond pilot, native inference runtime, operational
   demo, checkpoint candidate admission, scaling plan, GPU hygiene and gate.
+- `make training-eden-v02-stage` compares a 100-iteration baseline against a
+  250-iteration candidate, runs adversarial and rollback checks, writes an
+  internal model card and preserves the no-external-model boundary.
+- `make eden-v02-stability` admits the v0.2 artifacts into GEWC: stability
+  corpus, stability eval, checkpoint comparison, adversarial eval, rollback
+  drill, internal model card, checkpoint-storage policy, native inference
+  service, demo and gate.
 
 ## Future AMD GPU Use
 
@@ -155,6 +162,12 @@ The current model runtime path makes that boundary executable:
   semantic runtime candidate checks: larger curated dataset, semantic eval,
   `>=100` 7B iterations, native inference, candidate checkpoint admission,
   demo trace, 14B scaling cap and non-destructive GPU hygiene.
+- `/tmp/eden_garm_v02_stability/eden_v02_stability_gate.json` aggregates the
+  stability candidate checks: 250-iteration candidate evidence, baseline
+  comparison, checkpoint-load inference, adversarial eval, rollback drill,
+  internal model card, checkpoint-storage policy, native inference service and
+  demo trace. Candidate runtime admission may pass, but production release and
+  AGI claims remain blocked.
 
 ## Validation Commands
 
@@ -176,6 +189,8 @@ make training-eden-real-capability-stage
 make eden-real-capability
 make training-eden-v01-stage
 make eden-v01-capability
+make training-eden-v02-stage
+make eden-v02-stability
 make training-smoke
 make training-evidence
 make model-runtime

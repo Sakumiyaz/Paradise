@@ -30,13 +30,20 @@ measurable capability before expensive GPU work:
 | `data/build_eden_real_capability_corpus.py` | Stdlib-only real-capability corpus builder; no private data and no external model. |
 | `data/eden_v01_semantic_*.jsonl` | Larger curated semantic capability corpus for situation modeling, planning, memory, world model, tool policy, uncertainty, admission and rollback. |
 | `data/build_eden_v01_semantic_corpus.py` | Stdlib-only EDEN v0.1 semantic corpus builder; no private data and no external model. |
+| `data/eden_v02_stability_*.jsonl` | Stability corpus split for comparing 100-iteration and 250-iteration 7B checkpoint evidence. |
+| `data/build_eden_v02_stability_corpus.py` | Stdlib-only EDEN v0.2 stability corpus builder; no private data and no external model. |
 | `benchmarks/eden_capability_benchmark.py` | Stdlib-only benchmark runner and tiny trainable memory baseline. |
 | `benchmarks/validate_capability_report.py` | Stdlib-only contract validator for `capability_report.json`. |
 | `benchmarks/validate_elcp_transitions.py` | Stdlib-only validator for ELCP cognitive-transition fixtures. |
 | `benchmarks/elcp_baseline_eval.py` | CPU-safe rule baseline for ELCP target fields. |
 | `benchmarks/eden_real_capability_eval.py` | Operational eval for dataset coverage, 7B evidence, inference, SFT/ELCP packets and no-claim gates. |
 | `benchmarks/eden_v01_semantic_eval.py` | Stronger semantic eval requiring the larger corpus, 7B training beyond the pilot, checkpoint inference and no-claim gates. |
+| `benchmarks/eden_v02_stability_eval.py` | Checkpoint-stability eval comparing 100-iteration baseline evidence against a 250-iteration candidate. |
+| `benchmarks/eden_v02_adversarial_eval.py` | Deterministic adversarial architecture eval for injection, permissions, rollback and model-authority boundaries. |
+| `benchmarks/eden_v02_rollback_drill.py` | Rollback-readiness drill that requires stability and adversarial reports before candidate runtime admission. |
+| `benchmarks/eden_v02_model_card.py` | Internal model-card and checkpoint-storage manifest for the v0.2 candidate. |
 | `demos/eden_v01_operational_demo.py` | Non-mutating operational demo trace that connects semantic eval, inference and SFT/ELCP packets through GEWC. |
+| `demos/eden_v02_stability_demo.py` | Non-mutating stability demo trace that exercises the v0.2 checkpoint-admission path. |
 | `elcp/export_trace_candidates.py` | Redacted GEWC trace exporter for candidate ELCP transitions. |
 | `elcp/train_elcp.py` | Dry-run-only training interface for future ELCP 4B work. |
 | `elcp/admission_gate.py` | Pre-checkpoint ELCP admission policy report. |
@@ -56,6 +63,7 @@ measurable capability before expensive GPU work:
 | `rocm/eden_sft_elcp_gpu_pilot.sh` | Optional MI300X learned-capability pilot. It trains a compact EDEN-owned SFT/ELCP transition module on GPU and writes pre/post eval, repeated inference packets and checkpoint-admission evidence. |
 | `rocm/eden_real_capability_stage.sh` | Seven-part capability stage wrapper. It builds the real corpus, optionally runs the bounded 7B ROCm job, evaluates evidence and keeps checkpoint admission blocked. |
 | `rocm/eden_v01_capability_stage.sh` | EDEN v0.1 stage wrapper. It builds the semantic corpus, optionally runs 7B training beyond the pilot, evaluates, writes demo evidence and records GPU hygiene. |
+| `rocm/eden_v02_stability_stage.sh` | EDEN v0.2 stage wrapper. It can run 100-iteration baseline plus 250-iteration candidate jobs, compare evidence, write rollback/model-card artifacts and keep production release blocked. |
 | `rocm/eden_gpu_workspace_hygiene.sh` | Non-destructive GPU workspace hygiene report for run roots, Docker image presence and cleanup policy. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
@@ -125,6 +133,16 @@ Python training code:
 | `eden_v01_scaling_plan.json` | v0.1 step 7: keeps dense-model scaling capped at 14B. |
 | `eden_v01_gpu_workspace_hygiene.json` | v0.1 step 8: records GPU workspace hygiene and non-destructive cleanup policy. |
 | `eden_v01_capability_gate.json` | Aggregates the v0.1 semantic runtime candidate gate. |
+| `eden_v02_stability_corpus_manifest.json` | v0.2 step 1: admits the stability train/eval/challenge corpus manifest. |
+| `eden_v02_stability_eval.json` | v0.2 step 2: compares 100-iteration baseline and 250-iteration candidate evidence. |
+| `eden_v02_checkpoint_comparison.json` | v0.2 step 3: records checkpoint loss, iteration, parameter and inference deltas. |
+| `eden_v02_adversarial_eval.json` | v0.2 step 4: records deterministic adversarial architecture checks. |
+| `eden_v02_rollback_drill.json` | v0.2 step 5: proves the candidate can be rejected and baseline fallback preserved. |
+| `eden_v02_model_card_internal.json` | v0.2 step 6: records intended use, limits, gates and non-AGI claim boundaries. |
+| `eden_v02_checkpoint_storage.json` | v0.2 step 7: records checkpoint retention policy; weights stay out of git and are purged from the GPU VM after evidence capture. |
+| `eden_v02_native_inference_service.json` | v0.2 step 8: defines the permanent subordinate inference-service boundary. |
+| `eden_v02_stability_demo.json` | v0.2 step 9: records the non-mutating operational stability demo. |
+| `eden_v02_stability_gate.json` | Aggregates the v0.2 stability gate while blocking production release and AGI claims. |
 
 ## Local Smoke Run
 
@@ -373,6 +391,35 @@ has at least 100 completed iterations. To run the bounded ROCm continuation:
 ```bash
 EDEN_V01_RUN_GPU=true make training-eden-v01-stage
 ```
+
+To compare a 100-iteration baseline against a 250-iteration 7B candidate and
+write the v0.2 stability artifacts:
+
+```bash
+make training-eden-v02-stage
+make eden-v02-stability
+```
+
+By default this consumes existing evidence and emits a failed gate if the GPU
+evidence is absent. To launch the bounded ROCm baseline and candidate jobs:
+
+```bash
+EDEN_V02_RUN_GPU=true make training-eden-v02-stage
+```
+
+For disposable GPU VMs, purge local checkpoint directories after portable
+evidence is written:
+
+```bash
+EDEN_V02_RUN_GPU=true \
+EDEN_V02_PURGE_LOCAL_CHECKPOINTS=true \
+make training-eden-v02-stage
+```
+
+The v0.2 gate can allow candidate runtime admission only when the stability
+comparison, checkpoint inference, adversarial eval, rollback drill, model card,
+storage policy, native inference boundary and demo all pass. It still keeps
+production release and AGI claims blocked.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

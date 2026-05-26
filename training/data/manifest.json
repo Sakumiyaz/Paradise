@@ -131,6 +131,33 @@
       "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
       "records": 204,
       "generator": "training/data/build_eden_v01_semantic_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_train",
+      "path": "training/data/eden_v02_stability_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 2869,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_eval",
+      "path": "training/data/eden_v02_stability_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 818,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_challenge",
+      "path": "training/data/eden_v02_stability_challenge.jsonl",
+      "split": "challenge",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 409,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
     }
   ],
   "policy": {

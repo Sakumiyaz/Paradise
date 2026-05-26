@@ -449,6 +449,56 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=eden_v01_capability_gate",
         ),
         curated(
+            "eden_v02_stability_corpus_manifest",
+            crate::eden_garm::eden_real_capability::EDEN_V02_STABILITY_CORPUS_MANIFEST_SCHEMA,
+            "/api/artifact?name=eden_v02_stability_corpus_manifest",
+        ),
+        curated(
+            "eden_v02_stability_eval",
+            crate::eden_garm::eden_real_capability::EDEN_V02_STABILITY_EVAL_SCHEMA,
+            "/api/artifact?name=eden_v02_stability_eval",
+        ),
+        curated(
+            "eden_v02_checkpoint_comparison",
+            crate::eden_garm::eden_real_capability::EDEN_V02_CHECKPOINT_COMPARISON_SCHEMA,
+            "/api/artifact?name=eden_v02_checkpoint_comparison",
+        ),
+        curated(
+            "eden_v02_adversarial_eval",
+            crate::eden_garm::eden_real_capability::EDEN_V02_ADVERSARIAL_EVAL_SCHEMA,
+            "/api/artifact?name=eden_v02_adversarial_eval",
+        ),
+        curated(
+            "eden_v02_rollback_drill",
+            crate::eden_garm::eden_real_capability::EDEN_V02_ROLLBACK_DRILL_SCHEMA,
+            "/api/artifact?name=eden_v02_rollback_drill",
+        ),
+        curated(
+            "eden_v02_model_card_internal",
+            crate::eden_garm::eden_real_capability::EDEN_V02_MODEL_CARD_INTERNAL_SCHEMA,
+            "/api/artifact?name=eden_v02_model_card_internal",
+        ),
+        curated(
+            "eden_v02_checkpoint_storage",
+            crate::eden_garm::eden_real_capability::EDEN_V02_CHECKPOINT_STORAGE_SCHEMA,
+            "/api/artifact?name=eden_v02_checkpoint_storage",
+        ),
+        curated(
+            "eden_v02_native_inference_service",
+            crate::eden_garm::eden_real_capability::EDEN_V02_NATIVE_INFERENCE_SERVICE_SCHEMA,
+            "/api/artifact?name=eden_v02_native_inference_service",
+        ),
+        curated(
+            "eden_v02_stability_demo",
+            crate::eden_garm::eden_real_capability::EDEN_V02_STABILITY_DEMO_SCHEMA,
+            "/api/artifact?name=eden_v02_stability_demo",
+        ),
+        curated(
+            "eden_v02_stability_gate",
+            crate::eden_garm::eden_real_capability::EDEN_V02_STABILITY_GATE_SCHEMA,
+            "/api/artifact?name=eden_v02_stability_gate",
+        ),
+        curated(
             "paradise_worldcell_runtime",
             crate::eden_garm::paradise_worldcell::PARADISE_WORLDCELL_SCHEMA,
             "/api/artifact?name=paradise_worldcell_runtime",

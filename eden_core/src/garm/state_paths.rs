@@ -490,6 +490,36 @@ pub fn eden_v01_gpu_workspace_hygiene_path() -> String {
 pub fn eden_v01_capability_gate_path() -> String {
     path("eden_v01_capability_gate.json")
 }
+pub fn eden_v02_stability_corpus_manifest_path() -> String {
+    path("eden_v02_stability_corpus_manifest.json")
+}
+pub fn eden_v02_stability_eval_path() -> String {
+    path("eden_v02_stability_eval.json")
+}
+pub fn eden_v02_checkpoint_comparison_path() -> String {
+    path("eden_v02_checkpoint_comparison.json")
+}
+pub fn eden_v02_adversarial_eval_path() -> String {
+    path("eden_v02_adversarial_eval.json")
+}
+pub fn eden_v02_rollback_drill_path() -> String {
+    path("eden_v02_rollback_drill.json")
+}
+pub fn eden_v02_model_card_internal_path() -> String {
+    path("eden_v02_model_card_internal.json")
+}
+pub fn eden_v02_checkpoint_storage_path() -> String {
+    path("eden_v02_checkpoint_storage.json")
+}
+pub fn eden_v02_native_inference_service_path() -> String {
+    path("eden_v02_native_inference_service.json")
+}
+pub fn eden_v02_stability_demo_path() -> String {
+    path("eden_v02_stability_demo.json")
+}
+pub fn eden_v02_stability_gate_path() -> String {
+    path("eden_v02_stability_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }

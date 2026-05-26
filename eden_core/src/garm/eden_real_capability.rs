@@ -23,6 +23,16 @@ pub const EDEN_V01_CHECKPOINT_ADMISSION_SCHEMA: &str = "eden.v01.checkpoint_admi
 pub const EDEN_V01_SCALING_PLAN_SCHEMA: &str = "eden.v01.scaling_plan.v1";
 pub const EDEN_V01_GPU_WORKSPACE_HYGIENE_SCHEMA: &str = "eden.v01.gpu_workspace_hygiene.v1";
 pub const EDEN_V01_CAPABILITY_GATE_SCHEMA: &str = "eden.v01.capability_gate.v1";
+pub const EDEN_V02_STABILITY_CORPUS_MANIFEST_SCHEMA: &str = "eden.v02.stability_corpus_manifest.v1";
+pub const EDEN_V02_STABILITY_EVAL_SCHEMA: &str = "eden.v02.stability_eval.v1";
+pub const EDEN_V02_CHECKPOINT_COMPARISON_SCHEMA: &str = "eden.v02.checkpoint_comparison.v1";
+pub const EDEN_V02_ADVERSARIAL_EVAL_SCHEMA: &str = "eden.v02.adversarial_eval.v1";
+pub const EDEN_V02_ROLLBACK_DRILL_SCHEMA: &str = "eden.v02.rollback_drill.v1";
+pub const EDEN_V02_MODEL_CARD_INTERNAL_SCHEMA: &str = "eden.v02.model_card_internal.v1";
+pub const EDEN_V02_CHECKPOINT_STORAGE_SCHEMA: &str = "eden.v02.checkpoint_storage.v1";
+pub const EDEN_V02_NATIVE_INFERENCE_SERVICE_SCHEMA: &str = "eden.v02.native_inference_service.v1";
+pub const EDEN_V02_STABILITY_DEMO_SCHEMA: &str = "eden.v02.stability_demo.v1";
+pub const EDEN_V02_STABILITY_GATE_SCHEMA: &str = "eden.v02.stability_gate.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const TRAIN_DATA: &str = "training/data/eden_real_capability_train.jsonl";
@@ -31,12 +41,23 @@ const CHALLENGE_DATA: &str = "training/data/eden_real_capability_challenge.jsonl
 const V01_TRAIN_DATA: &str = "training/data/eden_v01_semantic_train.jsonl";
 const V01_EVAL_DATA: &str = "training/data/eden_v01_semantic_eval.jsonl";
 const V01_CHALLENGE_DATA: &str = "training/data/eden_v01_semantic_challenge.jsonl";
+const V02_TRAIN_DATA: &str = "training/data/eden_v02_stability_train.jsonl";
+const V02_EVAL_DATA: &str = "training/data/eden_v02_stability_eval.jsonl";
+const V02_CHALLENGE_DATA: &str = "training/data/eden_v02_stability_challenge.jsonl";
 const CORPUS_MANIFEST: &str = "target/eden_real_capability/corpus_manifest.json";
 const OPERATIONAL_EVAL_REPORT: &str = "target/eden_real_capability/capability_eval_report.json";
 const V01_CORPUS_MANIFEST: &str = "target/eden_v01/semantic_corpus_manifest.json";
 const V01_SEMANTIC_EVAL_REPORT: &str = "target/eden_v01/semantic_eval_report.json";
 const V01_OPERATIONAL_DEMO_REPORT: &str = "target/eden_v01/operational_demo_trace.json";
 const V01_GPU_HYGIENE_REPORT: &str = "target/eden_v01/gpu_workspace_hygiene_report.json";
+const V02_CORPUS_MANIFEST: &str = "target/eden_v02/stability_corpus_manifest.json";
+const V02_STABILITY_EVAL_REPORT: &str = "target/eden_v02/stability_eval_report.json";
+const V02_COMPARISON_REPORT: &str = "target/eden_v02/checkpoint_comparison_report.json";
+const V02_ADVERSARIAL_REPORT: &str = "target/eden_v02/adversarial_eval_report.json";
+const V02_ROLLBACK_REPORT: &str = "target/eden_v02/rollback_drill_report.json";
+const V02_MODEL_CARD_REPORT: &str = "target/eden_v02/model_card_internal.json";
+const V02_STORAGE_REPORT: &str = "target/eden_v02/checkpoint_storage_manifest.json";
+const V02_DEMO_REPORT: &str = "target/eden_v02/stability_demo_trace.json";
 const MEGATRON_7B_TRAINING_EVIDENCE: &str =
     "target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json";
 const MEGATRON_7B_INFERENCE_REPORT: &str =
@@ -71,6 +92,21 @@ pub fn run_v01_all() -> String {
     out.push_str(&write_v01_scaling_plan());
     out.push_str(&write_v01_gpu_workspace_hygiene());
     out.push_str(&write_v01_capability_gate());
+    out
+}
+
+pub fn run_v02_all() -> String {
+    let mut out = String::new();
+    out.push_str(&write_v02_stability_corpus_manifest());
+    out.push_str(&write_v02_stability_eval());
+    out.push_str(&write_v02_checkpoint_comparison());
+    out.push_str(&write_v02_adversarial_eval());
+    out.push_str(&write_v02_rollback_drill());
+    out.push_str(&write_v02_model_card_internal());
+    out.push_str(&write_v02_checkpoint_storage());
+    out.push_str(&write_v02_native_inference_service());
+    out.push_str(&write_v02_stability_demo());
+    out.push_str(&write_v02_stability_gate());
     out
 }
 
@@ -224,6 +260,96 @@ pub fn write_v01_capability_gate() -> String {
         EDEN_V01_CAPABILITY_GATE_SCHEMA,
         state_paths::eden_v01_capability_gate_path(),
         v01_gate_value(),
+    )
+}
+
+pub fn write_v02_stability_corpus_manifest() -> String {
+    write_report(
+        "EDEN-V02-STABILITY-CORPUS",
+        EDEN_V02_STABILITY_CORPUS_MANIFEST_SCHEMA,
+        state_paths::eden_v02_stability_corpus_manifest_path(),
+        v02_stability_corpus_manifest_value(),
+    )
+}
+
+pub fn write_v02_stability_eval() -> String {
+    write_report(
+        "EDEN-V02-STABILITY-EVAL",
+        EDEN_V02_STABILITY_EVAL_SCHEMA,
+        state_paths::eden_v02_stability_eval_path(),
+        v02_stability_eval_value(),
+    )
+}
+
+pub fn write_v02_checkpoint_comparison() -> String {
+    write_report(
+        "EDEN-V02-CHECKPOINT-COMPARISON",
+        EDEN_V02_CHECKPOINT_COMPARISON_SCHEMA,
+        state_paths::eden_v02_checkpoint_comparison_path(),
+        v02_checkpoint_comparison_value(),
+    )
+}
+
+pub fn write_v02_adversarial_eval() -> String {
+    write_report(
+        "EDEN-V02-ADVERSARIAL-EVAL",
+        EDEN_V02_ADVERSARIAL_EVAL_SCHEMA,
+        state_paths::eden_v02_adversarial_eval_path(),
+        v02_adversarial_eval_value(),
+    )
+}
+
+pub fn write_v02_rollback_drill() -> String {
+    write_report(
+        "EDEN-V02-ROLLBACK-DRILL",
+        EDEN_V02_ROLLBACK_DRILL_SCHEMA,
+        state_paths::eden_v02_rollback_drill_path(),
+        v02_rollback_drill_value(),
+    )
+}
+
+pub fn write_v02_model_card_internal() -> String {
+    write_report(
+        "EDEN-V02-MODEL-CARD",
+        EDEN_V02_MODEL_CARD_INTERNAL_SCHEMA,
+        state_paths::eden_v02_model_card_internal_path(),
+        v02_model_card_internal_value(),
+    )
+}
+
+pub fn write_v02_checkpoint_storage() -> String {
+    write_report(
+        "EDEN-V02-CHECKPOINT-STORAGE",
+        EDEN_V02_CHECKPOINT_STORAGE_SCHEMA,
+        state_paths::eden_v02_checkpoint_storage_path(),
+        v02_checkpoint_storage_value(),
+    )
+}
+
+pub fn write_v02_native_inference_service() -> String {
+    write_report(
+        "EDEN-V02-NATIVE-INFERENCE-SERVICE",
+        EDEN_V02_NATIVE_INFERENCE_SERVICE_SCHEMA,
+        state_paths::eden_v02_native_inference_service_path(),
+        v02_native_inference_service_value(),
+    )
+}
+
+pub fn write_v02_stability_demo() -> String {
+    write_report(
+        "EDEN-V02-STABILITY-DEMO",
+        EDEN_V02_STABILITY_DEMO_SCHEMA,
+        state_paths::eden_v02_stability_demo_path(),
+        v02_stability_demo_value(),
+    )
+}
+
+pub fn write_v02_stability_gate() -> String {
+    write_report(
+        "EDEN-V02-STABILITY-GATE",
+        EDEN_V02_STABILITY_GATE_SCHEMA,
+        state_paths::eden_v02_stability_gate_path(),
+        v02_stability_gate_value(),
     )
 }
 
@@ -821,6 +947,274 @@ fn v01_gate_value() -> Value {
             "external_AGI_benchmark",
             "fully_autonomous_tool_authority",
             "AGI"
+        ],
+    })
+}
+
+fn v02_stability_corpus_manifest_value() -> Value {
+    let manifest = read_repo_json(V02_CORPUS_MANIFEST);
+    let train = count_jsonl(V02_TRAIN_DATA);
+    let eval = count_jsonl(V02_EVAL_DATA);
+    let challenge = count_jsonl(V02_CHALLENGE_DATA);
+    serde_json::json!({
+        "schema": EDEN_V02_STABILITY_CORPUS_MANIFEST_SCHEMA,
+        "artifact": "eden_v02_stability_corpus_manifest",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_CORPUS_MANIFEST,
+        "source_present": manifest.is_some(),
+        "rows": {
+            "train": train,
+            "eval": eval,
+            "challenge": challenge,
+            "total": train + eval + challenge,
+        },
+        "task_types": manifest.as_ref().and_then(|v| v.get("task_types")).cloned().unwrap_or(Value::Null),
+        "categories": manifest.as_ref().and_then(|v| v.get("categories")).cloned().unwrap_or(Value::Null),
+        "accepted_for": ["stability_eval", "adversarial_eval", "rollback_drill"],
+        "not_accepted_for": ["AGI", "production_release"],
+    })
+}
+
+fn v02_stability_eval_value() -> Value {
+    let source = read_repo_json(V02_STABILITY_EVAL_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_STABILITY_EVAL_SCHEMA,
+        "artifact": "eden_v02_stability_eval",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_STABILITY_EVAL_REPORT,
+        "source_present": source.is_some(),
+        "score": source_f64(source.as_ref(), "/score"),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "rows": source.as_ref().and_then(|v| v.get("rows")).cloned().unwrap_or(Value::Null),
+        "checks": source.as_ref().and_then(|v| v.get("checks")).cloned().unwrap_or(Value::Null),
+        "comparison_report": source.as_ref().and_then(|v| v.get("comparison_report")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v02_checkpoint_comparison_value() -> Value {
+    let source = read_repo_json(V02_COMPARISON_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_CHECKPOINT_COMPARISON_SCHEMA,
+        "artifact": "eden_v02_checkpoint_comparison",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_COMPARISON_REPORT,
+        "source_present": source.is_some(),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "baseline": source.as_ref().and_then(|v| v.get("baseline")).cloned().unwrap_or(Value::Null),
+        "candidate": source.as_ref().and_then(|v| v.get("candidate")).cloned().unwrap_or(Value::Null),
+        "loss_delta": source.as_ref().and_then(|v| v.get("loss_delta")).cloned().unwrap_or(Value::Null),
+        "loss_ratio": source.as_ref().and_then(|v| v.get("loss_ratio")).cloned().unwrap_or(Value::Null),
+        "production_model_allowed": source_bool(source.as_ref(), "/production_model_allowed").unwrap_or(false),
+        "admission_scope": source_string(source.as_ref(), "/admission_scope"),
+    })
+}
+
+fn v02_adversarial_eval_value() -> Value {
+    let source = read_repo_json(V02_ADVERSARIAL_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_ADVERSARIAL_EVAL_SCHEMA,
+        "artifact": "eden_v02_adversarial_eval",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_ADVERSARIAL_REPORT,
+        "source_present": source.is_some(),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "cases_total": source_u64(source.as_ref(), "/cases_total"),
+        "cases_passed": source_u64(source.as_ref(), "/cases_passed"),
+        "cases": source.as_ref().and_then(|v| v.get("cases")).cloned().unwrap_or(Value::Null),
+        "policy": source.as_ref().and_then(|v| v.get("policy")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v02_rollback_drill_value() -> Value {
+    let source = read_repo_json(V02_ROLLBACK_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_ROLLBACK_DRILL_SCHEMA,
+        "artifact": "eden_v02_rollback_drill",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_ROLLBACK_REPORT,
+        "source_present": source.is_some(),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "fault": source.as_ref().and_then(|v| v.get("fault")).cloned().unwrap_or(Value::Null),
+        "rollback_contract": source.as_ref().and_then(|v| v.get("rollback_contract")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v02_model_card_internal_value() -> Value {
+    let source = read_repo_json(V02_MODEL_CARD_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_MODEL_CARD_INTERNAL_SCHEMA,
+        "artifact": "eden_v02_model_card_internal",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_MODEL_CARD_REPORT,
+        "source_present": source.is_some(),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "model": source.as_ref().and_then(|v| v.get("model")).cloned().unwrap_or(Value::Null),
+        "known_limits": source.as_ref().and_then(|v| v.get("known_limits")).cloned().unwrap_or(Value::Null),
+        "required_before_production": source.as_ref().and_then(|v| v.get("required_before_production")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v02_checkpoint_storage_value() -> Value {
+    let source = read_repo_json(V02_STORAGE_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_CHECKPOINT_STORAGE_SCHEMA,
+        "artifact": "eden_v02_checkpoint_storage",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_STORAGE_REPORT,
+        "source_present": source.is_some(),
+        "weights_committed_to_repo": source_bool(source.as_ref(), "/weights_committed_to_repo").unwrap_or(false),
+        "weights_retained_on_gpu_vm": source_bool(source.as_ref(), "/weights_retained_on_gpu_vm").unwrap_or(false),
+        "recommended_storage": source_string(source.as_ref(), "/recommended_storage"),
+        "current_policy": source_string(source.as_ref(), "/current_policy"),
+    })
+}
+
+fn v02_native_inference_service_value() -> Value {
+    let comparison = read_json_file(&state_paths::eden_v02_checkpoint_comparison_path());
+    let adversarial = read_json_file(&state_paths::eden_v02_adversarial_eval_path());
+    let rollback = read_json_file(&state_paths::eden_v02_rollback_drill_path());
+    let model_card = read_json_file(&state_paths::eden_v02_model_card_internal_path());
+    let service_ready = source_bool(comparison.as_ref(), "/passed") == Some(true)
+        && source_bool(adversarial.as_ref(), "/passed") == Some(true)
+        && source_bool(rollback.as_ref(), "/passed") == Some(true)
+        && source_bool(model_card.as_ref(), "/passed") == Some(true);
+    serde_json::json!({
+        "schema": EDEN_V02_NATIVE_INFERENCE_SERVICE_SCHEMA,
+        "artifact": "eden_v02_native_inference_service",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "service_ready": service_ready,
+        "service_scope": "local_candidate_runtime_only",
+        "request_contract": {
+            "schema": "eden.v02.native_inference_request.v1",
+            "fields": ["task_id", "goal", "situation_model", "memory_refs", "risk_class", "checkpoint_candidate", "rollback_target"]
+        },
+        "response_contract": {
+            "schema": "eden.v02.native_inference_response.v1",
+            "fields": ["candidate_text", "hypothesis_packet", "uncertainty", "verifier_required", "rollback_handle", "audit_trace"]
+        },
+        "guards": {
+            "direct_memory_write": false,
+            "direct_tool_execution": false,
+            "direct_objective_update": false,
+            "production_release_allowed": false
+        },
+    })
+}
+
+fn v02_stability_demo_value() -> Value {
+    let source = read_repo_json(V02_DEMO_REPORT);
+    serde_json::json!({
+        "schema": EDEN_V02_STABILITY_DEMO_SCHEMA,
+        "artifact": "eden_v02_stability_demo",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "source_path": V02_DEMO_REPORT,
+        "source_present": source.is_some(),
+        "passed": source_bool(source.as_ref(), "/passed"),
+        "steps": source.as_ref().and_then(|v| v.get("steps")).cloned().unwrap_or(Value::Null),
+        "safety_boundary": source.as_ref().and_then(|v| v.get("safety_boundary")).cloned().unwrap_or(Value::Null),
+    })
+}
+
+fn v02_stability_gate_value() -> Value {
+    let dataset = read_json_file(&state_paths::eden_v02_stability_corpus_manifest_path());
+    let stability = read_json_file(&state_paths::eden_v02_stability_eval_path());
+    let comparison = read_json_file(&state_paths::eden_v02_checkpoint_comparison_path());
+    let adversarial = read_json_file(&state_paths::eden_v02_adversarial_eval_path());
+    let rollback = read_json_file(&state_paths::eden_v02_rollback_drill_path());
+    let model_card = read_json_file(&state_paths::eden_v02_model_card_internal_path());
+    let storage = read_json_file(&state_paths::eden_v02_checkpoint_storage_path());
+    let service = read_json_file(&state_paths::eden_v02_native_inference_service_path());
+    let demo = read_json_file(&state_paths::eden_v02_stability_demo_path());
+    let checks = vec![
+        check(
+            "larger_stability_dataset_4096_plus_rows",
+            source_u64(dataset.as_ref(), "/rows/total").unwrap_or(0) >= 4096,
+            V02_TRAIN_DATA,
+        ),
+        check(
+            "stability_eval_passed",
+            source_bool(stability.as_ref(), "/passed") == Some(true),
+            V02_STABILITY_EVAL_REPORT,
+        ),
+        check(
+            "checkpoint_comparison_100_to_250_passed",
+            source_bool(comparison.as_ref(), "/passed") == Some(true),
+            V02_COMPARISON_REPORT,
+        ),
+        check(
+            "adversarial_eval_passed",
+            source_bool(adversarial.as_ref(), "/passed") == Some(true),
+            V02_ADVERSARIAL_REPORT,
+        ),
+        check(
+            "rollback_drill_passed",
+            source_bool(rollback.as_ref(), "/passed") == Some(true),
+            V02_ROLLBACK_REPORT,
+        ),
+        check(
+            "model_card_discloses_limits",
+            source_bool(model_card.as_ref(), "/passed") == Some(true),
+            V02_MODEL_CARD_REPORT,
+        ),
+        check(
+            "checkpoint_storage_keeps_weights_out_of_repo",
+            source_bool(storage.as_ref(), "/weights_committed_to_repo") == Some(false),
+            V02_STORAGE_REPORT,
+        ),
+        check(
+            "native_inference_service_ready",
+            source_bool(service.as_ref(), "/service_ready") == Some(true),
+            "eden_v02_native_inference_service.json",
+        ),
+        check(
+            "operational_demo_passed_without_mutation",
+            source_bool(demo.as_ref(), "/passed") == Some(true),
+            V02_DEMO_REPORT,
+        ),
+    ];
+    let passed = checks
+        .iter()
+        .filter(|check| check["passed"] == Value::Bool(true))
+        .count();
+    let total = checks.len();
+    let candidate_runtime_admission_allowed = passed == total;
+    serde_json::json!({
+        "schema": EDEN_V02_STABILITY_GATE_SCHEMA,
+        "artifact": "eden_v02_stability_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "passed": passed,
+        "total": total,
+        "checks": checks,
+        "candidate_runtime_admission_allowed": candidate_runtime_admission_allowed,
+        "production_model_allowed": false,
+        "max_dense_parameters": 14_000_000_000u64,
+        "capability_class": "eden_v02_stable_candidate_runtime",
+        "not_yet": [
+            "production_checkpoint_release",
+            "external_AGI_benchmark",
+            "fully_autonomous_tool_authority",
+            "AGI",
+            "14B_pretraining_run"
         ],
     })
 }

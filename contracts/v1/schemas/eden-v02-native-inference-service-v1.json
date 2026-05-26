@@ -1,0 +1,13 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.2 Native Inference Service",
+  "type": "object",
+  "required": ["schema", "authority", "claim_allowed", "agi_claim", "service_ready"],
+  "properties": {
+    "schema": { "const": "eden.v02.native_inference_service.v1" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "service_ready": { "type": "boolean" }
+  }
+}
