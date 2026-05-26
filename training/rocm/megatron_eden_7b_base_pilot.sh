@@ -81,7 +81,7 @@ printf 'save_checkpoint=%s\n' "$SAVE_CHECKPOINT"
 
 SAVE_ARGS="--save-interval ${SAVE_INTERVAL}"
 if [[ "$SAVE_CHECKPOINT" == "true" ]]; then
-  SAVE_ARGS="--save /eden-output/checkpoints ${SAVE_ARGS}"
+  SAVE_ARGS="--save /eden-output/checkpoints --ckpt-format torch ${SAVE_ARGS}"
 fi
 
 docker run --rm \

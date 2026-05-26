@@ -38,8 +38,10 @@ and writes it into the GEWC state artifact surface. Add
 GPU run.
 
 The 7B pilot may optionally write a checkpoint for controlled local evaluation,
-but that checkpoint remains blocked from admission until a separate capability,
-safety and governance process explicitly promotes it.
+using Megatron's legacy `torch` checkpoint format to avoid the ROCm image's
+distributed-checkpoint writer issue observed in the first 50-iteration run. That
+checkpoint remains blocked from admission until a separate capability, safety
+and governance process explicitly promotes it.
 
 ## Alternatives Considered
 
