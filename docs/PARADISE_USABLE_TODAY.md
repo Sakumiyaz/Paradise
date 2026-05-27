@@ -10,6 +10,8 @@ blocked.
 | --- | --- | --- |
 | Local Paradise CLI | Usable without sockets or network. | `make paradise-quickstart` |
 | Worldcell dry-run loop | Usable for intent, plan, approval, execution trace and evidence. | `make paradise-operational-loop` |
+| Checkpoint registry review | Usable to inspect checkpoint admission policy while keeping weights blocked. | `cargo run -p eden_core --bin paradise -- checkpoint review` |
+| Native inference readiness | Usable to expose inference status while keeping real checkpoint inference blocked. | `cargo run -p eden_core --bin paradise -- inference status` |
 | GARM/GEWC runtime | Native Rust runtime under `eden_core/src/garm/`. | `make test`, `make check` |
 | Public API contracts | Versioned schemas and OpenAPI files are validated. | `make contracts-validate` |
 | API conformance | Live local API can be checked from outside the process. | `make eden-api-conformance` |

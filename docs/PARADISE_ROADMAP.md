@@ -10,11 +10,13 @@ lane and cannot turn into a production claim without checkpoint admission.
 - Keep contracts, schemas, OpenAPI files and readiness reports executable.
 - Keep dataset provenance explicit and free of private data.
 - Keep checkpoint metadata separated from checkpoint weights.
+- Keep checkpoint review and inference readiness visible through native
+  Paradise CLI commands while admission remains blocked.
 
 ## Next
 
-- Add a native checkpoint admission command that consumes the registry and
-  refuses incomplete entries.
+- Extend checkpoint admission from blocked review to accepted registration only
+  after real checkpoint evidence exists.
 - Convert more operator-console panels from static docs into local runtime API
   views.
 - Add model adapter probes for real checkpoints once GPU runs produce accepted

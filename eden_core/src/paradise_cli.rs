@@ -7,8 +7,9 @@ use crate::eden_garm::nodes::{
     world_model_core,
 };
 use crate::eden_garm::{
-    action_evidence, eden_locus_layer, eden_operator_forge, model_runtime, operational_api,
-    operational_runtime, paradise_worldcell, praxis_nexus, runtime_spine, state_paths,
+    action_evidence, eden_70b_modular, eden_locus_layer, eden_operator_forge, model_runtime,
+    operational_api, operational_runtime, paradise_worldcell, praxis_nexus, runtime_spine,
+    state_paths,
 };
 use serde_json::Value;
 use std::env;
@@ -46,6 +47,8 @@ enum CliCommand {
     Status,
     Worldcell,
     RunDryRun(String),
+    CheckpointReview,
+    InferenceStatus,
 }
 
 #[derive(Debug)]
@@ -106,8 +109,28 @@ fn parse_command(args: &[String]) -> Result<CliCommand, CliError> {
     match command {
         "status" => Ok(CliCommand::Status),
         "worldcell" => Ok(CliCommand::Worldcell),
+        "checkpoint" => parse_checkpoint(&args[1..]),
+        "inference" => parse_inference(&args[1..]),
         "run" => parse_run(&args[1..]),
         other => Err(CliError::Message(format!("unknown command: {other}"))),
+    }
+}
+
+fn parse_checkpoint(args: &[String]) -> Result<CliCommand, CliError> {
+    match args.first().map(String::as_str) {
+        Some("review" | "admission" | "audit") => Ok(CliCommand::CheckpointReview),
+        _ => Err(CliError::Message(
+            "checkpoint requires review, admission or audit".to_string(),
+        )),
+    }
+}
+
+fn parse_inference(args: &[String]) -> Result<CliCommand, CliError> {
+    match args.first().map(String::as_str) {
+        Some("status" | "runtime" | "review") => Ok(CliCommand::InferenceStatus),
+        _ => Err(CliError::Message(
+            "inference requires status, runtime or review".to_string(),
+        )),
     }
 }
 
@@ -143,6 +166,8 @@ fn run(cli: Cli) -> Result<(), CliError> {
         CliCommand::Status => run_status(&cli.state_dir, cli.json),
         CliCommand::Worldcell => run_worldcell(cli.json),
         CliCommand::RunDryRun(intent) => run_dry_run(&intent, cli.json),
+        CliCommand::CheckpointReview => run_checkpoint_review(cli.json),
+        CliCommand::InferenceStatus => run_inference_status(cli.json),
     }
 }
 
@@ -226,6 +251,39 @@ fn run_dry_run(intent: &str, json: bool) -> Result<(), CliError> {
     println!(
         "evidence: {}",
         state_paths::paradise_worldcell_sessions_path()
+    );
+    Ok(())
+}
+
+fn run_checkpoint_review(json: bool) -> Result<(), CliError> {
+    let output = model_runtime::write_paradise_checkpoint_registry_admission();
+    if json {
+        print_file_or_fallback(
+            &state_paths::paradise_checkpoint_registry_admission_path(),
+            "{}",
+        )?;
+        return Ok(());
+    }
+
+    print!("{output}");
+    println!(
+        "registry: training/models/checkpoint_registry.json evidence: {} admission=false",
+        state_paths::paradise_checkpoint_registry_admission_path()
+    );
+    Ok(())
+}
+
+fn run_inference_status(json: bool) -> Result<(), CliError> {
+    let output = eden_70b_modular::write_inference_runtime();
+    if json {
+        print_file_or_fallback(&state_paths::eden_70b_inference_runtime_path(), "{}")?;
+        return Ok(());
+    }
+
+    print!("{output}");
+    println!(
+        "runtime: {} real_checkpoint_inference_available=false",
+        state_paths::eden_70b_inference_runtime_path()
     );
     Ok(())
 }
@@ -463,11 +521,15 @@ fn print_usage() {
         "Usage:
   paradise [--state-dir DIR] [--json] status
   paradise [--state-dir DIR] [--json] worldcell
+  paradise [--state-dir DIR] [--json] checkpoint review
+  paradise [--state-dir DIR] [--json] inference status
   paradise [--state-dir DIR] [--json] run --dry-run <intent>
 
 Commands:
   status              Print local runtime status without opening sockets.
   worldcell           Generate Paradise Worldcell evidence locally.
+  checkpoint review   Review checkpoint registry admission policy; never admits weights.
+  inference status    Show native inference readiness; blocks until checkpoint admission.
   run --dry-run       Record intent and plan a permissioned action without execution.
 
 Environment:
@@ -507,6 +569,20 @@ mod tests {
             cli.command,
             CliCommand::RunDryRun("inspect repo safely".to_string())
         );
+    }
+
+    #[test]
+    fn parses_checkpoint_review() {
+        let cli = parse_cli(args(&["checkpoint", "review"])).unwrap();
+
+        assert_eq!(cli.command, CliCommand::CheckpointReview);
+    }
+
+    #[test]
+    fn parses_inference_status() {
+        let cli = parse_cli(args(&["inference", "status"])).unwrap();
+
+        assert_eq!(cli.command, CliCommand::InferenceStatus);
     }
 
     #[test]

@@ -125,6 +125,8 @@ paradise-quickstart:
 	rm -rf -- /tmp/paradise_quickstart
 	$(PARADISE) --state-dir /tmp/paradise_quickstart status
 	$(PARADISE) --state-dir /tmp/paradise_quickstart worldcell
+	$(PARADISE) --state-dir /tmp/paradise_quickstart checkpoint review
+	$(PARADISE) --state-dir /tmp/paradise_quickstart inference status
 	$(PARADISE) --state-dir /tmp/paradise_quickstart run --dry-run "inspect runtime status safely"
 
 paradise-public-demo:

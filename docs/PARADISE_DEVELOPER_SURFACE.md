@@ -10,8 +10,10 @@ new users to learn every internal research term.
 | --- | --- | --- |
 | `cargo run -p eden_core --bin paradise -- status` | Socket-free local status and evidence path. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- worldcell` | Generate the Paradise Worldcell Runtime artifact. | Public quickstart |
+| `cargo run -p eden_core --bin paradise -- checkpoint review` | Review checkpoint registry policy without admitting weights. | Public quickstart |
+| `cargo run -p eden_core --bin paradise -- inference status` | Show native inference readiness without loading production checkpoints. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- run --dry-run <intent>` | Record intent and produce a reviewable dry-run session without execution. | Public quickstart |
-| `make paradise-quickstart` | Run status, worldcell generation and dry-run planning together. | Public quickstart |
+| `make paradise-quickstart` | Run status, worldcell generation, checkpoint review, inference status and dry-run planning together. | Public quickstart |
 | `edenctl` | Operator CLI for a live local API server. | Public runtime API |
 | `/api/actions/dry-run?cmd=...` | Inspect command risk, permissions and route without execution. | Public runtime API |
 | `contracts/v1/` | Versioned API schemas, examples and manifests. | Public contract |
@@ -48,9 +50,11 @@ explain a real boundary.
 
 1. Use `paradise status` to check local evidence generation.
 2. Use `paradise worldcell` to generate the public runtime identity artifact.
-3. Use `paradise run --dry-run "<intent>"` to produce a reviewable plan.
-4. Move to `edenctl` and the local API only when you need a live runtime daemon.
-5. Validate contracts through `make eden-api-conformance` before publishing an
+3. Use `paradise checkpoint review` and `paradise inference status` to confirm
+   model/checkpoint boundaries remain blocked.
+4. Use `paradise run --dry-run "<intent>"` to produce a reviewable plan.
+5. Move to `edenctl` and the local API only when you need a live runtime daemon.
+6. Validate contracts through `make eden-api-conformance` before publishing an
    integration.
 
 ## Non-Goals

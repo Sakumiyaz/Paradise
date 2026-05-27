@@ -51,6 +51,8 @@ not proof of general intelligence.
 - Run `make paradise-dataset-manifest`.
 - Run `make paradise-module-semantic-eval`.
 - Run `make paradise-checkpoint-evidence-review`.
+- Run `cargo run -p eden_core --bin paradise -- checkpoint review`.
+- Run `cargo run -p eden_core --bin paradise -- inference status`.
 - Run `make paradise-public-demo`.
 - Run `make paradise-release-package`.
 - Run `make eden-release-check`.

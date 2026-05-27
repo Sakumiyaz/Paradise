@@ -13,6 +13,14 @@ $ cargo run -p eden_core --bin paradise -- worldcell
 [PARADISE-WORLDCELL-RUNTIME] passed=8/8 claim_allowed=false path=/tmp/paradise/paradise_worldcell_runtime.json
 sessions: /tmp/paradise/paradise_worldcell_sessions.json
 
+$ cargo run -p eden_core --bin paradise -- checkpoint review
+[PARADISE-CHECKPOINT-REGISTRY] schema=paradise.checkpoint_registry_admission.v1 status=written authority=global_executive_workspace_core claim_allowed=false agi_claim=false path=/tmp/paradise/paradise_checkpoint_registry_admission.json
+registry: training/models/checkpoint_registry.json evidence: /tmp/paradise/paradise_checkpoint_registry_admission.json admission=false
+
+$ cargo run -p eden_core --bin paradise -- inference status
+[EDEN-70B-INFERENCE-RUNTIME] schema=eden.modular_70b.inference_runtime.v1 status=written authority=global_executive_workspace_core claim_allowed=false agi_claim=false path=/tmp/paradise/eden_70b_inference_runtime.json
+runtime: /tmp/paradise/eden_70b_inference_runtime.json real_checkpoint_inference_available=false
+
 $ cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
 [PARADISE-RUN-DRY-RUN] session=paradise-... status=planned would_execute=false candidate="status"
 [PARADISE-INTENT] id=paradise-... status=intent_recorded path=/tmp/paradise/paradise_worldcell_sessions.json
@@ -26,4 +34,6 @@ The visible contract is:
 - `agi_claim=false`;
 - dry-run before action;
 - no candidate action executed by `run --dry-run`;
+- checkpoint registry review is visible but does not admit weights;
+- native inference stays blocked until checkpoint admission exists;
 - evidence files remain inspectable in the selected state directory.

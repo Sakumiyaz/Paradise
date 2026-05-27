@@ -55,6 +55,19 @@ That command records intent, produces a dry-run plan and writes a reviewable
 `paradise_worldcell_sessions.json` session. It does not execute the candidate
 action.
 
+Review checkpoint admission and native inference readiness without loading or
+shipping weights:
+
+```bash
+cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- inference status
+```
+
+These commands make the model boundary visible: the registry can be inspected,
+but checkpoint admission and production inference stay blocked until a real
+checkpoint has hash, provenance, held-out eval, safety eval, rollback evidence
+and operator approval.
+
 Run a complete local Worldcell session without model training or external
 network access:
 
@@ -182,7 +195,7 @@ layer model and terminology.
 | Operator runtime | `eden_core/src/bin/eden_garm.rs` starts the native GARM runtime. |
 | Executive core | GEWC owns command routing, body handlers, runtime traces and safety gates. |
 | Locus/Forge | `locus ...`, `operator forge ...`, `edenctl locus ...` and `edenctl forge ...` expose governed context authority, formal synthesis artifacts and the Locus/Forge-to-CWM hypothesis bridge. |
-| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening`, `eden capable eval`, `eden capable operationalize` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, checkpoint probe routing, cognitive call contracts, eval surfaces, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
+| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening`, `eden capable eval`, `eden capable operationalize`, `cargo run -p eden_core --bin paradise -- checkpoint review`, `cargo run -p eden_core --bin paradise -- inference status` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, checkpoint probe routing, cognitive call contracts, eval surfaces, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
 | APIs | Runtime state, artifact, operational, capability, validation, GEWC and action-contract APIs. |
 | SDK | `eden_core::sdk` provides a lightweight Rust client over the public local API. |
 | Training surface | `training/` contains the CPU-safe smoke benchmark, first trainable-memory contract, ELCP cognitive-transition fixtures, ROCm profile and future AMD GPU training entry point. |
@@ -222,6 +235,8 @@ Five-minute local path, no sockets and no network:
 ```bash
 cargo run -p eden_core --bin paradise -- status
 cargo run -p eden_core --bin paradise -- worldcell
+cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- inference status
 cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
 ```
 
@@ -230,6 +245,8 @@ Expected evidence:
 ```text
 /tmp/paradise/paradise_worldcell_runtime.json
 /tmp/paradise/paradise_worldcell_sessions.json
+/tmp/paradise/paradise_checkpoint_registry_admission.json
+/tmp/paradise/eden_70b_inference_runtime.json
 ```
 
 Or run the same path through Make:
@@ -243,6 +260,8 @@ Post-quick-start verification:
 ```bash
 test -s /tmp/paradise_quickstart/paradise_worldcell_runtime.json
 test -s /tmp/paradise_quickstart/paradise_worldcell_sessions.json
+test -s /tmp/paradise_quickstart/paradise_checkpoint_registry_admission.json
+test -s /tmp/paradise_quickstart/eden_70b_inference_runtime.json
 ```
 
 Live local API path:

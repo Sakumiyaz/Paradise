@@ -83,6 +83,8 @@ use GPU, admit checkpoints or certify learned model capability.
 ```sh
 cargo run -p eden_core --bin paradise -- status
 cargo run -p eden_core --bin paradise -- worldcell
+cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- inference status
 cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
 ```
 

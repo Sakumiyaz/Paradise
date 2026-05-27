@@ -20,6 +20,34 @@ COMMANDS = [
         "argv": ["cargo", "run", "-p", "eden_core", "--bin", "paradise", "--", "worldcell"],
     },
     {
+        "name": "checkpoint_review",
+        "argv": [
+            "cargo",
+            "run",
+            "-p",
+            "eden_core",
+            "--bin",
+            "paradise",
+            "--",
+            "checkpoint",
+            "review",
+        ],
+    },
+    {
+        "name": "inference_status",
+        "argv": [
+            "cargo",
+            "run",
+            "-p",
+            "eden_core",
+            "--bin",
+            "paradise",
+            "--",
+            "inference",
+            "status",
+        ],
+    },
+    {
         "name": "dry_run",
         "argv": [
             "cargo",
