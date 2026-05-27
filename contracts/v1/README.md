@@ -44,6 +44,12 @@ The export command writes runtime-generated `runtime.openapi.json` and
   checkpoint-admission boundaries.
 - `schemas/paradise-checkpoint-registry-admission-v1.json` covers the native
   GEWC registry audit artifact.
+- `schemas/paradise-dataset-manifest-v1.json`,
+  `schemas/paradise-module-semantic-eval-v1.json`,
+  `schemas/paradise-checkpoint-evidence-review-v1.json`,
+  `schemas/paradise-public-demo-v1.json` and
+  `schemas/paradise-release-package-v1.json` cover the non-GPU release package
+  evidence added for Paradise public readiness.
 
 Validate the public contract surface locally:
 

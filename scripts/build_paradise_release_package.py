@@ -45,7 +45,13 @@ def main() -> int:
 
     contract_report = root / "target/public_contracts/validation_report.json"
     readiness_report = root / "target/paradise_non_gpu_readiness/non_gpu_readiness_report.json"
+    dataset_manifest = root / "target/paradise_dataset_manifest/paradise_dataset_manifest.json"
+    semantic_eval = root / "target/paradise_module_semantic_eval/module_semantic_eval_report.json"
+    checkpoint_review = root / "target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json"
+    public_demo = root / "target/paradise_public_demo/public_demo_manifest.json"
+    public_demo_transcript = root / "target/paradise_public_demo/demo_transcript.md"
     release_note = root / "docs/releases/paradise-non-gpu-readiness.md"
+    v02_release_note = root / "docs/releases/v0.2.0-public-readiness.md"
     checkpoint_registry = root / "training/models/checkpoint_registry.json"
     license_manifest = root / "training/data/license_manifest.json"
 
@@ -62,10 +68,18 @@ def main() -> int:
         "commands": [
             "make contracts-validate",
             "make paradise-non-gpu-readiness",
+            "make paradise-dataset-manifest",
+            "make paradise-module-semantic-eval",
+            "make paradise-checkpoint-evidence-review",
             "make paradise-checkpoint-registry-smoke",
+            "make paradise-public-demo",
             "make check",
             "make eden-api-conformance",
             "make public-audit",
+        ],
+        "optional_strict_commands": [
+            "make install-secret-scanners",
+            "make public-audit-strict",
         ],
         "artifacts": [
             {
@@ -81,9 +95,43 @@ def main() -> int:
                 "passed": load_json(readiness_report).get("passed"),
             },
             {
+                "name": "paradise_dataset_manifest",
+                "path": str(dataset_manifest.relative_to(root)),
+                "present": dataset_manifest.exists(),
+                "passed": load_json(dataset_manifest).get("passed"),
+            },
+            {
+                "name": "paradise_module_semantic_eval",
+                "path": str(semantic_eval.relative_to(root)),
+                "present": semantic_eval.exists(),
+                "passed": load_json(semantic_eval).get("passed"),
+            },
+            {
+                "name": "paradise_checkpoint_evidence_review",
+                "path": str(checkpoint_review.relative_to(root)),
+                "present": checkpoint_review.exists(),
+                "passed": load_json(checkpoint_review).get("passed"),
+            },
+            {
+                "name": "paradise_public_demo",
+                "path": str(public_demo.relative_to(root)),
+                "present": public_demo.exists(),
+                "passed": load_json(public_demo).get("passed"),
+            },
+            {
+                "name": "paradise_public_demo_transcript",
+                "path": str(public_demo_transcript.relative_to(root)),
+                "present": public_demo_transcript.exists(),
+            },
+            {
                 "name": "release_note",
                 "path": str(release_note.relative_to(root)),
                 "present": release_note.exists(),
+            },
+            {
+                "name": "v0_2_public_readiness_release_note",
+                "path": str(v02_release_note.relative_to(root)),
+                "present": v02_release_note.exists(),
             },
             {
                 "name": "checkpoint_registry",

@@ -13,10 +13,12 @@ governed local runtime from the Eden project.
 | `PARADISE_MODEL_INTERFACE.md` | GEWC-owned model adapter packet contract and model authority limits. |
 | `PARADISE_DATASET_GOVERNANCE.md` | Dataset source, privacy, split and public-export policy. |
 | `PARADISE_EVALUATION_AND_ADMISSION.md` | Non-GPU readiness, eval families and checkpoint admission policy. |
+| `PARADISE_USABLE_TODAY.md` | Explicit split between usable runtime surfaces and blocked model/checkpoint/AGI claims. |
 | `PARADISE_EXTERNAL_BRIEF.md` | Non-confidential technical package for compute partners. |
 | `PARADISE_TECHNICAL_DEBT_REGISTER.md` | Known non-GPU follow-ups separated from GPU blockers. |
 | `PARADISE_ROADMAP.md` | Runtime-first roadmap, GPU lane and non-goals. |
 | `releases/paradise-non-gpu-readiness.md` | Public non-GPU readiness release package. |
+| `releases/v0.2.0-public-readiness.md` | Public readiness release notes. |
 | `demos/paradise-quickstart.md` | Short transcript for the socket-free public quickstart. |
 | `EDEN_SYSTEM_LAYERS.md` | Layer model and terminology for Paradise, Eden, GARM, GEWC and the Runtime Spine. |
 | `EDEN_ENGINEERING_PRACTICES.md` | Project engineering standard for review scope, evidence, contracts and safety boundaries. |
@@ -62,12 +64,17 @@ The public release surface can be checked without GPU access:
 ```sh
 make contracts-validate
 make paradise-non-gpu-readiness
+make paradise-dataset-manifest
+make paradise-module-semantic-eval
+make paradise-checkpoint-evidence-review
+make paradise-public-demo
 make paradise-release-package
 ```
 
 These commands validate contracts, schema/OpenAPI manifest shape, dataset
-license boundaries, checkpoint registry policy and non-GPU product/runtime
-readiness. They do not admit checkpoints or certify learned model capability.
+license boundaries, module semantic coverage, checkpoint evidence review,
+checkpoint registry policy and non-GPU product/runtime readiness. They do not
+use GPU, admit checkpoints or certify learned model capability.
 
 ## Paradise CLI
 

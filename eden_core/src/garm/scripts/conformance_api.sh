@@ -13,6 +13,15 @@ BASE_URL="http://127.0.0.1:${PORT}"
 cleanup() {
     if [[ -n "${GARM_PID:-}" ]] && kill -0 "${GARM_PID}" 2>/dev/null; then
         curl -fsS --max-time 3 "${BASE_URL}/command?cmd=quit" >/dev/null 2>&1 || true
+        for _ in $(seq 1 10); do
+            if ! kill -0 "${GARM_PID}" 2>/dev/null; then
+                break
+            fi
+            sleep 0.2
+        done
+        if kill -0 "${GARM_PID}" 2>/dev/null; then
+            kill "${GARM_PID}" 2>/dev/null || true
+        fi
         wait "${GARM_PID}" 2>/dev/null || true
     fi
 }
@@ -54,6 +63,15 @@ for _ in $(seq 1 40); do
     fi
     sleep 1
 done
+
+if ! curl -fsS --max-time 1 "${BASE_URL}/ready" >/dev/null 2>&1; then
+    printf 'EDEN API did not become ready on %s\n' "${BASE_URL}" >&2
+    printf '%s\n' '--- daemon stdout ---' >&2
+    tail -80 "${STDOUT_FILE}" >&2 || true
+    printf '%s\n' '--- daemon log ---' >&2
+    tail -80 "${LOG_FILE}" >&2 || true
+    exit 1
+fi
 
 ready="$(curl_text "${BASE_URL}/ready")"
 require_contains "${ready}" "ready"

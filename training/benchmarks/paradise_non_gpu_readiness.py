@@ -124,10 +124,12 @@ def main() -> int:
         "docs/PARADISE_MODEL_INTERFACE.md",
         "docs/PARADISE_DATASET_GOVERNANCE.md",
         "docs/PARADISE_EVALUATION_AND_ADMISSION.md",
+        "docs/PARADISE_USABLE_TODAY.md",
         "docs/PARADISE_EXTERNAL_BRIEF.md",
         "docs/PARADISE_TECHNICAL_DEBT_REGISTER.md",
         "docs/PARADISE_ROADMAP.md",
         "docs/releases/paradise-non-gpu-readiness.md",
+        "docs/releases/v0.2.0-public-readiness.md",
         "docs/CLAIMS_AND_LIMITATIONS.md",
         "docs/THREAT_MODEL.md",
     ]
@@ -196,8 +198,10 @@ def main() -> int:
                 "training-eden-v03-generalization-eval",
                 "training-eden-v04-operational-eval",
                 "eden-api-conformance",
+                "paradise-module-semantic-eval",
+                "paradise-checkpoint-evidence-review",
             ]),
-            "v01/v02/v03/v04/API evaluation targets present",
+            "v01/v02/v03/v04/API and Paradise module evidence targets present",
         ),
         check(
             "checkpoint_admission_policy",
@@ -247,6 +251,10 @@ def main() -> int:
             "roadmap_and_release_package",
             "Paradise Roadmap" in read_text(root / "docs/PARADISE_ROADMAP.md")
             and "Paradise Non-GPU Readiness Release Package" in read_text(root / "docs/releases/paradise-non-gpu-readiness.md")
+            and "Paradise v0.2.0 Public Readiness" in read_text(root / "docs/releases/v0.2.0-public-readiness.md")
+            and "Paradise Usable Today" in read_text(root / "docs/PARADISE_USABLE_TODAY.md")
+            and "paradise-public-demo:" in makefile
+            and "paradise-dataset-manifest:" in makefile
             and "paradise-release-package:" in makefile,
             "roadmap and release package are documented and executable",
         ),

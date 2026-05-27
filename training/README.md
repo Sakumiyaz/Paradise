@@ -50,6 +50,9 @@ measurable capability before expensive GPU work:
 | `benchmarks/eden_v02_model_card.py` | Internal model-card and checkpoint-storage manifest for the v0.2 candidate. |
 | `benchmarks/eden_v03_generalization_eval.py` | v0.3 checkpoint-admission evaluator requiring a larger corpus, 1000-iteration 7B evidence, inference load, safety inheritance, checkpoint registry and 14B scaling policy. |
 | `benchmarks/paradise_non_gpu_readiness.py` | Paradise non-GPU product/runtime readiness gate. It validates docs, model-interface authority, dataset governance, checkpoint admission policy and public boundaries without GPU or checkpoints. |
+| `benchmarks/paradise_module_semantic_eval.py` | Non-GPU module semantic coverage gate for memory, planner, world model, safety, model router and observability routes. |
+| `benchmarks/paradise_checkpoint_evidence_review.py` | Reviews local checkpoint/inference probe evidence when present while keeping public checkpoint admission blocked. |
+| `data/build_paradise_dataset_manifest.py` | Writes hashes, row counts, schemas, category coverage and privacy/license posture for public dataset fixtures. |
 | `demos/eden_v01_operational_demo.py` | Non-mutating operational demo trace that connects semantic eval, inference and SFT/ELCP packets through GEWC. |
 | `demos/eden_v02_stability_demo.py` | Non-mutating stability demo trace that exercises the v0.2 checkpoint-admission path. |
 | `demos/eden_v03_operational_demo.py` | Non-mutating v0.3 trace for long-checkpoint admission, registry, native runtime candidate and 14B readiness. |

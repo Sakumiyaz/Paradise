@@ -141,7 +141,12 @@
     "schemas/paradise-public-contract-validation-v1.json",
     "schemas/paradise-dataset-license-manifest-v1.json",
     "schemas/paradise-checkpoint-registry-v1.json",
-    "schemas/paradise-checkpoint-registry-admission-v1.json"
+    "schemas/paradise-checkpoint-registry-admission-v1.json",
+    "schemas/paradise-dataset-manifest-v1.json",
+    "schemas/paradise-module-semantic-eval-v1.json",
+    "schemas/paradise-checkpoint-evidence-review-v1.json",
+    "schemas/paradise-public-demo-v1.json",
+    "schemas/paradise-release-package-v1.json"
   ],
   "examples": [
     "examples/operational-status.example.json",

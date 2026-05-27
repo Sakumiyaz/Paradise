@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-public-demo-v1.json",
+  "title": "Paradise Public Demo",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "checkpoint_admission_allowed",
+    "gpu_required",
+    "transcript",
+    "commands",
+    "passed"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.public_demo.v1" },
+    "artifact": { "const": "paradise_public_demo" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "checkpoint_admission_allowed": { "const": false },
+    "gpu_required": { "const": false },
+    "transcript": { "type": "string" },
+    "commands": { "type": "array" },
+    "passed": { "type": "boolean" }
+  }
+}

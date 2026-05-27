@@ -23,6 +23,9 @@ Run:
 ```sh
 make contracts-validate
 make paradise-non-gpu-readiness
+make paradise-dataset-manifest
+make paradise-module-semantic-eval
+make paradise-checkpoint-evidence-review
 ```
 
 The command writes:
@@ -30,6 +33,9 @@ The command writes:
 ```text
 target/paradise_non_gpu_readiness/non_gpu_readiness_report.json
 target/public_contracts/validation_report.json
+target/paradise_dataset_manifest/paradise_dataset_manifest.json
+target/paradise_module_semantic_eval/module_semantic_eval_report.json
+target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json
 ```
 
 ## Checkpoint Admission Policy
@@ -63,6 +69,17 @@ make paradise-checkpoint-registry-smoke
 
 This writes `paradise_checkpoint_registry_admission.json` under the selected
 runtime state directory and keeps `checkpoint_admission_allowed=false`.
+
+Review local probe evidence without admitting a checkpoint:
+
+```sh
+make paradise-checkpoint-evidence-review
+```
+
+If ignored `target/` evidence exists from a previous GPU run, the review records
+checkpoint-load and token-generation probe status. If those files are absent,
+the review still passes as a blocked public state. In both cases the public
+registry remains empty and production model use remains false.
 
 ## Required Reject Conditions
 

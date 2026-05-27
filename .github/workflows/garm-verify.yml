@@ -173,11 +173,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
+      - name: Install Go
+        uses: actions/setup-go@v7.0.1
+        with:
+          go-version: stable
+
+      - name: Install strict secret scanners
+        run: make install-secret-scanners
+
       - name: Validate public contract surface
         run: make contracts-validate
 
       - name: Audit public release surface
         run: make public-audit
+
+      - name: Audit public release surface with strict scanners
+        run: make public-audit-strict
 
       - name: Upload public contract validation evidence
         if: always()
@@ -203,12 +214,34 @@ jobs:
       - name: Run checkpoint registry admission smoke
         run: make paradise-checkpoint-registry-smoke
 
+      - name: Run dataset manifest gate
+        run: make paradise-dataset-manifest
+
+      - name: Run module semantic evaluation
+        run: make paradise-module-semantic-eval
+
+      - name: Run checkpoint evidence review
+        run: make paradise-checkpoint-evidence-review
+
+      - name: Build public demo transcript
+        run: make paradise-public-demo
+
+      - name: Build release package manifest
+        run: make paradise-release-package
+
       - name: Upload non-GPU readiness evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1
         with:
           name: paradise-non-gpu-readiness
-          path: target/paradise_non_gpu_readiness/non_gpu_readiness_report.json
+          path: |
+            target/paradise_non_gpu_readiness/non_gpu_readiness_report.json
+            target/paradise_dataset_manifest/paradise_dataset_manifest.json
+            target/paradise_module_semantic_eval/module_semantic_eval_report.json
+            target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json
+            target/paradise_public_demo/public_demo_manifest.json
+            target/paradise_public_demo/demo_transcript.md
+            target/paradise_release/release_package_manifest.json
           if-no-files-found: warn
           retention-days: 14
 

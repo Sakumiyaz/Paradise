@@ -71,7 +71,11 @@ Run the non-GPU product/runtime readiness gate:
 ```bash
 make contracts-validate
 make paradise-non-gpu-readiness
+make paradise-dataset-manifest
+make paradise-module-semantic-eval
+make paradise-checkpoint-evidence-review
 make paradise-checkpoint-registry-smoke
+make paradise-public-demo
 make paradise-release-package
 ```
 
@@ -79,9 +83,10 @@ This writes `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json`
 `target/public_contracts/validation_report.json` and
 `target/paradise_release/release_package_manifest.json`, then checks product
 docs, schema/OpenAPI manifest shape, model interface authority, dataset
-governance, checkpoint registry policy, evaluation/admission policy,
-external-public boundaries, hardware-test isolation and known technical debt.
-It does not train models, use GPU, admit checkpoints or certify AGI.
+governance, module-level semantic coverage, local checkpoint evidence review,
+checkpoint registry policy, evaluation/admission policy, external-public
+boundaries, hardware-test isolation and known technical debt. It does not train
+models, use GPU, admit checkpoints or certify AGI.
 
 Generate the GEWC-owned runtime spine contracts:
 
@@ -194,8 +199,9 @@ layer model and terminology.
 | Claim boundary | `docs/CLAIMS_AND_LIMITATIONS.md` blocks unsupported AGI claims. |
 | Engineering practices | `docs/EDEN_ENGINEERING_PRACTICES.md` defines review, evidence, contract and safety expectations. |
 | Non-GPU readiness | `docs/PARADISE_PRODUCT_SPEC.md`, `docs/PARADISE_MODEL_INTERFACE.md`, `docs/PARADISE_DATASET_GOVERNANCE.md`, `docs/PARADISE_EVALUATION_AND_ADMISSION.md` and `make paradise-non-gpu-readiness` define the non-GPU product/runtime hardening path. |
+| Usable today | `docs/PARADISE_USABLE_TODAY.md` separates usable runtime surfaces from blocked model/checkpoint/AGI claims. |
 | Contribution flow | `CONTRIBUTING.md`, issue templates and PR template are present. |
-| Release note | `PUBLIC_RELEASE.md` documents the public source checkpoint; no versioned GitHub release has been published. |
+| Release note | `PUBLIC_RELEASE.md` and `docs/releases/v0.2.0-public-readiness.md` document the public readiness package. |
 
 ## Non-Goals
 
@@ -470,6 +476,7 @@ Dry-run never queues or executes commands.
 | [docs/PARADISE_WORLDCELL_RUNTIME.md](docs/PARADISE_WORLDCELL_RUNTIME.md) | Public Paradise identity and Worldcell Runtime loop. |
 | [docs/PARADISE_DEVELOPER_SURFACE.md](docs/PARADISE_DEVELOPER_SURFACE.md) | Public CLI, API, contract, Action and extension boundaries. |
 | [docs/demos/paradise-quickstart.md](docs/demos/paradise-quickstart.md) | Short terminal transcript for the public quickstart flow. |
+| [docs/PARADISE_USABLE_TODAY.md](docs/PARADISE_USABLE_TODAY.md) | Clear split between usable runtime surfaces and blocked checkpoint/AGI claims. |
 | [docs/EDEN_SYSTEM_LAYERS.md](docs/EDEN_SYSTEM_LAYERS.md) | Layer model and terminology for Paradise, Eden, GARM and GEWC. |
 | [docs/EDEN_OPERATOR_CONSOLE.html](docs/EDEN_OPERATOR_CONSOLE.html) | Visual operator console served by the runtime root endpoint. |
 | [docs/EDEN_RUNTIME_API_SURFACE.md](docs/EDEN_RUNTIME_API_SURFACE.md) | Runtime, operational, artifact and action API map. |

@@ -1,7 +1,8 @@
 # Public Source Checkpoint
 
-Status: public source checkpoint. No versioned GitHub release has been
-published.
+Status: public readiness package prepared. A versioned source tag can point to
+the current non-GPU readiness state, but production checkpoint admission,
+training and AGI claims remain blocked.
 
 ## What Paradise Is
 
@@ -34,8 +35,10 @@ not proof of general intelligence.
 - `docs/THREAT_MODEL.md` local runtime threat model.
 - `docs/PROJECT_STRUCTURE.md` maturity and ownership map.
 - `docs/HISTORY_REWRITE_PLAYBOOK.md` history cleanup procedure.
+- `docs/PARADISE_USABLE_TODAY.md` explicit usable-vs-blocked surface.
 - `docs/releases/v0.1.0-public-draft.md` draft release notes.
 - `docs/releases/v0.1.0-rc1.md` local release-candidate notes.
+- `docs/releases/v0.2.0-public-readiness.md` current public readiness notes.
 - `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `LICENSE`.
 
 ## Recommended Public Checkpoint Checklist
@@ -44,6 +47,12 @@ not proof of general intelligence.
 - Run a fresh secret scan.
 - Confirm no `.env`, key, token or generated runtime state is tracked.
 - Run `make public-audit`.
+- Optionally run `make install-secret-scanners` and `make public-audit-strict`.
+- Run `make paradise-dataset-manifest`.
+- Run `make paradise-module-semantic-eval`.
+- Run `make paradise-checkpoint-evidence-review`.
+- Run `make paradise-public-demo`.
+- Run `make paradise-release-package`.
 - Run `make eden-release-check`.
 - Run `make eden-api-conformance`.
 - Run `make eden-api-contracts`.
@@ -51,9 +60,10 @@ not proof of general intelligence.
 - Decide whether to run the history rewrite playbook.
 - Review `docs/CLAIMS_AND_LIMITATIONS.md` before writing release notes.
 
-## Draft Version
+## Current Public Readiness Tag
 
-Suggested local tag: `v0.1.0-rc1`.
+Suggested tag pattern: `paradise-public-readiness-<commit12>`.
 
-Do not publish a versioned GitHub release until the owner explicitly approves
-release notes and the claim boundary in `docs/CLAIMS_AND_LIMITATIONS.md`.
+Do not attach checkpoint weights, private datasets, raw GPU workspaces or
+credentials to a GitHub release. Public release artifacts should be limited to
+validation reports, demo transcripts, release package manifests and docs.
