@@ -219,6 +219,8 @@ fn domain_for(name: &str) -> &'static str {
         || name.starts_with("eden_sft")
     {
         "eden_capable_runtime"
+    } else if name.starts_with("paradise_checkpoint") {
+        "model_runtime_governance"
     } else if name.starts_with("megatron_7b") {
         "model_runtime_governance"
     } else if name.starts_with("model_")
@@ -351,6 +353,8 @@ fn generator_command(name: &str) -> &'static str {
         "megatron 7b capability eval"
     } else if name == "megatron_7b_admission_gate" {
         "megatron 7b admission gate eval"
+    } else if name == "paradise_checkpoint_registry_admission" {
+        "paradise checkpoint registry audit"
     } else if name.starts_with("elcp") {
         "elcp prepare"
     } else if name.starts_with("first_model") {

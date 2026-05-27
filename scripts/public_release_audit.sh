@@ -6,6 +6,19 @@ ROOT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 
 declare -a FAILURES=()
 declare -a WARNINGS=()
+STRICT_SCANNERS=false
+
+for arg in "$@"; do
+    case "${arg}" in
+        --strict-scanners)
+            STRICT_SCANNERS=true
+            ;;
+        *)
+            printf '[public-audit] unknown argument: %s\n' "${arg}" >&2
+            exit 2
+            ;;
+    esac
+done
 
 record_failure() {
     FAILURES+=("$1")
@@ -112,6 +125,8 @@ check_optional_scanners() {
     if command -v gitleaks >/dev/null 2>&1; then
         printf '[public-audit] check: gitleaks detect\n'
         gitleaks detect --source "${ROOT_DIR}" --redact --exit-code 1
+    elif [[ "${STRICT_SCANNERS}" == true ]]; then
+        record_failure "gitleaks not installed; strict scanner mode requires it"
     else
         record_warning "gitleaks not installed; fallback regex scan was used"
     fi
@@ -119,6 +134,8 @@ check_optional_scanners() {
     if command -v trufflehog >/dev/null 2>&1; then
         printf '[public-audit] check: trufflehog filesystem\n'
         trufflehog filesystem "${ROOT_DIR}" --no-update --fail
+    elif [[ "${STRICT_SCANNERS}" == true ]]; then
+        record_failure "trufflehog not installed; strict scanner mode requires it"
     else
         record_warning "trufflehog not installed; fallback regex scan was used"
     fi
@@ -142,4 +159,4 @@ main() {
     printf '[public-audit] status=passed\n'
 }
 
-main "$@"
+main

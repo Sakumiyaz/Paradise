@@ -176,6 +176,9 @@ jobs:
       - name: Validate public contract surface
         run: make contracts-validate
 
+      - name: Audit public release surface
+        run: make public-audit
+
       - name: Upload public contract validation evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1
@@ -196,6 +199,9 @@ jobs:
 
       - name: Run non-GPU readiness gate
         run: make paradise-non-gpu-readiness
+
+      - name: Run checkpoint registry admission smoke
+        run: make paradise-checkpoint-registry-smoke
 
       - name: Upload non-GPU readiness evidence
         if: always()

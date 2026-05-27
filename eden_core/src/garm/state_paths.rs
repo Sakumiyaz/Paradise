@@ -598,6 +598,9 @@ pub fn model_adapter_runtime_path() -> String {
 pub fn model_checkpoint_manifest_path() -> String {
     path("model_checkpoint_manifest.json")
 }
+pub fn paradise_checkpoint_registry_admission_path() -> String {
+    path("paradise_checkpoint_registry_admission.json")
+}
 pub fn training_harness_report_path() -> String {
     path("training_harness_report.json")
 }
@@ -1511,6 +1514,11 @@ pub fn artifacts_report() -> String {
         (
             "model_checkpoint_manifest",
             model_checkpoint_manifest_path(),
+            false,
+        ),
+        (
+            "paradise_checkpoint_registry_admission",
+            paradise_checkpoint_registry_admission_path(),
             false,
         ),
         (

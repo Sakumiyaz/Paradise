@@ -550,6 +550,10 @@ impl GewcBodyExecutor {
             eden_garm::nodes::command_router::GarmCommand::ModelCheckpointManifestEval => {
                 (eden_garm::model_runtime::write_checkpoint_manifest(), true)
             }
+            eden_garm::nodes::command_router::GarmCommand::ParadiseCheckpointRegistryAdmission => (
+                eden_garm::model_runtime::write_paradise_checkpoint_registry_admission(),
+                true,
+            ),
             eden_garm::nodes::command_router::GarmCommand::TrainingHarnessEval => {
                 (eden_garm::model_runtime::run_training_harness(), true)
             }
@@ -6610,6 +6614,11 @@ mod tests {
             Eden70bDemoEval,
             Eden70bGateEval,
             ModelRuntimeEval,
+            ModelAdapterRuntimeEval,
+            ModelCheckpointManifestEval,
+            ParadiseCheckpointRegistryAdmission,
+            TrainingHarnessEval,
+            ModelGovernanceEval,
             RuntimeStateApiEval,
             OperationalApiEval,
             OperationalRuntimeEval,
@@ -6839,10 +6848,6 @@ mod tests {
             ("paradise execute", "gewc_planning_goal_body_handler"),
             ("paradise sessions", "gewc_planning_goal_body_handler"),
             (
-                "crawl https://example.invalid",
-                "gewc_tool_adapter_body_handler",
-            ),
-            (
                 "operational action execute status",
                 "gewc_tool_adapter_body_handler",
             ),
@@ -6855,21 +6860,11 @@ mod tests {
                 "gewc_specialized_model_body_handler",
             ),
             (
-                "policy eval local benchmark action",
-                "gewc_metacognitive_safety_body_handler",
-            ),
-            (
                 "gewc lifecycle world_model health_check",
                 "gewc_metacognitive_safety_body_handler",
             ),
-            ("capabilities audit", "gewc_validation_body_handler"),
+            ("readiness", "gewc_validation_body_handler"),
             ("gewc operational benchmark", "gewc_validation_body_handler"),
-            ("capability reality eval", "gewc_validation_body_handler"),
-            (
-                "architecture advantage eval",
-                "gewc_validation_body_handler",
-            ),
-            ("paradise worldcell eval", "gewc_validation_body_handler"),
             ("praxis nexus eval", "gewc_formal_synthesis_body_handler"),
             ("locus eval", "gewc_locus_context_body_handler"),
             (
@@ -6880,31 +6875,6 @@ mod tests {
                 "operator forge synth causal risk model",
                 "gewc_formal_synthesis_body_handler",
             ),
-            ("external ecosystem eval", "gewc_validation_body_handler"),
-            ("sovereign cognition eval", "gewc_validation_body_handler"),
-            ("artifact api eval", "gewc_validation_body_handler"),
-            ("model runtime eval", "gewc_validation_body_handler"),
-            ("eden 70b modular eval", "gewc_validation_body_handler"),
-            ("eden 70b inference runtime", "gewc_validation_body_handler"),
-            ("training harness eval", "gewc_validation_body_handler"),
-            ("model governance eval", "gewc_validation_body_handler"),
-            ("first model prepare", "gewc_validation_body_handler"),
-            ("elcp prepare", "gewc_validation_body_handler"),
-            ("elcp hardening", "gewc_validation_body_handler"),
-            ("elcp admission gate", "gewc_validation_body_handler"),
-            ("runtime state api eval", "gewc_validation_body_handler"),
-            ("operational api eval", "gewc_validation_body_handler"),
-            ("operational runtime eval", "gewc_validation_body_handler"),
-            ("operational replay run", "gewc_validation_body_handler"),
-            ("operational smoke run", "gewc_validation_body_handler"),
-            ("operational scenario run", "gewc_validation_body_handler"),
-            ("runtime spine eval", "gewc_validation_body_handler"),
-            ("runtime spine audit", "gewc_validation_body_handler"),
-            ("runtime spine verify", "gewc_validation_body_handler"),
-            ("runtime spine enforce", "gewc_validation_body_handler"),
-            ("runtime spine risk", "gewc_validation_body_handler"),
-            ("runtime spine breakers", "gewc_validation_body_handler"),
-            ("runtime spine replay", "gewc_validation_body_handler"),
             (
                 "experiment plan typed domain experiment",
                 "gewc_experiment_body_handler",

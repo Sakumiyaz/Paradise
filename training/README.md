@@ -217,6 +217,9 @@ make training-dataset-license-manifest
 make paradise-checkpoint-registry-smoke
 ```
 
+`make paradise-checkpoint-registry-smoke` runs the native GEWC command
+`paradise checkpoint registry audit`; it does not admit checkpoints.
+
 To freeze the EDEN-70B modular target without starting training:
 
 ```bash

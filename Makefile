@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime eden-70b-modular-target eden-70b-operationalize first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability eden-v03-capability eden-v04-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart paradise-non-gpu-readiness contracts-validate training-dataset-license-manifest paradise-checkpoint-registry-smoke paradise-model-adapter-smoke paradise-release-package paradise-ci-public runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-70b-dataset training-eden-70b-module-pilot training-eden-70b-modular-plan training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage training-eden-v03-dataset training-eden-v03-generalization-eval training-eden-v03-demo training-eden-v03-stage training-eden-v04-dataset training-eden-v04-operational-eval training-eden-v04-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime eden-70b-modular-target eden-70b-operationalize first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability eden-v03-capability eden-v04-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart paradise-non-gpu-readiness contracts-validate training-dataset-license-manifest paradise-checkpoint-registry-smoke paradise-model-adapter-smoke paradise-release-package paradise-ci-public runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-70b-dataset training-eden-70b-module-pilot training-eden-70b-modular-plan training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage training-eden-v03-dataset training-eden-v03-generalization-eval training-eden-v03-demo training-eden-v03-stage training-eden-v04-dataset training-eden-v04-operational-eval training-eden-v04-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit public-audit-strict verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -138,14 +138,16 @@ training-dataset-license-manifest:
 
 paradise-checkpoint-registry-smoke:
 	python3 -m json.tool training/models/checkpoint_registry.json >/dev/null
+	printf 'paradise checkpoint registry audit\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/paradise_checkpoint_registry --api-port 0
 
 paradise-model-adapter-smoke: model-runtime
 
-paradise-release-package: contracts-validate paradise-non-gpu-readiness
+paradise-release-package: contracts-validate paradise-non-gpu-readiness paradise-checkpoint-registry-smoke
 	python3 -m json.tool target/public_contracts/validation_report.json >/dev/null
 	python3 -m json.tool target/paradise_non_gpu_readiness/non_gpu_readiness_report.json >/dev/null
+	python3 scripts/build_paradise_release_package.py
 
-paradise-ci-public: contracts-validate paradise-non-gpu-readiness check eden-api-conformance
+paradise-ci-public: paradise-release-package public-audit check eden-api-conformance
 
 runtime-spine:
 	rm -rf -- /tmp/eden_runtime_spine
@@ -326,6 +328,9 @@ js-policy:
 
 public-audit:
 	bash scripts/public_release_audit.sh
+
+public-audit-strict:
+	bash scripts/public_release_audit.sh --strict-scanners
 
 verify: js-policy
 	bash eden_core/src/garm/scripts/verify.sh

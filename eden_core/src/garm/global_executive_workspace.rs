@@ -1470,6 +1470,7 @@ impl CommandProfile {
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval
+            | GarmCommand::ParadiseCheckpointRegistryAdmission
             | GarmCommand::TrainingHarnessEval
             | GarmCommand::ModelGovernanceEval
             | GarmCommand::FirstModelPrepare

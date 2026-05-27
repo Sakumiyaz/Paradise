@@ -3,6 +3,8 @@ use serde_json::Value;
 
 pub const MODEL_ADAPTER_RUNTIME_SCHEMA: &str = "eden.model_adapter_runtime.v1";
 pub const MODEL_CHECKPOINT_MANIFEST_SCHEMA: &str = "eden.model_checkpoint_manifest.v1";
+pub const PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA: &str =
+    "paradise.checkpoint_registry_admission.v1";
 pub const TRAINING_HARNESS_SCHEMA: &str = "eden.training_harness.v1";
 pub const MODEL_GOVERNANCE_SCHEMA: &str = "eden.model_governance.v1";
 pub const FIRST_MODEL_CARD_SCHEMA: &str = "eden.first_model.card.v1";
@@ -45,6 +47,7 @@ const DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH: &str =
     "target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json";
 const DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH: &str =
     "target/eden_megatron_7b_base_pilot/eden_7b_inference_report.json";
+const PUBLIC_CHECKPOINT_REGISTRY: &str = "training/models/checkpoint_registry.json";
 
 pub fn run_all() -> String {
     let mut out = String::new();
@@ -70,6 +73,16 @@ pub fn write_checkpoint_manifest() -> String {
         "MODEL-CHECKPOINT",
         MODEL_CHECKPOINT_MANIFEST_SCHEMA,
         state_paths::model_checkpoint_manifest_path(),
+        record,
+    )
+}
+
+pub fn write_paradise_checkpoint_registry_admission() -> String {
+    let record = paradise_checkpoint_registry_admission_value();
+    write_report(
+        "PARADISE-CHECKPOINT-REGISTRY",
+        PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA,
+        state_paths::paradise_checkpoint_registry_admission_path(),
         record,
     )
 }
@@ -455,6 +468,101 @@ fn checkpoint_manifest_value(model_id: &str) -> Value {
             "training_evidence": state_paths::training_capability_evidence_path(),
         },
         "runtime_boundaries": model_safety_boundary(),
+    })
+}
+
+fn paradise_checkpoint_registry_admission_value() -> Value {
+    let registry = read_repo_json(PUBLIC_CHECKPOINT_REGISTRY);
+    let entries = registry
+        .as_ref()
+        .and_then(|value| value.get("entries"))
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let blocked_entries = entries
+        .iter()
+        .filter(|entry| entry.get("status").and_then(Value::as_str) != Some("admitted"))
+        .count();
+    let admitted_entries = entries.len().saturating_sub(blocked_entries);
+    let checks = vec![
+        (
+            "registry_present",
+            registry.is_some(),
+            PUBLIC_CHECKPOINT_REGISTRY.to_string(),
+        ),
+        (
+            "registry_schema_matches",
+            registry.as_ref().is_some_and(|value| {
+                value.get("schema").and_then(Value::as_str)
+                    == Some("paradise.checkpoint_registry.v1")
+            }),
+            "schema=paradise.checkpoint_registry.v1".to_string(),
+        ),
+        (
+            "no_claim_boundary",
+            registry.as_ref().is_some_and(|value| {
+                value.get("claim_allowed").and_then(Value::as_bool) == Some(false)
+                    && value.get("agi_claim").and_then(Value::as_bool) == Some(false)
+                    && value
+                        .get("production_model_allowed")
+                        .and_then(Value::as_bool)
+                        == Some(false)
+            }),
+            "claim_allowed=false agi_claim=false production_model_allowed=false".to_string(),
+        ),
+        (
+            "no_active_checkpoint_without_admission",
+            registry
+                .as_ref()
+                .is_some_and(|value| value.get("active_checkpoint").map_or(true, Value::is_null)),
+            "active_checkpoint=null".to_string(),
+        ),
+        (
+            "no_admitted_entries_without_evidence",
+            admitted_entries == 0,
+            format!("admitted_entries={admitted_entries}"),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    serde_json::json!({
+        "schema": PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA,
+        "artifact": "paradise_checkpoint_registry_admission",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "production_model_allowed": false,
+        "checkpoint_admission_allowed": false,
+        "gpu_required": false,
+        "registry_source": PUBLIC_CHECKPOINT_REGISTRY,
+        "registry_present": registry.is_some(),
+        "entry_count": entries.len(),
+        "blocked_entries": blocked_entries,
+        "admitted_entries": admitted_entries,
+        "active_checkpoint": registry
+            .as_ref()
+            .and_then(|value| value.get("active_checkpoint"))
+            .cloned()
+            .unwrap_or(Value::Null),
+        "passed": passed,
+        "total": checks.len(),
+        "checks": checks.into_iter().map(|(check, passed, evidence)| {
+            serde_json::json!({
+                "check": check,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        }).collect::<Vec<_>>(),
+        "decision": "registry_audited_but_checkpoint_admission_blocked_until_evidence_exists",
+        "requires_before_admission": [
+            "checkpoint_hash",
+            "dataset_license_review",
+            "training_report",
+            "inference_report",
+            "held_out_eval",
+            "safety_verifier_eval",
+            "rollback_plan",
+            "operator_approval"
+        ],
     })
 }
 
@@ -2726,6 +2834,35 @@ mod tests {
         assert_eq!(parsed["4a_complete"], false);
         assert_eq!(parsed["4b_training_allowed"], false);
         assert_eq!(parsed["training_executed"], false);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn paradise_checkpoint_registry_admission_blocks_empty_public_registry() {
+        let _guard = state_paths::test_state_guard();
+        let dir = std::env::temp_dir().join(format!(
+            "paradise_checkpoint_registry_{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = write_paradise_checkpoint_registry_admission();
+        let body =
+            std::fs::read_to_string(state_paths::paradise_checkpoint_registry_admission_path())
+                .unwrap();
+        let parsed: Value = serde_json::from_str(&body).unwrap();
+
+        assert!(out.contains("[PARADISE-CHECKPOINT-REGISTRY]"));
+        assert_eq!(
+            parsed["schema"],
+            PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA
+        );
+        assert_eq!(parsed["checkpoint_admission_allowed"], false);
+        assert_eq!(parsed["production_model_allowed"], false);
+        assert_eq!(parsed["admitted_entries"], 0);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

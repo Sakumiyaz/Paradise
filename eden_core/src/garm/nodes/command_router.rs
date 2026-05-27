@@ -74,6 +74,7 @@ pub enum GarmCommand {
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
+    ParadiseCheckpointRegistryAdmission,
     TrainingHarnessEval,
     ModelGovernanceEval,
     FirstModelPrepare,
@@ -675,6 +676,11 @@ impl CommandRouterNode {
             | "checkpoint manifest eval"
             | "manifest checkpoint eval"
             | "manifiesto checkpoint eval" => GarmCommand::ModelCheckpointManifestEval,
+            "paradise checkpoint registry"
+            | "paradise checkpoint registry audit"
+            | "checkpoint registry admission"
+            | "checkpoint registry audit"
+            | "checkpoint registry validate" => GarmCommand::ParadiseCheckpointRegistryAdmission,
             "training harness eval"
             | "training harness"
             | "harness eval"
@@ -1686,6 +1692,10 @@ mod tests {
         assert_eq!(
             parse("model checkpoint manifest eval"),
             GarmCommand::ModelCheckpointManifestEval
+        );
+        assert_eq!(
+            parse("paradise checkpoint registry audit"),
+            GarmCommand::ParadiseCheckpointRegistryAdmission
         );
         assert_eq!(
             parse("training harness eval"),

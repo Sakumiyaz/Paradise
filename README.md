@@ -71,14 +71,17 @@ Run the non-GPU product/runtime readiness gate:
 ```bash
 make contracts-validate
 make paradise-non-gpu-readiness
+make paradise-checkpoint-registry-smoke
+make paradise-release-package
 ```
 
 This writes `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json`
-and `target/public_contracts/validation_report.json`, then checks product docs,
-schema/OpenAPI manifest shape, model interface authority, dataset governance,
-checkpoint registry policy, evaluation/admission policy, external-public
-boundaries, hardware-test isolation and known technical debt. It does not train
-models, use GPU, admit checkpoints or certify AGI.
+`target/public_contracts/validation_report.json` and
+`target/paradise_release/release_package_manifest.json`, then checks product
+docs, schema/OpenAPI manifest shape, model interface authority, dataset
+governance, checkpoint registry policy, evaluation/admission policy,
+external-public boundaries, hardware-test isolation and known technical debt.
+It does not train models, use GPU, admit checkpoints or certify AGI.
 
 Generate the GEWC-owned runtime spine contracts:
 

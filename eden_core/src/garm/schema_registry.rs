@@ -184,6 +184,11 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=model_checkpoint_manifest",
         ),
         curated(
+            "paradise_checkpoint_registry_admission",
+            "paradise.checkpoint_registry_admission.v1",
+            "/api/artifact?name=paradise_checkpoint_registry_admission",
+        ),
+        curated(
             "training_harness_report",
             "eden.training_harness.v1",
             "/api/artifact?name=training_harness_report",

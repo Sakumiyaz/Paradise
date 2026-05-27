@@ -9,8 +9,10 @@ model capability and does not admit checkpoints.
 ```sh
 make contracts-validate
 make paradise-non-gpu-readiness
+make paradise-checkpoint-registry-smoke
 make check
 make eden-api-conformance
+make public-audit
 ```
 
 ## Expected Artifacts
@@ -19,6 +21,8 @@ make eden-api-conformance
 | --- | --- |
 | `target/public_contracts/validation_report.json` | Contract manifest, schema and OpenAPI validation. |
 | `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json` | Product/runtime readiness report. |
+| `paradise_checkpoint_registry_admission.json` | Native GEWC audit that keeps checkpoint admission blocked. |
+| `target/paradise_release/release_package_manifest.json` | Commit, suggested tag, commands and artifact inventory. |
 | API conformance report | SDK/API behavior and no-claim markers. |
 | Operator console preview | Human-facing explanation of runtime state, gates and checkpoint boundary. |
 
@@ -30,3 +34,9 @@ make eden-api-conformance
 - no checkpoint weights are included
 - no private datasets are included
 - GPU training is out of scope for this package
+
+For release environments with secret scanners installed, use:
+
+```sh
+make public-audit-strict
+```

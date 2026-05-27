@@ -42,6 +42,8 @@ The export command writes runtime-generated `runtime.openapi.json` and
 - `schemas/paradise-dataset-license-manifest-v1.json` and
   `schemas/paradise-checkpoint-registry-v1.json` cover public dataset and
   checkpoint-admission boundaries.
+- `schemas/paradise-checkpoint-registry-admission-v1.json` covers the native
+  GEWC registry audit artifact.
 
 Validate the public contract surface locally:
 

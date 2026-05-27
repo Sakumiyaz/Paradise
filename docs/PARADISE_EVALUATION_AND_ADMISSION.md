@@ -55,6 +55,15 @@ The public checkpoint registry is `training/models/checkpoint_registry.json`.
 It intentionally starts empty and keeps every trained checkpoint blocked until
 the admission policy above is satisfied.
 
+Audit the registry through the native GEWC runtime command:
+
+```sh
+make paradise-checkpoint-registry-smoke
+```
+
+This writes `paradise_checkpoint_registry_admission.json` under the selected
+runtime state directory and keeps `checkpoint_admission_allowed=false`.
+
 ## Required Reject Conditions
 
 A checkpoint must remain blocked if:

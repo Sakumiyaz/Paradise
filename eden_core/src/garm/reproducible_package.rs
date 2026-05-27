@@ -501,6 +501,10 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::model_checkpoint_manifest_path(),
         ),
         artifact(
+            "paradise_checkpoint_registry_admission",
+            state_paths::paradise_checkpoint_registry_admission_path(),
+        ),
+        artifact(
             "training_harness_report",
             state_paths::training_harness_report_path(),
         ),
