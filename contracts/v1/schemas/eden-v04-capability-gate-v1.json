@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_capability_gate" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "checks": { "type": "array" },
+    "claim_allowed": { "const": false },
+    "production_model_allowed": { "const": false },
+    "schema": { "const": "eden.v04.capability_gate.v1" },
+    "score": { "maximum": 1, "minimum": 0, "type": "number" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "score", "checks", "production_model_allowed"],
+  "type": "object"
+}

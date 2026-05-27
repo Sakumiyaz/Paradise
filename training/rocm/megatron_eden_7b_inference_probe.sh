@@ -13,6 +13,8 @@ TEMPERATURE="${EDEN_MEGATRON_7B_TEMPERATURE:-0.8}"
 TOP_K="${EDEN_MEGATRON_7B_TOP_K:-10}"
 TOP_P="${EDEN_MEGATRON_7B_TOP_P:-0.0}"
 PROMPTS_JSON="${EDEN_MEGATRON_7B_PROMPTS_JSON:-[\"EDEN runtime state:\",\"Memory safety plan:\"]}"
+CACHE_DIR="${EDEN_MEGATRON_CACHE_DIR:-${REPO_ROOT}/target/rocm_megatron_cache}"
+AITER_ROPE="${EDEN_MEGATRON_AITER_ROPE:-false}"
 LOG_FILE="${OUTPUT_DIR}/eden_7b_inference_probe.log"
 SUMMARY_FILE="${OUTPUT_DIR}/eden_7b_inference.summary"
 RESPONSE_FILE="${OUTPUT_DIR}/eden_7b_inference_response.json"
@@ -37,6 +39,8 @@ Environment:
   EDEN_MEGATRON_7B_TOP_K              Top-k sampling. Default: 10
   EDEN_MEGATRON_7B_TOP_P              Top-p sampling. Default: 0.0
   EDEN_MEGATRON_7B_PROMPTS_JSON       JSON array of prompts.
+  EDEN_MEGATRON_CACHE_DIR             Persistent ROCm/Megatron cache. Default: target/rocm_megatron_cache
+  EDEN_MEGATRON_AITER_ROPE            Use ROCm AITER RoPE backend. Default: false for fast pilots
 EOF
 }
 
@@ -60,6 +64,10 @@ require_command python3
 docker image inspect "$IMAGE" >/dev/null 2>&1 || {
   fail "Docker image not found locally: ${IMAGE}. Pull it explicitly before running this offline probe."
 }
+case "$AITER_ROPE" in
+  true | false) ;;
+  *) fail "EDEN_MEGATRON_AITER_ROPE must be true or false" ;;
+esac
 
 [[ -d "${OUTPUT_DIR}/checkpoints" ]] || fail "missing checkpoint directory: ${OUTPUT_DIR}/checkpoints"
 [[ -f "${OUTPUT_DIR}/checkpoints/latest_checkpointed_iteration.txt" ]] || fail "missing latest checkpoint marker"
@@ -77,12 +85,20 @@ if not all(isinstance(prompt, str) and prompt.strip() for prompt in prompts):
     raise SystemExit("all prompts must be non-empty strings")
 PY
 
-mkdir -p "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR" "$CACHE_DIR/aiter-jit" "$CACHE_DIR/torch"
+OUTPUT_DIR="$(cd -- "$OUTPUT_DIR" && pwd -P)"
+CACHE_DIR="$(cd -- "$CACHE_DIR" && pwd -P)"
 rm -f -- "$LOG_FILE" "$SUMMARY_FILE" "$RESPONSE_FILE" "$REPORT_FILE"
+LOG_FILE="${OUTPUT_DIR}/eden_7b_inference_probe.log"
+SUMMARY_FILE="${OUTPUT_DIR}/eden_7b_inference.summary"
+RESPONSE_FILE="${OUTPUT_DIR}/eden_7b_inference_response.json"
+REPORT_FILE="${OUTPUT_DIR}/eden_7b_inference_report.json"
 
 printf 'eden_7b_inference_probe_start=true\n'
 printf 'image=%s\n' "$IMAGE"
 printf 'output_dir=%s\n' "$OUTPUT_DIR"
+printf 'cache_dir=%s\n' "$CACHE_DIR"
+printf 'aiter_rope=%s\n' "$AITER_ROPE"
 printf 'network=none\n'
 printf 'model_id=eden-megatron-7b-base-pilot\n'
 printf 'model_scale=7b_shape\n'
@@ -100,6 +116,8 @@ docker run --rm \
   --security-opt seccomp=unconfined \
   --privileged \
   --shm-size 128G \
+  -v "${CACHE_DIR}/aiter-jit:/workspace/aiter/aiter/jit/build" \
+  -v "${CACHE_DIR}/torch:/root/.cache/torch" \
   -v "${REPO_ROOT}:/workspace/Paradise:ro" \
   -v "${OUTPUT_DIR}:/eden-output" \
   -e EDEN_INFERENCE_RESPONSE_JSON=/eden-output/eden_7b_inference_response.json \
@@ -107,6 +125,11 @@ docker run --rm \
   "$IMAGE" \
   bash -lc "set -Eeuo pipefail
 cd /workspace/Megatron-LM
+export TORCH_HOME=/root/.cache/torch
+export TORCHINDUCTOR_CACHE_DIR=/root/.cache/torch/inductor
+if [[ '${AITER_ROPE}' != 'true' ]]; then
+  export USE_ROCM_AITER_ROPE_BACKEND=0
+fi
 
 cat >/tmp/eden_megatron_7b_infer.py <<'PY'
 import json

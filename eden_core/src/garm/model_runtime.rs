@@ -26,15 +26,18 @@ pub const MEGATRON_7B_MODEL_ADAPTER_SCHEMA: &str = "eden.megatron.7b.model_adapt
 pub const MEGATRON_7B_INFERENCE_REPORT_SCHEMA: &str = "eden.megatron.7b.inference_report.v1";
 pub const MEGATRON_7B_CAPABILITY_REPORT_SCHEMA: &str = "eden.megatron.7b.capability_report.v1";
 pub const MEGATRON_7B_ADMISSION_GATE_SCHEMA: &str = "eden.megatron.7b.admission_gate.v1";
+pub const EDEN_70B_MODULAR_TARGET_SCHEMA: &str = "eden.modular_70b.target.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const DEFAULT_MODEL_ID: &str = "eden-memory-retrieval-baseline";
 const MEGATRON_7B_MODEL_ID: &str = "eden-megatron-7b-base-pilot";
+const EDEN_70B_TARGET_ID: &str = "eden-70b-modular-target-v1";
 const DEFAULT_MODEL_CONFIG: &str = "training/configs/first_model_memory_retrieval.json";
 const DEFAULT_TRAIN_DATA: &str = "training/data/first_model_memory_train.jsonl";
 const DEFAULT_EVAL_DATA: &str = "training/data/first_model_memory_eval.jsonl";
 const ELCP_OBJECTIVE_ID: &str = "eden-latent-cognitive-prediction-v1";
 const ELCP_CONFIG: &str = "training/configs/elcp_latent_cognitive_prediction.json";
+const EDEN_70B_TARGET_CONFIG: &str = "training/configs/eden_70b_modular_target.json";
 const ELCP_TRAIN_DATA: &str = "training/data/elcp_transition_train.jsonl";
 const ELCP_EVAL_DATA: &str = "training/data/elcp_transition_eval.jsonl";
 const ELCP_REPORT_DIR_ENV: &str = "EDEN_ELCP_REPORT_DIR";
@@ -49,6 +52,7 @@ pub fn run_all() -> String {
     out.push_str(&write_checkpoint_manifest());
     out.push_str(&run_training_harness());
     out.push_str(&write_model_governance());
+    out.push_str(&write_eden_70b_modular_target());
     out
 }
 
@@ -116,6 +120,16 @@ pub fn prepare_megatron_7b_adapter() -> String {
     out.push_str(&write_megatron_7b_capability_report());
     out.push_str(&write_megatron_7b_admission_gate());
     out
+}
+
+pub fn write_eden_70b_modular_target() -> String {
+    let record = eden_70b_modular_target_value();
+    write_report(
+        "EDEN-70B-MODULAR-TARGET",
+        EDEN_70B_MODULAR_TARGET_SCHEMA,
+        state_paths::eden_70b_modular_target_path(),
+        record,
+    )
 }
 
 pub fn write_megatron_7b_model_adapter() -> String {
@@ -330,9 +344,10 @@ pub fn audit_model_runtime() -> String {
     let elcp_hardening_status =
         std::fs::metadata(state_paths::elcp_4b_readiness_contract_path()).is_ok();
     let elcp_status = std::fs::metadata(state_paths::elcp_readiness_path()).is_ok();
+    let modular_70b_status = std::fs::metadata(state_paths::eden_70b_modular_target_path()).is_ok();
     format!(
-        "[MODEL-RUNTIME-AUDIT] adapter_runtime={} checkpoint_manifest={} training_harness={} governance={} first_model_readiness={} elcp_admission_gate={} elcp_hardening={} elcp_readiness={} authority={} claim_allowed=false\n",
-        adapter_status, checkpoint_status, harness_status, governance_status, first_model_status, elcp_gate_status, elcp_hardening_status, elcp_status, AUTHORITY
+        "[MODEL-RUNTIME-AUDIT] adapter_runtime={} checkpoint_manifest={} training_harness={} governance={} first_model_readiness={} elcp_admission_gate={} elcp_hardening={} elcp_readiness={} eden_70b_modular_target={} authority={} claim_allowed=false\n",
+        adapter_status, checkpoint_status, harness_status, governance_status, first_model_status, elcp_gate_status, elcp_hardening_status, elcp_status, modular_70b_status, AUTHORITY
     )
 }
 
@@ -548,6 +563,163 @@ fn model_governance_value() -> Value {
             "claim_boundary_violation"
         ],
         "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn eden_70b_modular_target_value() -> Value {
+    let modules = eden_70b_module_budget();
+    let total_parameters: u64 = modules
+        .iter()
+        .filter_map(|module| module.get("parameters").and_then(Value::as_u64))
+        .sum();
+    serde_json::json!({
+        "schema": EDEN_70B_MODULAR_TARGET_SCHEMA,
+        "artifact": "eden_70b_modular_target",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "target_id": EDEN_70B_TARGET_ID,
+        "status": "architecture_target_prepared_not_trained",
+        "architecture_class": "GEWC_COORDINATED_MULTI_MODEL_COGNITIVE_FAMILY",
+        "decision": "move_future_training_target_from_7b_or_14b_dense_path_to_70b_modular_path",
+        "training_executed": false,
+        "weights_present": false,
+        "checkpoint_admitted": false,
+        "production_model": false,
+        "not_a_single_model": true,
+        "single_checkpoint_training_allowed": false,
+        "module_count": modules.len(),
+        "target_config": EDEN_70B_TARGET_CONFIG,
+        "budget": {
+            "total_parameters": total_parameters,
+            "total_parameters_label": "70B modular",
+            "active_default_parameters": 33_000_000_000u64,
+            "active_default_label": "EDEN-33B-ELCP primary only unless GEWC routes auxiliary modules",
+            "single_dense_70b_core_allowed": false,
+            "monolithic_llm_brain_allowed": false,
+            "all_modules_loaded_for_every_request": false,
+            "routed_subset_expected": true,
+            "total_budget_is_family_capacity_not_active_context": true
+        },
+        "module_budget": modules,
+        "runtime_policy": {
+            "gewc_final_authority": true,
+            "models_are_subordinate": true,
+            "outputs_are_hypotheses": true,
+            "direct_memory_writes": false,
+            "direct_objective_writes": false,
+            "direct_tool_execution": false,
+            "direct_checkpoint_self_admission": false,
+            "module_activation": "GEWC routes modules by task, risk, modality, uncertainty and cost"
+        },
+        "legacy_7b_policy": {
+            "status": "retained_as_pipeline_probe_and_historical_evidence",
+            "default_future_scaling_target": false,
+            "reason": "7B proved ROCm/Megatron/checkpoint/inference plumbing; future work targets modular capability rather than extending the 7B ladder"
+        },
+        "supersedes_as_future_target": [
+            "14B_dense_final_target",
+            "7B_continued_scaling_as_main_path"
+        ],
+        "does_not_supersede": [
+            "7B historical evidence",
+            "GEWC authority",
+            "ELCP objective",
+            "checkpoint admission gates",
+            "no-claim policy"
+        ],
+        "required_before_training": [
+            "ADR-092 accepted",
+            "70B modular config freeze",
+            "module-specific dataset manifests",
+            "EDEN-owned tokenizer and corpus policy",
+            "multi-GPU ROCm/Megatron plan",
+            "per-module eval suites",
+            "checkpoint registry per module",
+            "GEWC admission gate per module",
+            "rollback and retention policy",
+            "safety, privacy and license review"
+        ],
+        "not_allowed": [
+            "claim_AGI_from_target_definition",
+            "train_single_70b_dense_core",
+            "use_external_model_weights_as_EDEN_weights",
+            "bypass_GEWC_or_model_governance",
+            "grant_models_direct_action_authority",
+            "commit_checkpoints_to_git"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn eden_70b_module_budget() -> Vec<Value> {
+    vec![
+        eden_70b_module(
+            "eden_33b_elcp_primary",
+            "primary_cognitive_model",
+            33_000_000_000u64,
+            "ELCP reasoning, language, structured hypothesis generation and cognitive-state prediction",
+            "default_primary_when_model_help_is_required",
+        ),
+        eden_70b_module(
+            "eden_cwm_12b_causal_world_model",
+            "world_model",
+            12_000_000_000u64,
+            "causal world deltas, counterfactuals, simulation summaries and consequence prediction",
+            "before_nontrivial_action_or_claim",
+        ),
+        eden_70b_module(
+            "eden_multimodal_vla_12b",
+            "multimodal_grounding",
+            12_000_000_000u64,
+            "vision, audio, spatial grounding, VLA preparation and perception-to-concept translation",
+            "only_when_multimodal_or_embodied_context_is_present",
+        ),
+        eden_70b_module(
+            "eden_planner_code_tool_6b",
+            "planning_code_tools",
+            6_000_000_000u64,
+            "hierarchical planning, code/tool reasoning, workflow synthesis and action contract proposals",
+            "during_planning_or_tool_use",
+        ),
+        eden_70b_module(
+            "eden_safety_verifier_4b",
+            "safety_verifier_critic",
+            4_000_000_000u64,
+            "risk scoring, policy critique, adversarial review, uncertainty and corrigibility checks",
+            "before_state_change_action_or_release_claim",
+        ),
+        eden_70b_module(
+            "eden_memory_router_retrieval_3b",
+            "memory_router_retrieval",
+            3_000_000_000u64,
+            "hybrid retrieval, ranking, context selection, memory conflict detection and source calibration",
+            "before_reasoning_and_before_memory_promotion",
+        ),
+    ]
+}
+
+fn eden_70b_module(
+    id: &str,
+    role: &str,
+    parameters: u64,
+    purpose: &str,
+    activation: &str,
+) -> Value {
+    serde_json::json!({
+        "id": id,
+        "role": role,
+        "parameters": parameters,
+        "purpose": purpose,
+        "activation": activation,
+        "authority": AUTHORITY,
+        "routed_by_gewc": true,
+        "single_model_core": false,
+        "state_write_policy": "read_only_hypothesis_producer_until_gewc_accepts_output",
+        "checkpoint_admission": "separate_module_gate_required",
+        "direct_tool_execution": false,
+        "direct_memory_write": false,
+        "direct_objective_update": false
     })
 }
 
@@ -2390,6 +2562,77 @@ mod tests {
         assert!(std::fs::metadata(state_paths::model_checkpoint_manifest_path()).is_ok());
         assert!(std::fs::metadata(state_paths::training_harness_report_path()).is_ok());
         assert!(std::fs::metadata(state_paths::model_governance_report_path()).is_ok());
+        assert!(std::fs::metadata(state_paths::eden_70b_modular_target_path()).is_ok());
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn eden_70b_modular_target_is_not_a_single_model() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("eden_70b_modular_target_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = write_eden_70b_modular_target();
+        let body = std::fs::read_to_string(state_paths::eden_70b_modular_target_path()).unwrap();
+        let parsed: Value = serde_json::from_str(&body).unwrap();
+        let modules = parsed["module_budget"].as_array().unwrap();
+        let total_parameters: u64 = modules
+            .iter()
+            .map(|module| module["parameters"].as_u64().unwrap())
+            .sum();
+
+        assert!(out.contains("[EDEN-70B-MODULAR-TARGET]"));
+        assert_eq!(parsed["schema"], EDEN_70B_MODULAR_TARGET_SCHEMA);
+        assert_eq!(
+            parsed["architecture_class"],
+            "GEWC_COORDINATED_MULTI_MODEL_COGNITIVE_FAMILY"
+        );
+        assert_eq!(parsed["not_a_single_model"], true);
+        assert_eq!(parsed["single_checkpoint_training_allowed"], false);
+        assert_eq!(parsed["module_count"], 6);
+        assert_eq!(parsed["budget"]["total_parameters"], 70_000_000_000u64);
+        assert_eq!(
+            parsed["budget"]["active_default_parameters"],
+            33_000_000_000u64
+        );
+        assert_eq!(parsed["budget"]["single_dense_70b_core_allowed"], false);
+        assert_eq!(parsed["budget"]["monolithic_llm_brain_allowed"], false);
+        assert_eq!(
+            parsed["budget"]["all_modules_loaded_for_every_request"],
+            false
+        );
+        assert_eq!(parsed["budget"]["routed_subset_expected"], true);
+        assert_eq!(
+            parsed["budget"]["total_budget_is_family_capacity_not_active_context"],
+            true
+        );
+        assert_eq!(modules.len(), 6);
+        assert_eq!(total_parameters, 70_000_000_000u64);
+        assert!(modules
+            .iter()
+            .all(|module| module["authority"] == AUTHORITY));
+        assert!(modules
+            .iter()
+            .all(|module| module["routed_by_gewc"] == true));
+        assert!(modules
+            .iter()
+            .all(|module| module["single_model_core"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_tool_execution"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_memory_write"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_objective_update"] == false));
+        assert_eq!(parsed["runtime_policy"]["gewc_final_authority"], true);
+        assert_eq!(parsed["runtime_policy"]["models_are_subordinate"], true);
+        assert_eq!(parsed["runtime_policy"]["outputs_are_hypotheses"], true);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

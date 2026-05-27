@@ -23,6 +23,16 @@ ad hoc notebooks or private scripts.
 - `model runtime eval` writes a governed model adapter runtime, checkpoint
   manifest, training harness report and model governance report without
   training or admitting weights.
+- `make eden-70b-modular-target` writes the future EDEN-70B modular target as
+  a GEWC-governed artifact. This is six specialized models totaling 70B, not a
+  single dense 70B checkpoint or monolithic LLM brain.
+- `make eden-70b-operationalize` writes the seven executable follow-up
+  artifacts for that target: router, dataset manifest, launcher manifest,
+  checkpoint admission, inference runtime, operational demo and aggregate gate.
+- `make training-eden-70b-module-pilot` is the bounded ROCm launcher for one
+  module in that family. On a single MI300X it can execute the 3B memory-router,
+  4B safety-verifier and 6B planner/tool pilots; it records formal blocked
+  evidence for the 12B, 12B and 33B modules until multi-GPU training exists.
 - `first model prepare` writes the 4A first-model card, training plan and
   readiness gate while keeping 4B training blocked.
 - `elcp prepare` writes the 4A Eden Latent Cognitive Prediction objective,
@@ -120,6 +130,19 @@ The current model runtime path makes that boundary executable:
   `training_executed=false` until real training is explicitly requested.
 - `model_governance_report.json` blocks direct memory writes, objective writes
   and tool execution by model adapters.
+- `eden_70b_modular_target.json` freezes the future modular model family:
+  33B primary, 12B causal world model, 12B multimodal/VLA, 6B
+  planner-code-tool, 4B safety verifier and 3B memory-router. It keeps
+  `not_a_single_model=true`, `single_checkpoint_training_allowed=false` and
+  `claim_allowed=false`.
+- `/tmp/eden_garm_70b_modular/eden_70b_operational_gate.json` proves the target
+  is now a runtime surface rather than a document-only plan. It keeps
+  `training_allowed=false`, `checkpoint_admission_allowed=false` and
+  `agi_claim=false`.
+- `target/eden_70b_modular_training_evidence/eden_70b_modular_training_summary.json`
+  records the first single-MI300X module pilots. It is local evidence only:
+  three modules were started as one-iteration pilots, while the 12B/12B/33B
+  modules remain blocked until distributed ROCm topology is available.
 - `first_model_card.json`, `first_model_training_plan.json` and
   `first_model_readiness.json` define the first EDEN model candidate and prove
   preparation without submitting a GPU job.
@@ -180,6 +203,9 @@ make training-megatron-7b-evidence-json
 make training-megatron-7b-evidence
 make training-megatron-7b-inference-probe
 make training-megatron-7b-adapter
+make eden-70b-modular-target
+make eden-70b-operationalize
+make training-eden-70b-module-pilot
 make eden-capable
 make eden-capable-operationalize
 make training-eden-sft-elcp-dataset

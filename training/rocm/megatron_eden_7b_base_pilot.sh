@@ -12,6 +12,8 @@ SEQ_LENGTH="${EDEN_MEGATRON_7B_SEQ_LENGTH:-128}"
 VOCAB_SIZE="${EDEN_MEGATRON_7B_VOCAB_SIZE:-2048}"
 SAVE_CHECKPOINT="${EDEN_MEGATRON_7B_SAVE_CHECKPOINT:-false}"
 SAVE_INTERVAL="${EDEN_MEGATRON_7B_SAVE_INTERVAL:-100000}"
+CACHE_DIR="${EDEN_MEGATRON_CACHE_DIR:-${REPO_ROOT}/target/rocm_megatron_cache}"
+AITER_ROPE="${EDEN_MEGATRON_AITER_ROPE:-false}"
 LOG_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.log"
 SUMMARY_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.summary"
 EVIDENCE_FILE="${OUTPUT_DIR}/eden_7b_training_evidence.json"
@@ -39,6 +41,8 @@ Environment:
   EDEN_MEGATRON_7B_SAVE_CHECKPOINT
                                   Write a pilot checkpoint. Default: false
   EDEN_MEGATRON_7B_SAVE_INTERVAL  Checkpoint interval when saving. Default: 100000
+  EDEN_MEGATRON_CACHE_DIR         Persistent ROCm/Megatron cache. Default: target/rocm_megatron_cache
+  EDEN_MEGATRON_AITER_ROPE        Use ROCm AITER RoPE backend. Default: false for fast pilots
 EOF
 }
 
@@ -65,9 +69,18 @@ case "$SAVE_CHECKPOINT" in
   true | false) ;;
   *) fail "EDEN_MEGATRON_7B_SAVE_CHECKPOINT must be true or false" ;;
 esac
+case "$AITER_ROPE" in
+  true | false) ;;
+  *) fail "EDEN_MEGATRON_AITER_ROPE must be true or false" ;;
+esac
 
-mkdir -p "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR" "$CACHE_DIR/aiter-jit" "$CACHE_DIR/megatron-data" "$CACHE_DIR/torch"
+OUTPUT_DIR="$(cd -- "$OUTPUT_DIR" && pwd -P)"
+CACHE_DIR="$(cd -- "$CACHE_DIR" && pwd -P)"
 rm -f -- "$LOG_FILE" "$SUMMARY_FILE" "$EVIDENCE_FILE"
+LOG_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.log"
+SUMMARY_FILE="${OUTPUT_DIR}/eden_7b_base_pilot.summary"
+EVIDENCE_FILE="${OUTPUT_DIR}/eden_7b_training_evidence.json"
 if [[ "$SAVE_CHECKPOINT" == "true" ]]; then
   rm -rf -- "${OUTPUT_DIR}/checkpoints"
 fi
@@ -75,6 +88,8 @@ fi
 printf 'eden_megatron_7b_base_pilot_start=true\n'
 printf 'image=%s\n' "$IMAGE"
 printf 'output_dir=%s\n' "$OUTPUT_DIR"
+printf 'cache_dir=%s\n' "$CACHE_DIR"
+printf 'aiter_rope=%s\n' "$AITER_ROPE"
 printf 'network=none\n'
 printf 'model_scale=7b_shape\n'
 printf 'tokenizer=eden_sentencepiece\n'
@@ -97,6 +112,9 @@ docker run --rm \
   --security-opt seccomp=unconfined \
   --privileged \
   --shm-size 128G \
+  -v "${CACHE_DIR}/aiter-jit:/workspace/aiter/aiter/jit/build" \
+  -v "${CACHE_DIR}/megatron-data:/root/cache" \
+  -v "${CACHE_DIR}/torch:/root/.cache/torch" \
   -v "${REPO_ROOT}:/workspace/Paradise:ro" \
   -v "${OUTPUT_DIR}:/eden-output" \
   "$IMAGE" \
@@ -165,6 +183,11 @@ python3 tools/preprocess_data.py \
   --log-interval 1000
 
 export GPU_MAX_HW_QUEUES=2
+export TORCH_HOME=/root/.cache/torch
+export TORCHINDUCTOR_CACHE_DIR=/root/.cache/torch/inductor
+if [[ '${AITER_ROPE}' != 'true' ]]; then
+  export USE_ROCM_AITER_ROPE_BACKEND=0
+fi
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export HSA_NO_SCRATCH_RECLAIM=1
 export TOKENIZERS_PARALLELISM=false

@@ -559,6 +559,7 @@
         <a href="#paradise">Paradise</a>
         <a href="#apis">APIs</a>
         <a href="#validation">Validation</a>
+        <a href="#readiness">Readiness</a>
         <a href="/api/help">Text help</a>
       </nav>
     </header>
@@ -879,6 +880,16 @@
           </thead>
           <tbody>
             <tr>
+              <td>Non-GPU readiness</td>
+              <td><code>make paradise-non-gpu-readiness</code></td>
+              <td><code>paradise_non_gpu_readiness_report.json</code></td>
+            </tr>
+            <tr>
+              <td>Public contracts</td>
+              <td><code>make contracts-validate</code></td>
+              <td><code>validation_report.json</code>, schema and OpenAPI manifest checks</td>
+            </tr>
+            <tr>
               <td>API conformance</td>
               <td><code>make eden-api-conformance</code></td>
               <td><code>sdk_conformance_report.json</code></td>
@@ -900,6 +911,52 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <section class="section" id="readiness">
+      <div class="section-title">
+        <h2>Product Readiness Boundary</h2>
+        <p class="section-note">Paradise can mature as a governed runtime while
+          Eden model checkpoints remain paused behind GPU and admission gates.</p>
+      </div>
+      <div class="grid">
+        <article class="panel">
+          <h3>Model checkpoints</h3>
+          <ul class="list">
+            <li><span>70B family</span><strong>modular</strong></li>
+            <li><span>authority</span><strong>GEWC</strong></li>
+            <li><span>admission</span><strong>blocked</strong></li>
+          </ul>
+          <a href="/api/artifact/catalog">Artifact catalog</a>
+        </article>
+        <article class="panel">
+          <h3>Dataset governance</h3>
+          <ul class="list">
+            <li><span>private rows</span><strong>forbidden</strong></li>
+            <li><span>license review</span><strong>required</strong></li>
+            <li><span>export</span><strong>metrics only</strong></li>
+          </ul>
+          <a href="/api/operational/schemas">Schema registry</a>
+        </article>
+        <article class="panel">
+          <h3>Approval queue</h3>
+          <ul class="list">
+            <li><span>model output</span><strong>hypothesis</strong></li>
+            <li><span>tool call</span><strong>dry-run first</strong></li>
+            <li><span>checkpoint</span><strong>registry gate</strong></li>
+          </ul>
+          <a href="/api/actions/dry-run">Review dry-runs</a>
+        </article>
+        <article class="panel">
+          <h3>External package</h3>
+          <ul class="list">
+            <li><span>configs</span><strong>shareable</strong></li>
+            <li><span>benchmarks</span><strong>aggregate</strong></li>
+            <li><span>checkpoints</span><strong>private</strong></li>
+          </ul>
+          <a href="/api/validation/status">Validation status</a>
+        </article>
       </div>
     </section>
 

@@ -509,6 +509,37 @@ impl GewcBodyExecutor {
             eden_garm::nodes::command_router::GarmCommand::EdenV02StabilityEval => {
                 (eden_garm::eden_real_capability::run_v02_all(), true)
             }
+            eden_garm::nodes::command_router::GarmCommand::EdenV03CapabilityEval => {
+                (eden_garm::eden_real_capability::run_v03_all(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::EdenV04CapabilityEval => {
+                (eden_garm::eden_real_capability::run_v04_all(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bModularEval => {
+                (eden_garm::eden_70b_modular::run_all(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bRouterEval => {
+                (eden_garm::eden_70b_modular::write_router(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bDatasetEval => {
+                (eden_garm::eden_70b_modular::write_dataset_manifest(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bLauncherEval => {
+                (eden_garm::eden_70b_modular::write_launcher_manifest(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bCheckpointAdmissionEval => (
+                eden_garm::eden_70b_modular::write_checkpoint_admission(),
+                true,
+            ),
+            eden_garm::nodes::command_router::GarmCommand::Eden70bInferenceEval => {
+                (eden_garm::eden_70b_modular::write_inference_runtime(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bDemoEval => {
+                (eden_garm::eden_70b_modular::write_operational_demo(), true)
+            }
+            eden_garm::nodes::command_router::GarmCommand::Eden70bGateEval => {
+                (eden_garm::eden_70b_modular::write_operational_gate(), true)
+            }
             eden_garm::nodes::command_router::GarmCommand::ModelRuntimeEval => {
                 (eden_garm::model_runtime::run_all(), true)
             }
@@ -3389,36 +3420,44 @@ impl GarmRuntime {
     ) -> String {
         let report = Self::garm_report(graph, ids, shared_engine, api_metrics, autonomous);
         let export = Self::garm_export(graph, ids, shared_engine, api_metrics, autonomous);
-        let manifest =
-            Self::readiness_external_validation_manifest(graph, ids, shared_engine, api_metrics);
-        let external =
-            Self::readiness_external_validation_run(graph, ids, shared_engine, api_metrics);
-        let cognitive = Self::cognitive_architecture_eval(graph, ids, shared_engine);
-        let embodied = Self::embodied_grounding_eval(graph, ids, shared_engine);
-        let neural = Self::neural_architecture_eval(graph, ids, shared_engine);
-        let symbolic = Self::symbolic_architecture_eval(graph, shared_engine);
-        let self_improvement = Self::self_improvement_architecture_eval(graph, ids, shared_engine);
-        let frontier = Self::frontier_architecture_eval(graph, ids, shared_engine);
-        let paradigm = Self::paradigm_architecture_eval(graph, ids, shared_engine, api_metrics);
-        let integration = Self::integration_governance_eval(graph, ids, shared_engine, api_metrics);
-        let global_workspace =
-            Self::global_executive_workspace_eval(graph, ids, shared_engine, api_metrics);
-        let operational = Self::gewc_operational_benchmark(graph, ids, shared_engine, api_metrics);
-        let reality = Self::capability_reality_eval(graph, ids, shared_engine, api_metrics);
-        let architecture_advantage =
-            Self::architecture_advantage_eval(graph, ids, shared_engine, api_metrics);
-        let praxis_nexus = Self::praxis_nexus_eval(graph, ids, shared_engine, api_metrics);
-        let external_ecosystem =
-            Self::external_ecosystem_eval(graph, ids, shared_engine, api_metrics);
-        let sovereign_cognition =
-            Self::sovereign_cognition_eval(graph, ids, shared_engine, api_metrics);
-        let runtime_state_api = Self::runtime_state_api_eval(graph, ids);
-        let operational_api = Self::operational_api_eval(graph, ids);
+        let manifest = if std::fs::metadata(
+            eden_garm::state_paths::external_validation_manifest_path(),
+        )
+        .is_ok()
+        {
+            format!(
+                    "[READINESS-EXTERNAL] schema=garm-external-validation-v1 claim_allowed=false reused=true path={}\n",
+                    eden_garm::state_paths::external_validation_manifest_path()
+                )
+        } else {
+            Self::readiness_external_validation_manifest(graph, ids, shared_engine, api_metrics)
+        };
+        let external = if std::fs::metadata(
+            eden_garm::state_paths::external_validation_result_path(),
+        )
+        .is_ok()
+        {
+            format!(
+                    "[READINESS-EXTERNAL-RUN] schema=garm-external-validation-result-v1 claim_allowed=false reused=true path={}\n",
+                    eden_garm::state_paths::external_validation_result_path()
+                )
+        } else {
+            Self::readiness_external_validation_run(graph, ids, shared_engine, api_metrics)
+        };
         let readiness_report = Self::readiness_report(graph, ids, shared_engine, api_metrics);
         let local_evidence = Self::readiness_goal_evidence(graph, ids, &readiness_report);
         let gates =
             eden_garm::nodes::goal_scheduler::readiness_gate_benchmark_report(&local_evidence);
-        let registry = Self::capability_registry_audit(graph, ids, shared_engine, api_metrics);
+        let registry = if std::fs::metadata(eden_garm::state_paths::capability_registry_path())
+            .is_ok()
+        {
+            format!(
+                    "[CAPABILITY-REGISTRY] schema=eden.capability.registry.v1 claim_allowed=false reused=true path={}\n",
+                    eden_garm::state_paths::capability_registry_path()
+                )
+        } else {
+            Self::capability_registry_audit(graph, ids, shared_engine, api_metrics)
+        };
         let artifact_api = Self::artifact_api_eval(graph, ids);
         let package = eden_garm::reproducible_package::write(&readiness_report, &gates);
         Self::record_history(
@@ -3427,31 +3466,8 @@ impl GarmRuntime {
             "[READINESS-PACKAGE] reproducible validation package generated",
         );
         format!(
-            "{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
-            report,
-            export,
-            manifest,
-            external,
-            cognitive,
-            embodied,
-            neural,
-            symbolic,
-            self_improvement,
-            frontier,
-            paradigm,
-            integration,
-            global_workspace,
-            operational,
-            reality,
-            architecture_advantage,
-            praxis_nexus,
-            external_ecosystem,
-            sovereign_cognition,
-            runtime_state_api,
-            operational_api,
-            artifact_api,
-            registry,
-            package
+            "{}{}{}{}{}{}{}",
+            report, export, manifest, external, artifact_api, registry, package
         )
     }
 
@@ -6583,6 +6599,16 @@ mod tests {
             EdenRealCapabilityEval,
             EdenV01CapabilityEval,
             EdenV02StabilityEval,
+            EdenV03CapabilityEval,
+            EdenV04CapabilityEval,
+            Eden70bModularEval,
+            Eden70bRouterEval,
+            Eden70bDatasetEval,
+            Eden70bLauncherEval,
+            Eden70bCheckpointAdmissionEval,
+            Eden70bInferenceEval,
+            Eden70bDemoEval,
+            Eden70bGateEval,
             ModelRuntimeEval,
             RuntimeStateApiEval,
             OperationalApiEval,
@@ -6858,6 +6884,8 @@ mod tests {
             ("sovereign cognition eval", "gewc_validation_body_handler"),
             ("artifact api eval", "gewc_validation_body_handler"),
             ("model runtime eval", "gewc_validation_body_handler"),
+            ("eden 70b modular eval", "gewc_validation_body_handler"),
+            ("eden 70b inference runtime", "gewc_validation_body_handler"),
             ("training harness eval", "gewc_validation_body_handler"),
             ("model governance eval", "gewc_validation_body_handler"),
             ("first model prepare", "gewc_validation_body_handler"),

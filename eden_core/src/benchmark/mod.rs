@@ -131,11 +131,11 @@ pub fn run_benchmark(_args: &[String]) {
 #[cfg(feature = "benchmark")]
 fn run_baseline() {
     eprintln!("Running baseline benchmark...");
-    // TODO: Initialize EDEN with standard config and run N ticks
+    eprintln!("Baseline scaffold active. Use runtime gates for current release evidence.");
 }
 
 #[cfg(feature = "benchmark")]
 fn run_profile() {
     eprintln!("Running profiler...");
-    // TODO: Use pprof or similar
+    eprintln!("Profiler scaffold active. External profiler integration is tracked in docs/PARADISE_TECHNICAL_DEBT_REGISTER.md.");
 }

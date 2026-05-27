@@ -194,6 +194,46 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=model_governance_report",
         ),
         curated(
+            "eden_70b_modular_target",
+            "eden.modular_70b.target.v1",
+            "/api/artifact?name=eden_70b_modular_target",
+        ),
+        curated(
+            "eden_70b_module_router",
+            "eden.modular_70b.router.v1",
+            "/api/artifact?name=eden_70b_module_router",
+        ),
+        curated(
+            "eden_70b_dataset_manifest",
+            "eden.modular_70b.dataset_manifest.v1",
+            "/api/artifact?name=eden_70b_dataset_manifest",
+        ),
+        curated(
+            "eden_70b_launcher_manifest",
+            "eden.modular_70b.launcher_manifest.v1",
+            "/api/artifact?name=eden_70b_launcher_manifest",
+        ),
+        curated(
+            "eden_70b_checkpoint_admission",
+            "eden.modular_70b.checkpoint_admission.v1",
+            "/api/artifact?name=eden_70b_checkpoint_admission",
+        ),
+        curated(
+            "eden_70b_inference_runtime",
+            "eden.modular_70b.inference_runtime.v1",
+            "/api/artifact?name=eden_70b_inference_runtime",
+        ),
+        curated(
+            "eden_70b_operational_demo",
+            "eden.modular_70b.operational_demo.v1",
+            "/api/artifact?name=eden_70b_operational_demo",
+        ),
+        curated(
+            "eden_70b_operational_gate",
+            "eden.modular_70b.operational_gate.v1",
+            "/api/artifact?name=eden_70b_operational_gate",
+        ),
+        curated(
             "first_model_card",
             "eden.first_model.card.v1",
             "/api/artifact?name=first_model_card",

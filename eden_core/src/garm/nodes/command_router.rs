@@ -61,6 +61,16 @@ pub enum GarmCommand {
     EdenRealCapabilityEval,
     EdenV01CapabilityEval,
     EdenV02StabilityEval,
+    EdenV03CapabilityEval,
+    EdenV04CapabilityEval,
+    Eden70bModularEval,
+    Eden70bRouterEval,
+    Eden70bDatasetEval,
+    Eden70bLauncherEval,
+    Eden70bCheckpointAdmissionEval,
+    Eden70bInferenceEval,
+    Eden70bDemoEval,
+    Eden70bGateEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
@@ -613,6 +623,43 @@ impl CommandRouterNode {
             | "eden stability checkpoint eval"
             | "eden checkpoint stability"
             | "eden estabilidad v02" => GarmCommand::EdenV02StabilityEval,
+            "eden v03 capability"
+            | "eden v03 capability eval"
+            | "eden v0.3 capability"
+            | "eden v0.3 capability eval"
+            | "eden long pretraining eval"
+            | "eden 1000 iter eval"
+            | "eden capacidad v03" => GarmCommand::EdenV03CapabilityEval,
+            "eden v04 capability"
+            | "eden v04 capability eval"
+            | "eden v0.4 capability"
+            | "eden v0.4 capability eval"
+            | "eden operational capability eval"
+            | "eden 10000 iter eval"
+            | "eden capacidad v04" => GarmCommand::EdenV04CapabilityEval,
+            "eden 70b modular"
+            | "eden 70b modular eval"
+            | "eden 70b operationalize"
+            | "eden 70b operationalize eval"
+            | "eden modular 70b eval"
+            | "eden capacidad 70b modular" => GarmCommand::Eden70bModularEval,
+            "eden 70b router" | "eden 70b router eval" | "eden 70b module router" => {
+                GarmCommand::Eden70bRouterEval
+            }
+            "eden 70b datasets" | "eden 70b dataset eval" | "eden 70b dataset manifest" => {
+                GarmCommand::Eden70bDatasetEval
+            }
+            "eden 70b launchers" | "eden 70b launcher eval" | "eden 70b rocm launchers" => {
+                GarmCommand::Eden70bLauncherEval
+            }
+            "eden 70b checkpoint admission" | "eden 70b admission" | "eden 70b checkpoint gate" => {
+                GarmCommand::Eden70bCheckpointAdmissionEval
+            }
+            "eden 70b inference" | "eden 70b inference runtime" => {
+                GarmCommand::Eden70bInferenceEval
+            }
+            "eden 70b demo" | "eden 70b operational demo" => GarmCommand::Eden70bDemoEval,
+            "eden 70b gate" | "eden 70b operational gate" => GarmCommand::Eden70bGateEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -1614,6 +1661,22 @@ mod tests {
         assert_eq!(
             parse("eden v02 stability eval"),
             GarmCommand::EdenV02StabilityEval
+        );
+        assert_eq!(
+            parse("eden v03 capability eval"),
+            GarmCommand::EdenV03CapabilityEval
+        );
+        assert_eq!(
+            parse("eden v04 capability eval"),
+            GarmCommand::EdenV04CapabilityEval
+        );
+        assert_eq!(
+            parse("eden 70b modular eval"),
+            GarmCommand::Eden70bModularEval
+        );
+        assert_eq!(
+            parse("eden 70b inference runtime"),
+            GarmCommand::Eden70bInferenceEval
         );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(

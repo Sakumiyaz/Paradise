@@ -66,6 +66,20 @@ That loop records an intent, plans a dry-run, asks for explicit approval,
 executes only a safe standalone runtime action, then writes
 `paradise_worldcell_sessions.json`.
 
+Run the non-GPU product/runtime readiness gate:
+
+```bash
+make contracts-validate
+make paradise-non-gpu-readiness
+```
+
+This writes `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json`
+and `target/public_contracts/validation_report.json`, then checks product docs,
+schema/OpenAPI manifest shape, model interface authority, dataset governance,
+checkpoint registry policy, evaluation/admission policy, external-public
+boundaries, hardware-test isolation and known technical debt. It does not train
+models, use GPU, admit checkpoints or certify AGI.
+
 Generate the GEWC-owned runtime spine contracts:
 
 ```bash
@@ -176,6 +190,7 @@ layer model and terminology.
 | Security | `SECURITY.md` and `docs/THREAT_MODEL.md` define local runtime boundaries. |
 | Claim boundary | `docs/CLAIMS_AND_LIMITATIONS.md` blocks unsupported AGI claims. |
 | Engineering practices | `docs/EDEN_ENGINEERING_PRACTICES.md` defines review, evidence, contract and safety expectations. |
+| Non-GPU readiness | `docs/PARADISE_PRODUCT_SPEC.md`, `docs/PARADISE_MODEL_INTERFACE.md`, `docs/PARADISE_DATASET_GOVERNANCE.md`, `docs/PARADISE_EVALUATION_AND_ADMISSION.md` and `make paradise-non-gpu-readiness` define the non-GPU product/runtime hardening path. |
 | Contribution flow | `CONTRIBUTING.md`, issue templates and PR template are present. |
 | Release note | `PUBLIC_RELEASE.md` documents the public source checkpoint; no versioned GitHub release has been published. |
 

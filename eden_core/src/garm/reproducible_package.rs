@@ -429,6 +429,70 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::eden_v02_stability_gate_path(),
         ),
         artifact(
+            "eden_v03_generalization_corpus_manifest",
+            state_paths::eden_v03_generalization_corpus_manifest_path(),
+        ),
+        artifact(
+            "eden_v03_generalization_eval",
+            state_paths::eden_v03_generalization_eval_path(),
+        ),
+        artifact(
+            "eden_v03_checkpoint_admission",
+            state_paths::eden_v03_checkpoint_admission_path(),
+        ),
+        artifact(
+            "eden_v03_live_inference_runtime",
+            state_paths::eden_v03_live_inference_runtime_path(),
+        ),
+        artifact(
+            "eden_v03_checkpoint_registry",
+            state_paths::eden_v03_checkpoint_registry_path(),
+        ),
+        artifact(
+            "eden_v03_scaling_14b_plan",
+            state_paths::eden_v03_scaling_14b_plan_path(),
+        ),
+        artifact(
+            "eden_v03_operational_demo",
+            state_paths::eden_v03_operational_demo_path(),
+        ),
+        artifact(
+            "eden_v03_capability_gate",
+            state_paths::eden_v03_capability_gate_path(),
+        ),
+        artifact(
+            "eden_v04_cognitive_capability_corpus_manifest",
+            state_paths::eden_v04_cognitive_capability_corpus_manifest_path(),
+        ),
+        artifact(
+            "eden_v04_operational_capability_eval",
+            state_paths::eden_v04_operational_capability_eval_path(),
+        ),
+        artifact(
+            "eden_v04_generative_probe",
+            state_paths::eden_v04_generative_probe_path(),
+        ),
+        artifact(
+            "eden_v04_hard_checkpoint_admission",
+            state_paths::eden_v04_hard_checkpoint_admission_path(),
+        ),
+        artifact(
+            "eden_v04_persistent_inference_service",
+            state_paths::eden_v04_persistent_inference_service_path(),
+        ),
+        artifact(
+            "eden_v04_continuity_eval",
+            state_paths::eden_v04_continuity_eval_path(),
+        ),
+        artifact(
+            "eden_v04_scaling_14b_preflight",
+            state_paths::eden_v04_scaling_14b_preflight_path(),
+        ),
+        artifact(
+            "eden_v04_capability_gate",
+            state_paths::eden_v04_capability_gate_path(),
+        ),
+        artifact(
             "model_adapter_runtime",
             state_paths::model_adapter_runtime_path(),
         ),
@@ -443,6 +507,38 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
         artifact(
             "model_governance_report",
             state_paths::model_governance_report_path(),
+        ),
+        artifact(
+            "eden_70b_modular_target",
+            state_paths::eden_70b_modular_target_path(),
+        ),
+        artifact(
+            "eden_70b_module_router",
+            state_paths::eden_70b_module_router_path(),
+        ),
+        artifact(
+            "eden_70b_dataset_manifest",
+            state_paths::eden_70b_dataset_manifest_path(),
+        ),
+        artifact(
+            "eden_70b_launcher_manifest",
+            state_paths::eden_70b_launcher_manifest_path(),
+        ),
+        artifact(
+            "eden_70b_checkpoint_admission",
+            state_paths::eden_70b_checkpoint_admission_path(),
+        ),
+        artifact(
+            "eden_70b_inference_runtime",
+            state_paths::eden_70b_inference_runtime_path(),
+        ),
+        artifact(
+            "eden_70b_operational_demo",
+            state_paths::eden_70b_operational_demo_path(),
+        ),
+        artifact(
+            "eden_70b_operational_gate",
+            state_paths::eden_70b_operational_gate_path(),
         ),
         artifact("first_model_card", state_paths::first_model_card_path()),
         artifact(

@@ -71,6 +71,19 @@ can be one cognitive engine, but GEWC remains the authority that routes work to
 language, reasoning, code, memory, verifier, safety, world-model, tool-use and
 future multimodal roles under explicit training and action boundaries.
 
+The EDEN-70B target follows that same rule. It is a modular family coordinated
+by GEWC, not a single dense 70B checkpoint: 33B primary ELCP, 12B causal world
+model, 12B multimodal/VLA, 6B planner-code-tool, 4B safety verifier and 3B
+memory-router. The total parameter count is a routed family budget; GEWC may
+activate only the subset required by task, risk, modality, uncertainty and
+cost.
+
+The target is no longer only a static document. `eden 70b modular eval` writes
+the GEWC router, module dataset manifest, ROCm launcher manifest, checkpoint
+admission gate, inference runtime contract, non-mutating demo trace and
+aggregate operational gate. Checkpoints remain absent and unadmitted; the
+runtime surface is ready for module-specific training evidence.
+
 GEWC also owns module lifecycle supervision. Each handler receives a lifecycle
 state and an allowed action set from the core, so paused, recovering, isolated,
 quarantined, disabled or failed handlers can be held before execution instead of

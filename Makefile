@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime eden-70b-modular-target eden-70b-operationalize first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability eden-v03-capability eden-v04-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart paradise-non-gpu-readiness contracts-validate training-dataset-license-manifest paradise-checkpoint-registry-smoke paradise-model-adapter-smoke paradise-release-package paradise-ci-public runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-70b-dataset training-eden-70b-module-pilot training-eden-70b-modular-plan training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage training-eden-v03-dataset training-eden-v03-generalization-eval training-eden-v03-demo training-eden-v03-stage training-eden-v04-dataset training-eden-v04-operational-eval training-eden-v04-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy public-audit verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -48,6 +48,21 @@ training-evidence: training-smoke
 
 model-runtime: training-smoke
 	printf 'model runtime eval\nmodel register eden-memory-retrieval-baseline\nmodel load eden-memory-retrieval-baseline\nmodel evaluate eden-memory-retrieval-baseline\nmodel unload eden-memory-retrieval-baseline\nmodel audit\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_model_runtime --api-port 0
+
+eden-70b-modular-target: model-runtime
+	printf 'artifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_model_runtime --api-port 0
+
+training-eden-70b-dataset:
+	python3 training/data/build_eden_70b_modular_datasets.py
+
+training-eden-70b-modular-plan: training-eden-70b-dataset
+	bash training/rocm/eden_70b_modular_stage.sh
+
+training-eden-70b-module-pilot: training-eden-70b-dataset
+	bash training/rocm/megatron_eden_70b_module_pilot.sh
+
+eden-70b-operationalize: training-eden-70b-modular-plan
+	printf 'eden 70b modular eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_70b_modular --api-port 0
 
 first-model-prepare: training-smoke
 	printf 'first model prepare\nfirst model readiness\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_first_model_prepare --api-port 0
@@ -111,6 +126,26 @@ paradise-quickstart:
 	$(PARADISE) --state-dir /tmp/paradise_quickstart status
 	$(PARADISE) --state-dir /tmp/paradise_quickstart worldcell
 	$(PARADISE) --state-dir /tmp/paradise_quickstart run --dry-run "inspect runtime status safely"
+
+paradise-non-gpu-readiness: training-eden-70b-dataset training-eden-v04-dataset
+	python3 training/benchmarks/paradise_non_gpu_readiness.py
+
+contracts-validate:
+	python3 scripts/validate_public_contracts.py
+
+training-dataset-license-manifest:
+	python3 -m json.tool training/data/license_manifest.json >/dev/null
+
+paradise-checkpoint-registry-smoke:
+	python3 -m json.tool training/models/checkpoint_registry.json >/dev/null
+
+paradise-model-adapter-smoke: model-runtime
+
+paradise-release-package: contracts-validate paradise-non-gpu-readiness
+	python3 -m json.tool target/public_contracts/validation_report.json >/dev/null
+	python3 -m json.tool target/paradise_non_gpu_readiness/non_gpu_readiness_report.json >/dev/null
+
+paradise-ci-public: contracts-validate paradise-non-gpu-readiness check eden-api-conformance
 
 runtime-spine:
 	rm -rf -- /tmp/eden_runtime_spine
@@ -222,6 +257,33 @@ training-eden-v02-stage:
 
 eden-v02-stability: training-eden-v02-stage
 	printf 'eden v02 stability eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_v02_stability --api-port 0
+
+training-eden-v03-dataset:
+	python3 training/data/build_eden_v03_generalization_corpus.py
+
+training-eden-v03-generalization-eval: training-eden-v03-dataset
+	python3 training/benchmarks/eden_v03_generalization_eval.py
+
+training-eden-v03-demo: training-eden-v03-generalization-eval
+	python3 training/demos/eden_v03_operational_demo.py
+
+training-eden-v03-stage:
+	bash training/rocm/eden_v03_capability_stage.sh
+
+eden-v03-capability: training-eden-v03-stage
+	printf 'eden v03 capability eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_v03_capability --api-port 0
+
+training-eden-v04-dataset:
+	python3 training/data/build_eden_v04_cognitive_capability_corpus.py
+
+training-eden-v04-operational-eval: training-eden-v04-dataset
+	python3 training/benchmarks/eden_v04_operational_capability_eval.py
+
+training-eden-v04-stage:
+	bash training/rocm/eden_v04_capability_stage.sh
+
+eden-v04-capability: training-eden-v04-stage
+	printf 'eden v04 capability eval\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/eden_garm_v04_capability --api-port 0
 
 operational-blackbox:
 	bash eden_core/src/garm/scripts/operational_blackbox.sh

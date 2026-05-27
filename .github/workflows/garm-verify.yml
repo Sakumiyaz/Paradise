@@ -164,6 +164,48 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+  public_contracts:
+    name: Public Contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Validate public contract surface
+        run: make contracts-validate
+
+      - name: Upload public contract validation evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: paradise-public-contract-validation
+          path: target/public_contracts/validation_report.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  paradise_non_gpu_readiness:
+    name: Paradise Non-GPU Readiness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Run non-GPU readiness gate
+        run: make paradise-non-gpu-readiness
+
+      - name: Upload non-GPU readiness evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: paradise-non-gpu-readiness
+          path: target/paradise_non_gpu_readiness/non_gpu_readiness_report.json
+          if-no-files-found: warn
+          retention-days: 14
+
   external_tests_optional:
     name: External Hardware And Network Tests
     runs-on: ubuntu-24.04

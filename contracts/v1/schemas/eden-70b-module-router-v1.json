@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-70b-module-router-v1.json",
+  "title": "EDEN 70B Module Router",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "not_a_single_model", "modules"],
+  "properties": {
+    "schema": {"const": "eden.modular_70b.router.v1"},
+    "artifact": {"const": "eden_70b_module_router"},
+    "authority": {"const": "global_executive_workspace_core"},
+    "claim_allowed": {"const": false},
+    "agi_claim": {"const": false},
+    "not_a_single_model": {"const": true},
+    "modules": {"type": "array", "minItems": 6}
+  }
+}

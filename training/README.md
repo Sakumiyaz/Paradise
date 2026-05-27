@@ -20,7 +20,9 @@ measurable capability before expensive GPU work:
 | `configs/rocm_smoke.json` | Minimal AMD ROCm profile with CPU fallback for local validation. |
 | `configs/first_model_memory_retrieval.json` | First trainable module contract: subordinate memory retrieval under GEWC. |
 | `configs/elcp_latent_cognitive_prediction.json` | ELCP objective contract: latent cognitive transition prediction under GEWC. |
+| `configs/eden_70b_modular_target.json` | EDEN-70B modular target freeze: 33B primary plus 12B CWM, 12B multimodal/VLA, 6B planner/tool, 4B safety and 3B memory/router modules. It is not one dense 70B model. |
 | `data/manifest.json` | Explicit dataset manifest; synthetic repo-local data only. |
+| `data/license_manifest.json` | Public dataset/license boundary; no private data, no external model dependency. |
 | `data/capability_smoke.jsonl` | Tiny deterministic benchmark dataset for current operational capabilities. |
 | `data/first_model_memory_*.jsonl` | Tiny train/eval fixtures for the first memory-retrieval baseline. |
 | `data/elcp_transition_*.jsonl` | Tiny train/eval fixtures for ELCP cognitive-transition contracts. |
@@ -32,6 +34,10 @@ measurable capability before expensive GPU work:
 | `data/build_eden_v01_semantic_corpus.py` | Stdlib-only EDEN v0.1 semantic corpus builder; no private data and no external model. |
 | `data/eden_v02_stability_*.jsonl` | Stability corpus split for comparing 100-iteration and 250-iteration 7B checkpoint evidence. |
 | `data/build_eden_v02_stability_corpus.py` | Stdlib-only EDEN v0.2 stability corpus builder; no private data and no external model. |
+| `data/eden_v03_generalization_*.jsonl` | Larger v0.3 generalization corpus for long pretraining, checkpoint admission, native inference runtime, registry policy and 14B readiness. |
+| `data/build_eden_v03_generalization_corpus.py` | Stdlib-only EDEN v0.3 corpus builder; repo-owned inputs only, no private data and no external model. |
+| `data/eden_70b_modular_*.jsonl` | Tiny module-specific seed splits for the 70B modular family: primary, CWM, multimodal/VLA, planner/tool, safety and memory/router. |
+| `data/build_eden_70b_modular_datasets.py` | Stdlib-only EDEN-70B modular seed builder; no private data and no external model. |
 | `benchmarks/eden_capability_benchmark.py` | Stdlib-only benchmark runner and tiny trainable memory baseline. |
 | `benchmarks/validate_capability_report.py` | Stdlib-only contract validator for `capability_report.json`. |
 | `benchmarks/validate_elcp_transitions.py` | Stdlib-only validator for ELCP cognitive-transition fixtures. |
@@ -42,8 +48,11 @@ measurable capability before expensive GPU work:
 | `benchmarks/eden_v02_adversarial_eval.py` | Deterministic adversarial architecture eval for injection, permissions, rollback and model-authority boundaries. |
 | `benchmarks/eden_v02_rollback_drill.py` | Rollback-readiness drill that requires stability and adversarial reports before candidate runtime admission. |
 | `benchmarks/eden_v02_model_card.py` | Internal model-card and checkpoint-storage manifest for the v0.2 candidate. |
+| `benchmarks/eden_v03_generalization_eval.py` | v0.3 checkpoint-admission evaluator requiring a larger corpus, 1000-iteration 7B evidence, inference load, safety inheritance, checkpoint registry and 14B scaling policy. |
+| `benchmarks/paradise_non_gpu_readiness.py` | Paradise non-GPU product/runtime readiness gate. It validates docs, model-interface authority, dataset governance, checkpoint admission policy and public boundaries without GPU or checkpoints. |
 | `demos/eden_v01_operational_demo.py` | Non-mutating operational demo trace that connects semantic eval, inference and SFT/ELCP packets through GEWC. |
 | `demos/eden_v02_stability_demo.py` | Non-mutating stability demo trace that exercises the v0.2 checkpoint-admission path. |
+| `demos/eden_v03_operational_demo.py` | Non-mutating v0.3 trace for long-checkpoint admission, registry, native runtime candidate and 14B readiness. |
 | `elcp/export_trace_candidates.py` | Redacted GEWC trace exporter for candidate ELCP transitions. |
 | `elcp/train_elcp.py` | Dry-run-only training interface for future ELCP 4B work. |
 | `elcp/admission_gate.py` | Pre-checkpoint ELCP admission policy report. |
@@ -53,6 +62,7 @@ measurable capability before expensive GPU work:
 | `elcp/metrics_board.py` | Aggregates validation, baseline, replay, freeze and admission metrics. |
 | `elcp/readiness_contract.py` | Writes the 4B readiness contract while keeping training blocked. |
 | `models/README.md` | Checkpoint policy; generated model artifacts stay out of git. |
+| `models/checkpoint_registry.json` | Empty public checkpoint registry. It preserves no-claim/no-production admission until evidence exists. |
 | `rocm/rocm_env.sh` | Local ROCm environment probe; it reports availability without requiring a GPU. |
 | `rocm/build_megatron_7b_evidence.py` | Stdlib-only builder/validator for the 7B Megatron pilot evidence contract. |
 | `rocm/build_megatron_7b_inference_report.py` | Stdlib-only builder/validator for the 7B checkpoint inference probe contract. |
@@ -64,6 +74,9 @@ measurable capability before expensive GPU work:
 | `rocm/eden_real_capability_stage.sh` | Seven-part capability stage wrapper. It builds the real corpus, optionally runs the bounded 7B ROCm job, evaluates evidence and keeps checkpoint admission blocked. |
 | `rocm/eden_v01_capability_stage.sh` | EDEN v0.1 stage wrapper. It builds the semantic corpus, optionally runs 7B training beyond the pilot, evaluates, writes demo evidence and records GPU hygiene. |
 | `rocm/eden_v02_stability_stage.sh` | EDEN v0.2 stage wrapper. It can run 100-iteration baseline plus 250-iteration candidate jobs, compare evidence, write rollback/model-card artifacts and keep production release blocked. |
+| `rocm/eden_v03_capability_stage.sh` | EDEN v0.3 stage wrapper. It can run a 1000-iteration 7B job, checkpoint inference, generalization eval, checkpoint registry, native runtime candidate, 14B scaling plan and demo trace. |
+| `rocm/eden_70b_modular_stage.sh` | EDEN-70B modular launcher planner. It writes per-module ROCm/Megatron launch intent while keeping GPU training blocked unless separately approved. |
+| `rocm/megatron_eden_70b_module_pilot.sh` | Optional per-module EDEN-70B ROCm launcher. On one MI300X it can pilot the 3B, 4B and 6B modules; it writes blocked evidence for the 12B, 12B and 33B modules until multi-GPU training is available. |
 | `rocm/eden_gpu_workspace_hygiene.sh` | Non-destructive GPU workspace hygiene report for run roots, Docker image presence and cleanup policy. |
 
 GEWC model runtime artifacts are generated from the Rust runtime, not from
@@ -75,6 +88,18 @@ Python training code:
 | `model_checkpoint_manifest.json` | Records checkpoint admission policy; no weights are committed. |
 | `training_harness_report.json` | Describes train/evaluate/compare/admit phases without running production training. |
 | `model_governance_report.json` | Defines permissions, verification and circuit breakers for model adapters. |
+| `eden_70b_modular_target.json` | Freezes the future 70B modular family under GEWC. It blocks single-checkpoint 70B training, monolithic LLM-brain authority and direct model writes. |
+| `eden_70b_module_router.json` | Makes the 70B family routable by task, risk, modality, uncertainty, cost and permission. |
+| `eden_70b_dataset_manifest.json` | Admits the module-specific seed splits as dataset contracts, not as sufficient training data. |
+| `eden_70b_launcher_manifest.json` | Records per-module ROCm/Megatron launcher intent while keeping training blocked. |
+| `eden_70b_module_training_pilot.json` | Contract for local per-module pilot evidence. This evidence stays under `target/` and does not admit checkpoints. |
+| `eden_70b_module_training_blocked.json` | Contract for modules blocked by single-GPU memory limits. |
+| `eden_70b_modular_training_summary.json` | Local summary for module pilots and blocked modules; it is evidence, not a release artifact. |
+| `paradise_non_gpu_readiness_report.json` | Non-GPU product/runtime readiness report written by `make paradise-non-gpu-readiness`. |
+| `eden_70b_checkpoint_admission.json` | Defines per-module checkpoint admission gates and keeps every module unadmitted until evidence exists. |
+| `eden_70b_inference_runtime.json` | Defines the GEWC -> router -> module -> verifier inference contract while checkpoint loading remains false. |
+| `eden_70b_operational_demo.json` | Records a non-mutating demo trace across memory, planner, CWM, safety and primary modules. |
+| `eden_70b_operational_gate.json` | Aggregates the 70B modular operational surface and preserves no-claim/no-checkpoint-admission policy. |
 | `first_model_card.json` | Defines the first EDEN model candidate and its authority boundary. |
 | `first_model_training_plan.json` | Plans 4B training without submitting GPU work. |
 | `first_model_readiness.json` | Confirms 4A preparation while keeping training blocked. |
@@ -143,6 +168,14 @@ Python training code:
 | `eden_v02_native_inference_service.json` | v0.2 step 8: defines the permanent subordinate inference-service boundary. |
 | `eden_v02_stability_demo.json` | v0.2 step 9: records the non-mutating operational stability demo. |
 | `eden_v02_stability_gate.json` | Aggregates the v0.2 stability gate while blocking production release and AGI claims. |
+| `eden_v03_generalization_corpus_manifest.json` | v0.3 step 1: admits the larger train/eval/challenge corpus manifest. |
+| `eden_v03_generalization_eval.json` | v0.3 step 2: evaluates dataset coverage, inherited v0.2 safety, 1000-iteration evidence, inference load and non-regression. |
+| `eden_v03_checkpoint_admission.json` | v0.3 step 3: admits the 1000-iteration checkpoint as candidate runtime only when all checks pass. |
+| `eden_v03_live_inference_runtime.json` | v0.3 step 4: defines the persistent native inference-service contract for the admitted candidate. |
+| `eden_v03_checkpoint_registry.json` | v0.3 step 5: registers candidate checkpoints without committing weights to git. |
+| `eden_v03_scaling_14b_plan.json` | v0.3 step 6: opens the 14B prototype path only after v0.3 passes and keeps the dense ceiling at 14B. |
+| `eden_v03_operational_demo.json` | v0.3 step 7: records the non-mutating operational demo trace. |
+| `eden_v03_capability_gate.json` | Aggregates the v0.3 long-pretraining candidate gate while blocking production release and AGI claims. |
 
 ## Local Smoke Run
 
@@ -175,6 +208,61 @@ weights:
 ```bash
 make model-runtime
 ```
+
+To validate the public dataset/license and checkpoint-registry boundaries:
+
+```bash
+make contracts-validate
+make training-dataset-license-manifest
+make paradise-checkpoint-registry-smoke
+```
+
+To freeze the EDEN-70B modular target without starting training:
+
+```bash
+make eden-70b-modular-target
+```
+
+This emits `eden_70b_modular_target.json` as a governed runtime artifact. The
+target is six models coordinated by GEWC: 33B primary, 12B causal world model,
+12B multimodal/VLA, 6B planner-code-tool, 4B safety verifier and 3B
+memory-router. It deliberately rejects a single dense 70B checkpoint and treats
+the 7B path as historical pipeline evidence.
+
+To generate the module seed splits, write the ROCm launcher plan and execute
+the seven 70B modular runtime artifacts:
+
+```bash
+make eden-70b-operationalize
+```
+
+This is the operational bridge after the target freeze. It still does not train
+or admit checkpoints. It proves that the 70B plan is a GEWC-routed runtime
+surface with module datasets, launchers, admission gates, inference contract and
+demo evidence.
+
+To run one bounded module pilot on a ROCm host:
+
+```bash
+EDEN_70B_MODULE_ID=eden_memory_router_retrieval_3b \
+make training-eden-70b-module-pilot
+```
+
+Supported module IDs:
+
+```text
+eden_memory_router_retrieval_3b
+eden_safety_verifier_4b
+eden_planner_code_tool_6b
+eden_cwm_12b_causal_world_model
+eden_multimodal_vla_12b
+eden_33b_elcp_primary
+```
+
+On a single MI300X, the 3B, 4B and 6B modules can run as one-iteration pilots.
+The 12B, 12B and 33B modules write `blocked_before_gpu_training` evidence by
+default because they require multi-GPU tensor/pipeline parallelism or a smaller
+proxy run. This target never trains one dense 70B checkpoint.
 
 To prepare the first EDEN model candidate as a formal 4A artifact set:
 
@@ -420,6 +508,61 @@ The v0.2 gate can allow candidate runtime admission only when the stability
 comparison, checkpoint inference, adversarial eval, rollback drill, model card,
 storage policy, native inference boundary and demo all pass. It still keeps
 production release and AGI claims blocked.
+
+To move from the 250-iteration candidate to the v0.3 long-pretraining
+candidate path:
+
+```bash
+make training-eden-v03-stage
+make eden-v03-capability
+```
+
+By default this writes a valid blocked report if the 1000-iteration GPU
+evidence is absent. To launch the ROCm long run:
+
+```bash
+EDEN_V03_RUN_GPU=true make training-eden-v03-stage
+```
+
+The v0.3 gate can allow candidate runtime admission only when the larger corpus,
+1000-iteration 7B checkpoint evidence, checkpoint-load inference, v0.2 safety
+chain, checkpoint registry, native runtime contract, 14B scaling policy and
+demo all pass. It still keeps production release, autonomous authority and AGI
+claims blocked.
+
+To move from v0.3 into the seven v0.4 GPU-backed capability processes:
+
+```bash
+make training-eden-v04-stage
+make eden-v04-capability
+```
+
+By default this writes a blocked report if the 10k 7B evidence is absent. To
+launch or reuse the ROCm 10k run, checkpoint inference probe and compact
+cognitive SFT/ELCP pilot:
+
+```bash
+EDEN_V04_RUN_GPU=true make training-eden-v04-stage
+```
+
+The v0.4 gate can allow candidate runtime admission only when the 8192-row
+cognitive capability corpus, 10k 7B checkpoint evidence, generative probe,
+cognitive SFT evidence, hard checkpoint admission, persistent inference service
+contract, continuity eval and 14B preflight pass. It still blocks production
+release, autonomous authority and AGI claims.
+
+To validate all non-GPU product/runtime readiness work while GPU training is
+paused:
+
+```bash
+make paradise-non-gpu-readiness
+```
+
+This writes `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json`
+and checks product docs, model-interface authority, dataset governance,
+evaluation/admission policy, external-public boundaries, hardware-test
+isolation and known technical debt. It does not start GPU work and does not
+admit checkpoints.
 
 For a longer controlled pilot that writes a checkpoint but keeps admission
 blocked:

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-non-gpu-readiness-v1.json",
+  "title": "Paradise Non-GPU Readiness Report",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "gpu_required",
+    "production_model_allowed",
+    "score",
+    "passed",
+    "checks"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.non_gpu_readiness.v1" },
+    "artifact": { "const": "paradise_non_gpu_readiness" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "gpu_required": { "const": false },
+    "production_model_allowed": { "const": false },
+    "score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "passed": { "type": "boolean" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["area", "passed", "evidence"],
+        "properties": {
+          "area": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "evidence": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

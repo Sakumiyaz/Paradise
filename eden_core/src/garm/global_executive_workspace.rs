@@ -1457,6 +1457,16 @@ impl CommandProfile {
             | GarmCommand::EdenRealCapabilityEval
             | GarmCommand::EdenV01CapabilityEval
             | GarmCommand::EdenV02StabilityEval
+            | GarmCommand::EdenV03CapabilityEval
+            | GarmCommand::EdenV04CapabilityEval
+            | GarmCommand::Eden70bModularEval
+            | GarmCommand::Eden70bRouterEval
+            | GarmCommand::Eden70bDatasetEval
+            | GarmCommand::Eden70bLauncherEval
+            | GarmCommand::Eden70bCheckpointAdmissionEval
+            | GarmCommand::Eden70bInferenceEval
+            | GarmCommand::Eden70bDemoEval
+            | GarmCommand::Eden70bGateEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval

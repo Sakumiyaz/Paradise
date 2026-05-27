@@ -1,0 +1,14 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 Live Inference Runtime",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "status"],
+  "properties": {
+    "schema": { "const": "eden.v03.live_inference_runtime.v1" },
+    "artifact": { "const": "eden_v03_live_inference_runtime" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "status": { "type": "string" }
+  }
+}

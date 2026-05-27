@@ -1,0 +1,15 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 14B Scaling Plan",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "current_dense_ceiling", "may_start_14b_prototype"],
+  "properties": {
+    "schema": { "const": "eden.v03.scaling_14b_plan.v1" },
+    "artifact": { "const": "eden_v03_scaling_14b_plan" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "current_dense_ceiling": { "const": 14000000000 },
+    "may_start_14b_prototype": { "type": "boolean" }
+  }
+}

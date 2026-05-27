@@ -48,6 +48,7 @@ docker image inspect "$IMAGE" >/dev/null 2>&1 || {
 [[ -f "$EVAL_DATA" ]] || fail "missing eval dataset: ${EVAL_DATA}"
 
 mkdir -p "$OUTPUT_DIR"
+OUTPUT_DIR="$(cd -- "$OUTPUT_DIR" && pwd -P)"
 rm -f -- \
   "${OUTPUT_DIR}/eden_sft_elcp_training_report.json" \
   "${OUTPUT_DIR}/eden_sft_elcp_prepost_eval.json" \

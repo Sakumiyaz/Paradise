@@ -192,8 +192,14 @@ fn domain_for(name: &str) -> &'static str {
         || name.starts_with("eden_real_capability")
         || name.starts_with("eden_v01")
         || name.starts_with("eden_v02")
+        || name.starts_with("eden_v03")
+        || name.starts_with("eden_v04")
     {
-        if name.starts_with("eden_v02") {
+        if name.starts_with("eden_v04") {
+            "eden_v04_capability"
+        } else if name.starts_with("eden_v03") {
+            "eden_v03_capability"
+        } else if name.starts_with("eden_v02") {
             "eden_v02_stability"
         } else if name.starts_with("eden_v01") {
             "eden_v01_capability"
@@ -296,6 +302,8 @@ fn generator_command(name: &str) -> &'static str {
         || name.starts_with("eden_real_capability")
         || name.starts_with("eden_v01")
         || name.starts_with("eden_v02")
+        || name.starts_with("eden_v03")
+        || name.starts_with("eden_v04")
         || name.starts_with("eden_native")
         || name.starts_with("eden_structured")
         || name.starts_with("eden_checkpoint")
@@ -314,8 +322,14 @@ fn generator_command(name: &str) -> &'static str {
             || name.starts_with("eden_real_capability")
             || name.starts_with("eden_v01")
             || name.starts_with("eden_v02")
+            || name.starts_with("eden_v03")
+            || name.starts_with("eden_v04")
         {
-            if name.starts_with("eden_v02") {
+            if name.starts_with("eden_v04") {
+                "eden v04 capability eval"
+            } else if name.starts_with("eden_v03") {
+                "eden v03 capability eval"
+            } else if name.starts_with("eden_v02") {
                 "eden v02 stability eval"
             } else if name.starts_with("eden_v01") {
                 "eden v01 capability eval"

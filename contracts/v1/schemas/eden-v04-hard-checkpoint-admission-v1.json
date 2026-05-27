@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_hard_checkpoint_admission" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "autonomous_authority_allowed": { "const": false },
+    "candidate_runtime_admission_allowed": { "type": "boolean" },
+    "claim_allowed": { "const": false },
+    "production_model_allowed": { "const": false },
+    "schema": { "const": "eden.v04.hard_checkpoint_admission.v1" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "candidate_runtime_admission_allowed", "production_model_allowed"],
+  "type": "object"
+}

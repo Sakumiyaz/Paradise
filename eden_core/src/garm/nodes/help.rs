@@ -57,6 +57,7 @@ impl HelpNode {
             "  eden real capability eval - integra corpus real, evidencia 7B, inferencia, eval, admision bloqueada, demo y escalado",
             "  eden v01 capability eval - admite dataset semantico grande, 7B > piloto, inferencia nativa, demo, admision candidata, higiene GPU y techo 14B",
             "  eden v02 stability eval - compara checkpoints 100/250, adversarial, rollback, model card, storage e inferencia candidata estable",
+            "  eden 70b modular eval - prepara router, datasets, launchers, admision, inferencia y demo para 70B modular GEWC, no un checkpoint unico",
             "  model runtime eval - genera adapter runtime, checkpoint manifest, training harness y gobernanza de modelos sin entrenar pesos",
             "  first model prepare/readiness - prepara el primer modelo EDEN como 4A formal sin ejecutar entrenamiento",
             "  elcp prepare/objective/admission/hardening/readiness - prepara, endurece y mide ELCP sin entrenar ni admitir pesos",

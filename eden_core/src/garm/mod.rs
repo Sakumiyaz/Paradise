@@ -14,6 +14,7 @@ pub mod capability_reality_eval;
 pub mod capability_registry;
 pub mod client_sdk;
 pub mod cognitive_architecture;
+pub mod eden_70b_modular;
 pub mod eden_capable;
 pub mod eden_learned_capability;
 pub mod eden_locus_layer;

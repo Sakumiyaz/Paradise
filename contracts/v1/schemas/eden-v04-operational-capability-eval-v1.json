@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_operational_capability_eval" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "checks": { "type": "array" },
+    "claim_allowed": { "const": false },
+    "passed": { "type": "boolean" },
+    "schema": { "const": "eden.v04.operational_capability_eval.v1" },
+    "score": { "maximum": 1, "minimum": 0, "type": "number" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed", "score", "checks"],
+  "type": "object"
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_scaling_14b_preflight" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "max_dense_parameters": { "const": 14000000000 },
+    "ready_for_14b_experiment": { "type": "boolean" },
+    "schema": { "const": "eden.v04.scaling_14b_preflight.v1" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "max_dense_parameters", "ready_for_14b_experiment"],
+  "type": "object"
+}

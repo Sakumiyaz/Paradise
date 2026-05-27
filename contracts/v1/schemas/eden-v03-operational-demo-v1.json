@@ -1,0 +1,15 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 Operational Demo",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed", "steps"],
+  "properties": {
+    "schema": { "const": "eden.v03.operational_demo.v1" },
+    "artifact": { "const": "eden_v03_operational_demo" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "passed": { "type": "boolean" },
+    "steps": { "type": "array" }
+  }
+}

@@ -105,8 +105,10 @@ def marker_exists(path: Path) -> bool:
 
 run_root = Path(sys.argv[1])
 output = Path(sys.argv[2])
-git_status_code, git_status = run(["git", "status", "--short"])
-git_head_code, git_head = run(["git", "log", "-1", "--oneline"])
+repo_root = Path.cwd()
+git_base = ["git", "-c", f"safe.directory={repo_root}"]
+git_status_code, git_status = run([*git_base, "status", "--short"])
+git_head_code, git_head = run([*git_base, "log", "-1", "--oneline"])
 docker_code, docker_info = run(["docker", "image", "inspect", "rocm/megatron-lm:v25.3", "--format", "{{.Id}}"])
 
 run_dirs: list[dict[str, Any]] = []

@@ -1,0 +1,22 @@
+{
+  "schema": "paradise.checkpoint_registry.v1",
+  "claim_allowed": false,
+  "agi_claim": false,
+  "production_model_allowed": false,
+  "authority": "global_executive_workspace_core",
+  "active_checkpoint": null,
+  "entries": [
+    {
+      "checkpoint_id": "eden_33b_elcp_primary-dev-placeholder",
+      "module_id": "eden_33b_elcp_primary",
+      "status": "blocked",
+      "checkpoint_uri": "not-committed",
+      "sha256": "required-before-admission",
+      "training_report": "required-before-admission",
+      "inference_report": "required-before-admission",
+      "eval_report": "required-before-admission",
+      "rollback_plan": "required-before-admission",
+      "operator_approval": false
+    }
+  ]
+}

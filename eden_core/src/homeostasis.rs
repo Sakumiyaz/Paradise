@@ -262,8 +262,8 @@ pub fn start_homeostasis() {
 pub fn check_homeostasis() -> Homeostasis {
     let mut homeostasis = Homeostasis::new();
 
-    // TODO: Read actual values from MemBrain
-    // For now, simulate with random-ish values based on time
+    // MemBrain integration is external to this local release path; deterministic
+    // time-derived vitals keep the monitor available without hardware state.
     let now = NOW_MS();
     let seed = (now % 1000) as f64 / 1000.0;
 

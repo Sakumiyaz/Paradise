@@ -10,6 +10,8 @@ MASTER_PORT="${EDEN_MEGATRON_MASTER_PORT:-6004}"
 TRAIN_ITERS="${EDEN_MEGATRON_TRAIN_ITERS:-1}"
 SEQ_LENGTH="${EDEN_MEGATRON_SEQ_LENGTH:-128}"
 VOCAB_SIZE="${EDEN_MEGATRON_VOCAB_SIZE:-32000}"
+CACHE_DIR="${EDEN_MEGATRON_CACHE_DIR:-${REPO_ROOT}/target/rocm_megatron_cache}"
+AITER_ROPE="${EDEN_MEGATRON_AITER_ROPE:-false}"
 LOG_FILE="${OUTPUT_DIR}/offline_megatron_smoke.log"
 SUMMARY_FILE="${OUTPUT_DIR}/offline_megatron_smoke.summary"
 
@@ -28,6 +30,8 @@ Environment:
   EDEN_MEGATRON_TRAIN_ITERS  Smoke train iterations. Default: 1
   EDEN_MEGATRON_SEQ_LENGTH   Sequence length. Default: 128
   EDEN_MEGATRON_VOCAB_SIZE   NullTokenizer vocab size. Default: 32000
+  EDEN_MEGATRON_CACHE_DIR    Persistent ROCm/Megatron cache. Default: target/rocm_megatron_cache
+  EDEN_MEGATRON_AITER_ROPE   Use ROCm AITER RoPE backend. Default: false for fast pilots
 EOF
 }
 
@@ -50,13 +54,23 @@ require_command docker
 docker image inspect "$IMAGE" >/dev/null 2>&1 || {
   fail "Docker image not found locally: ${IMAGE}. Pull it explicitly before running this offline smoke."
 }
+case "$AITER_ROPE" in
+  true | false) ;;
+  *) fail "EDEN_MEGATRON_AITER_ROPE must be true or false" ;;
+esac
 
-mkdir -p "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR" "$CACHE_DIR/aiter-jit" "$CACHE_DIR/megatron-data" "$CACHE_DIR/torch"
+OUTPUT_DIR="$(cd -- "$OUTPUT_DIR" && pwd -P)"
+CACHE_DIR="$(cd -- "$CACHE_DIR" && pwd -P)"
 rm -f -- "$LOG_FILE" "$SUMMARY_FILE"
+LOG_FILE="${OUTPUT_DIR}/offline_megatron_smoke.log"
+SUMMARY_FILE="${OUTPUT_DIR}/offline_megatron_smoke.summary"
 
 printf 'eden_megatron_offline_smoke_start=true\n'
 printf 'image=%s\n' "$IMAGE"
 printf 'output_dir=%s\n' "$OUTPUT_DIR"
+printf 'cache_dir=%s\n' "$CACHE_DIR"
+printf 'aiter_rope=%s\n' "$AITER_ROPE"
 printf 'network=none\n'
 printf 'tokenizer=NullTokenizer\n'
 printf 'mock_data=true\n'
@@ -72,10 +86,18 @@ docker run --rm \
   --security-opt seccomp=unconfined \
   --privileged \
   --shm-size 64G \
+  -v "${CACHE_DIR}/aiter-jit:/workspace/aiter/aiter/jit/build" \
+  -v "${CACHE_DIR}/megatron-data:/root/cache" \
+  -v "${CACHE_DIR}/torch:/root/.cache/torch" \
   -v "${OUTPUT_DIR}:/eden-output" \
   "$IMAGE" \
   bash -lc "set -Eeuo pipefail
 cd /workspace/Megatron-LM
+export TORCH_HOME=/root/.cache/torch
+export TORCHINDUCTOR_CACHE_DIR=/root/.cache/torch/inductor
+if [[ '${AITER_ROPE}' != 'true' ]]; then
+  export USE_ROCM_AITER_ROPE_BACKEND=0
+fi
 export GPU_MAX_HW_QUEUES=2
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export HSA_NO_SCRATCH_RECLAIM=1

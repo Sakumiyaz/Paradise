@@ -14,7 +14,7 @@
 pub mod dialogue;
 pub mod eidetic_memory;
 pub mod ultra_low_latency;
-// pub mod quantum_pre_cognition; // TODO: implementar módulo
+// `quantum_pre_cognition` remains a reserved experimental module name.
 
 // Exports públicos
 pub use dialogue::{

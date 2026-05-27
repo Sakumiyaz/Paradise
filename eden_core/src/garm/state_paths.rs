@@ -367,6 +367,30 @@ pub fn megatron_7b_capability_report_path() -> String {
 pub fn megatron_7b_admission_gate_path() -> String {
     path("megatron_7b_admission_gate.json")
 }
+pub fn eden_70b_modular_target_path() -> String {
+    path("eden_70b_modular_target.json")
+}
+pub fn eden_70b_module_router_path() -> String {
+    path("eden_70b_module_router.json")
+}
+pub fn eden_70b_dataset_manifest_path() -> String {
+    path("eden_70b_dataset_manifest.json")
+}
+pub fn eden_70b_launcher_manifest_path() -> String {
+    path("eden_70b_launcher_manifest.json")
+}
+pub fn eden_70b_checkpoint_admission_path() -> String {
+    path("eden_70b_checkpoint_admission.json")
+}
+pub fn eden_70b_inference_runtime_path() -> String {
+    path("eden_70b_inference_runtime.json")
+}
+pub fn eden_70b_operational_demo_path() -> String {
+    path("eden_70b_operational_demo.json")
+}
+pub fn eden_70b_operational_gate_path() -> String {
+    path("eden_70b_operational_gate.json")
+}
 pub fn eden_capable_training_run_contract_path() -> String {
     path("eden_capable_training_run_contract.json")
 }
@@ -519,6 +543,54 @@ pub fn eden_v02_stability_demo_path() -> String {
 }
 pub fn eden_v02_stability_gate_path() -> String {
     path("eden_v02_stability_gate.json")
+}
+pub fn eden_v03_generalization_corpus_manifest_path() -> String {
+    path("eden_v03_generalization_corpus_manifest.json")
+}
+pub fn eden_v03_generalization_eval_path() -> String {
+    path("eden_v03_generalization_eval.json")
+}
+pub fn eden_v03_checkpoint_admission_path() -> String {
+    path("eden_v03_checkpoint_admission.json")
+}
+pub fn eden_v03_live_inference_runtime_path() -> String {
+    path("eden_v03_live_inference_runtime.json")
+}
+pub fn eden_v03_checkpoint_registry_path() -> String {
+    path("eden_v03_checkpoint_registry.json")
+}
+pub fn eden_v03_scaling_14b_plan_path() -> String {
+    path("eden_v03_scaling_14b_plan.json")
+}
+pub fn eden_v03_operational_demo_path() -> String {
+    path("eden_v03_operational_demo.json")
+}
+pub fn eden_v03_capability_gate_path() -> String {
+    path("eden_v03_capability_gate.json")
+}
+pub fn eden_v04_cognitive_capability_corpus_manifest_path() -> String {
+    path("eden_v04_cognitive_capability_corpus_manifest.json")
+}
+pub fn eden_v04_operational_capability_eval_path() -> String {
+    path("eden_v04_operational_capability_eval.json")
+}
+pub fn eden_v04_generative_probe_path() -> String {
+    path("eden_v04_generative_probe.json")
+}
+pub fn eden_v04_hard_checkpoint_admission_path() -> String {
+    path("eden_v04_hard_checkpoint_admission.json")
+}
+pub fn eden_v04_persistent_inference_service_path() -> String {
+    path("eden_v04_persistent_inference_service.json")
+}
+pub fn eden_v04_continuity_eval_path() -> String {
+    path("eden_v04_continuity_eval.json")
+}
+pub fn eden_v04_scaling_14b_preflight_path() -> String {
+    path("eden_v04_scaling_14b_preflight.json")
+}
+pub fn eden_v04_capability_gate_path() -> String {
+    path("eden_v04_capability_gate.json")
 }
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
@@ -1449,6 +1521,46 @@ pub fn artifacts_report() -> String {
         (
             "model_governance_report",
             model_governance_report_path(),
+            false,
+        ),
+        (
+            "eden_70b_modular_target",
+            eden_70b_modular_target_path(),
+            false,
+        ),
+        (
+            "eden_70b_module_router",
+            eden_70b_module_router_path(),
+            false,
+        ),
+        (
+            "eden_70b_dataset_manifest",
+            eden_70b_dataset_manifest_path(),
+            false,
+        ),
+        (
+            "eden_70b_launcher_manifest",
+            eden_70b_launcher_manifest_path(),
+            false,
+        ),
+        (
+            "eden_70b_checkpoint_admission",
+            eden_70b_checkpoint_admission_path(),
+            false,
+        ),
+        (
+            "eden_70b_inference_runtime",
+            eden_70b_inference_runtime_path(),
+            false,
+        ),
+        (
+            "eden_70b_operational_demo",
+            eden_70b_operational_demo_path(),
+            false,
+        ),
+        (
+            "eden_70b_operational_gate",
+            eden_70b_operational_gate_path(),
             false,
         ),
         ("first_model_card", first_model_card_path(), false),
