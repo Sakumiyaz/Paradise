@@ -142,11 +142,14 @@
     "schemas/paradise-dataset-license-manifest-v1.json",
     "schemas/paradise-checkpoint-registry-v1.json",
     "schemas/paradise-checkpoint-registry-admission-v1.json",
+    "schemas/paradise-checkpoint-admission-dry-run-v1.json",
     "schemas/paradise-dataset-manifest-v1.json",
     "schemas/paradise-module-semantic-eval-v1.json",
+    "schemas/paradise-strong-eval-v1.json",
     "schemas/paradise-checkpoint-evidence-review-v1.json",
     "schemas/paradise-public-demo-v1.json",
-    "schemas/paradise-release-package-v1.json"
+    "schemas/paradise-release-package-v1.json",
+    "schemas/paradise-external-validation-package-v1.json"
   ],
   "examples": [
     "examples/operational-status.example.json",
@@ -161,6 +164,8 @@
     "make long-run-stability",
     "make public-audit",
     "make contracts-validate",
-    "make paradise-non-gpu-readiness"
+    "make paradise-non-gpu-readiness",
+    "make paradise-strong-eval",
+    "make paradise-external-validation-package"
   ]
 }

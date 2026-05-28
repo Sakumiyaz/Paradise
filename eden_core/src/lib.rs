@@ -9,6 +9,7 @@
 pub mod analysis; // Psicohistoria: predicción de colapsos
 pub mod autonomous; // Motor autónomo: auto-replicación e independencia
 pub mod behavior_pred; // Predicción de comportamiento - Markov, anomalías, escenarios
+pub mod benchmark; // Local benchmark utilities and deterministic tick timing
 pub mod cell; // Célula base
 pub mod consciousness; // Introspección y autoconciencia (MISM)
 pub mod core; // Núcleo autopoyético: kernel de auto-creación

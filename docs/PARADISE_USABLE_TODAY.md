@@ -18,7 +18,10 @@ blocked.
 | Operator console | Static local console for runtime/readiness artifacts. | `docs/EDEN_OPERATOR_CONSOLE.html` |
 | Dataset manifest | Public corpus files can be counted, hashed and checked for private-data flags. | `make paradise-dataset-manifest` |
 | Module semantic eval | Corpus coverage can be checked across memory, planner, world model, safety, router and observability routes. | `make paradise-module-semantic-eval` |
+| Strong local eval bundle | Existing non-GPU reports can be composed into family-level evidence without model inference. | `make paradise-strong-eval` |
 | Checkpoint evidence review | Existing local probe reports can be reviewed without admitting weights. | `make paradise-checkpoint-evidence-review` |
+| Checkpoint admission dry-run | Registry, evidence and inference requirements can be evaluated while keeping admission blocked. | `cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit` |
+| External validation package | Non-confidential reports can be bundled for outside reviewers without checkpoints or private data. | `make paradise-external-validation-package` |
 | Public release audit | Secret/path/document scans are available. | `make public-audit` |
 
 ## Blocked Until Evidence Exists

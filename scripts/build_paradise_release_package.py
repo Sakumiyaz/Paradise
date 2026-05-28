@@ -47,6 +47,7 @@ def main() -> int:
     readiness_report = root / "target/paradise_non_gpu_readiness/non_gpu_readiness_report.json"
     dataset_manifest = root / "target/paradise_dataset_manifest/paradise_dataset_manifest.json"
     semantic_eval = root / "target/paradise_module_semantic_eval/module_semantic_eval_report.json"
+    strong_eval = root / "target/paradise_strong_eval/strong_eval_report.json"
     checkpoint_review = root / "target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json"
     public_demo = root / "target/paradise_public_demo/public_demo_manifest.json"
     public_demo_transcript = root / "target/paradise_public_demo/demo_transcript.md"
@@ -70,6 +71,7 @@ def main() -> int:
             "make paradise-non-gpu-readiness",
             "make paradise-dataset-manifest",
             "make paradise-module-semantic-eval",
+            "make paradise-strong-eval",
             "make paradise-checkpoint-evidence-review",
             "make paradise-checkpoint-registry-smoke",
             "make paradise-public-demo",
@@ -105,6 +107,12 @@ def main() -> int:
                 "path": str(semantic_eval.relative_to(root)),
                 "present": semantic_eval.exists(),
                 "passed": load_json(semantic_eval).get("passed"),
+            },
+            {
+                "name": "paradise_strong_eval",
+                "path": str(strong_eval.relative_to(root)),
+                "present": strong_eval.exists(),
+                "passed": load_json(strong_eval).get("passed"),
             },
             {
                 "name": "paradise_checkpoint_evidence_review",

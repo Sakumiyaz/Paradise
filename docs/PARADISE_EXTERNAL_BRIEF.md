@@ -40,6 +40,8 @@ Preferred options:
 
 Paradise can share:
 
+- the generated external validation manifest from
+  `make paradise-external-validation-package`;
 - Megatron/ROCm or CUDA configs;
 - benchmark throughput summaries;
 - memory and stability metrics;
@@ -58,3 +60,12 @@ Paradise will not share:
 - checkpoints;
 - non-redistributable datasets;
 - private runtime memory.
+
+The package is generated under:
+
+```text
+target/paradise_external_validation/external_validation_manifest.json
+```
+
+It references only public contracts, local non-GPU reports, dataset governance
+summaries, checkpoint-policy evidence and aggregate validation status.

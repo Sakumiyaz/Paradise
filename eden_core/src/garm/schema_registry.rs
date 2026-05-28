@@ -189,6 +189,41 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=paradise_checkpoint_registry_admission",
         ),
         curated(
+            "paradise_checkpoint_admission_dry_run",
+            crate::eden_garm::model_runtime::PARADISE_CHECKPOINT_ADMISSION_DRY_RUN_SCHEMA,
+            "/api/artifact?name=paradise_checkpoint_admission_dry_run",
+        ),
+        curated(
+            "paradise_non_gpu_readiness",
+            "paradise.non_gpu_readiness.v1",
+            "/api/artifact?name=paradise_non_gpu_readiness",
+        ),
+        curated(
+            "paradise_dataset_manifest",
+            "paradise.dataset_manifest.v1",
+            "/api/artifact?name=paradise_dataset_manifest",
+        ),
+        curated(
+            "paradise_module_semantic_eval",
+            "paradise.module_semantic_eval.v1",
+            "/api/artifact?name=paradise_module_semantic_eval",
+        ),
+        curated(
+            "paradise_strong_eval",
+            "paradise.strong_eval.v1",
+            "/api/artifact?name=paradise_strong_eval",
+        ),
+        curated(
+            "paradise_checkpoint_evidence_review",
+            "paradise.checkpoint_evidence_review.v1",
+            "/api/artifact?name=paradise_checkpoint_evidence_review",
+        ),
+        curated(
+            "paradise_external_validation_package",
+            "paradise.external_validation_package.v1",
+            "/api/artifact?name=paradise_external_validation_package",
+        ),
+        curated(
             "training_harness_report",
             "eden.training_harness.v1",
             "/api/artifact?name=training_harness_report",

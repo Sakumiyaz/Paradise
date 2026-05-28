@@ -505,6 +505,35 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::paradise_checkpoint_registry_admission_path(),
         ),
         artifact(
+            "paradise_checkpoint_admission_dry_run",
+            state_paths::paradise_checkpoint_admission_dry_run_path(),
+        ),
+        artifact(
+            "paradise_non_gpu_readiness",
+            "target/paradise_non_gpu_readiness/non_gpu_readiness_report.json".to_string(),
+        ),
+        artifact(
+            "paradise_dataset_manifest",
+            "target/paradise_dataset_manifest/paradise_dataset_manifest.json".to_string(),
+        ),
+        artifact(
+            "paradise_module_semantic_eval",
+            "target/paradise_module_semantic_eval/module_semantic_eval_report.json".to_string(),
+        ),
+        artifact(
+            "paradise_strong_eval",
+            "target/paradise_strong_eval/strong_eval_report.json".to_string(),
+        ),
+        artifact(
+            "paradise_checkpoint_evidence_review",
+            "target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json"
+                .to_string(),
+        ),
+        artifact(
+            "paradise_external_validation_package",
+            "target/paradise_external_validation/external_validation_manifest.json".to_string(),
+        ),
+        artifact(
             "training_harness_report",
             state_paths::training_harness_report_path(),
         ),

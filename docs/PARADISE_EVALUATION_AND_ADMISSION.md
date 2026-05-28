@@ -26,6 +26,7 @@ make paradise-non-gpu-readiness
 make paradise-dataset-manifest
 make paradise-module-semantic-eval
 make paradise-checkpoint-evidence-review
+make paradise-strong-eval
 ```
 
 The command writes:
@@ -36,6 +37,7 @@ target/public_contracts/validation_report.json
 target/paradise_dataset_manifest/paradise_dataset_manifest.json
 target/paradise_module_semantic_eval/module_semantic_eval_report.json
 target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json
+target/paradise_strong_eval/strong_eval_report.json
 ```
 
 ## Checkpoint Admission Policy
@@ -65,10 +67,12 @@ Audit the registry through the native GEWC runtime command:
 
 ```sh
 make paradise-checkpoint-registry-smoke
+cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit
 ```
 
 This writes `paradise_checkpoint_registry_admission.json` under the selected
-runtime state directory and keeps `checkpoint_admission_allowed=false`.
+runtime state directory plus `paradise_checkpoint_admission_dry_run.json` when
+the dry-run command is used. Both keep `checkpoint_admission_allowed=false`.
 
 Review local probe evidence without admitting a checkpoint:
 
@@ -106,6 +110,10 @@ A checkpoint must remain blocked if:
 | World model | Entity/state/causal deltas and counterfactual consistency. |
 | VLA/multimodal | Grounding, affordances and action constraints. |
 | Runtime integration | GEWC routing, traceability, rollback and audit. |
+
+`make paradise-strong-eval` composes the module semantic eval, dataset manifest,
+checkpoint review, public contracts and non-GPU readiness into family-level
+evidence. It is intentionally still a no-claim non-GPU gate.
 
 ## Hardware And Network Tests
 

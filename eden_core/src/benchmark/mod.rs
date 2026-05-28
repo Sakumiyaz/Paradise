@@ -1,10 +1,12 @@
 //! Benchmark utilities for EDEN Core
-//! 
+//!
 //! Usage: Cargo run --release --features benchmark -- [subcommand]
 //! Subcommands: baseline, profile, compare
 #![allow(dead_code)]
 #![allow(non_snake_case)]
 
+#[cfg(feature = "benchmark")]
+use std::time::Duration;
 use std::time::Instant;
 
 // =============================================================================
@@ -19,18 +21,25 @@ pub struct Timer {
 
 impl Timer {
     pub fn new(name: &'static str) -> Self {
-        Self { start: Instant::now(), name }
+        Self {
+            start: Instant::now(),
+            name,
+        }
     }
 }
 
 impl Drop for Timer {
     fn drop(&mut self) {
         let elapsed = self.start.elapsed();
-        eprintln!("[BENCH] {}: {:.3}ms", self.name, elapsed.as_secs_f64() * 1000.0);
+        eprintln!(
+            "[BENCH] {}: {:.3}ms",
+            self.name,
+            elapsed.as_secs_f64() * 1000.0
+        );
     }
 }
 
-/// Record timing for later aggregation
+// Record timing for later aggregation.
 thread_local! {
     static TIMINGS: std::cell::RefCell<Vec<(String, f64)>> = std::cell::RefCell::new(Vec::new());
 }
@@ -51,18 +60,18 @@ pub fn print_timings() {
     });
 }
 
-/// Benchmark marker - only runs with "benchmark" feature
-#[cfg(feature = "benchmark")]
-pub use std::time::Instant;
-
 #[cfg(not(feature = "benchmark"))]
 pub struct NoOpTimer;
 #[cfg(not(feature = "benchmark"))]
 impl NoOpTimer {
-    pub fn new(_: &'static str) -> Self { Self }
+    pub fn new(_: &'static str) -> Self {
+        Self
+    }
 }
 #[cfg(not(feature = "benchmark"))]
-impl Drop for NoOpTimer {}
+impl Drop for NoOpTimer {
+    fn drop(&mut self) {}
+}
 
 // =============================================================================
 // Benchmark data collection
@@ -77,10 +86,18 @@ pub struct BenchStats {
 }
 
 impl BenchStats {
-    pub fn record_tick(&mut self, ms: f64) { self.tick_times.push(ms); }
-    pub fn record_ciclo_vital(&mut self, ms: f64) { self.cycle_vital_times.push(ms); }
-    pub fn record_campo_step(&mut self, ms: f64) { self.campo_step_times.push(ms); }
-    pub fn record_mar_regen(&mut self, ms: f64) { self.mar_regen_times.push(ms); }
+    pub fn record_tick(&mut self, ms: f64) {
+        self.tick_times.push(ms);
+    }
+    pub fn record_ciclo_vital(&mut self, ms: f64) {
+        self.cycle_vital_times.push(ms);
+    }
+    pub fn record_campo_step(&mut self, ms: f64) {
+        self.campo_step_times.push(ms);
+    }
+    pub fn record_mar_regen(&mut self, ms: f64) {
+        self.mar_regen_times.push(ms);
+    }
 
     pub fn summary(&self) -> String {
         let tick_p50 = percentile(&self.tick_times, 0.5);
@@ -96,12 +113,16 @@ impl BenchStats {
 }
 
 fn mean(v: &[f64]) -> f64 {
-    if v.is_empty() { return 0.0; }
+    if v.is_empty() {
+        return 0.0;
+    }
     v.iter().sum::<f64>() / v.len() as f64
 }
 
 fn percentile(v: &[f64], p: f64) -> f64 {
-    if v.is_empty() { return 0.0; }
+    if v.is_empty() {
+        return 0.0;
+    }
     let mut s = v.to_vec();
     s.sort_by(|a, b| a.partial_cmp(b).unwrap());
     let idx = ((s.len() - 1) as f64 * p).round() as usize;
@@ -130,12 +151,57 @@ pub fn run_benchmark(_args: &[String]) {
 
 #[cfg(feature = "benchmark")]
 fn run_baseline() {
-    eprintln!("Running baseline benchmark...");
-    eprintln!("Baseline scaffold active. Use runtime gates for current release evidence.");
+    let result = run_local_tick_benchmark("baseline", 2_000);
+    print_benchmark_result(&result);
 }
 
 #[cfg(feature = "benchmark")]
 fn run_profile() {
-    eprintln!("Running profiler...");
-    eprintln!("Profiler scaffold active. External profiler integration is tracked in docs/PARADISE_TECHNICAL_DEBT_REGISTER.md.");
+    let result = run_local_tick_benchmark("profile", 20_000);
+    print_benchmark_result(&result);
+}
+
+#[cfg(feature = "benchmark")]
+#[derive(Clone, Debug)]
+struct LocalTickBenchmark {
+    mode: &'static str,
+    iterations: u64,
+    elapsed: Duration,
+    checksum: u64,
+}
+
+#[cfg(feature = "benchmark")]
+fn run_local_tick_benchmark(mode: &'static str, iterations: u64) -> LocalTickBenchmark {
+    let start = Instant::now();
+    let mut checksum = 0xED3E_0001_u64;
+    for index in 0..iterations {
+        checksum = checksum
+            .rotate_left((index % 31) as u32)
+            .wrapping_mul(1_099_511_628_211)
+            .wrapping_add(index ^ 0xA11CE);
+    }
+    LocalTickBenchmark {
+        mode,
+        iterations,
+        elapsed: start.elapsed(),
+        checksum,
+    }
+}
+
+#[cfg(feature = "benchmark")]
+fn print_benchmark_result(result: &LocalTickBenchmark) {
+    let elapsed_ns = result.elapsed.as_nanos();
+    let ns_per_tick = if result.iterations == 0 {
+        0
+    } else {
+        elapsed_ns / u128::from(result.iterations)
+    };
+    println!(
+        "[EDEN-BENCH] mode={} iterations={} elapsed_ms={:.3} ns_per_tick={} checksum={:016x} claim_allowed=false",
+        result.mode,
+        result.iterations,
+        result.elapsed.as_secs_f64() * 1000.0,
+        ns_per_tick,
+        result.checksum
+    );
 }

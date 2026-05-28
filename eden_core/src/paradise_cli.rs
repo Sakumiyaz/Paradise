@@ -48,6 +48,7 @@ enum CliCommand {
     Worldcell,
     RunDryRun(String),
     CheckpointReview,
+    CheckpointDryRunAdmission,
     InferenceStatus,
 }
 
@@ -119,8 +120,12 @@ fn parse_command(args: &[String]) -> Result<CliCommand, CliError> {
 fn parse_checkpoint(args: &[String]) -> Result<CliCommand, CliError> {
     match args.first().map(String::as_str) {
         Some("review" | "admission" | "audit") => Ok(CliCommand::CheckpointReview),
+        Some("dry-run-admit" | "admit-dry-run") => Ok(CliCommand::CheckpointDryRunAdmission),
+        Some("admit") if args.get(1).map(String::as_str) == Some("--dry-run") => {
+            Ok(CliCommand::CheckpointDryRunAdmission)
+        }
         _ => Err(CliError::Message(
-            "checkpoint requires review, admission or audit".to_string(),
+            "checkpoint requires review, admission, audit or dry-run-admit".to_string(),
         )),
     }
 }
@@ -167,6 +172,7 @@ fn run(cli: Cli) -> Result<(), CliError> {
         CliCommand::Worldcell => run_worldcell(cli.json),
         CliCommand::RunDryRun(intent) => run_dry_run(&intent, cli.json),
         CliCommand::CheckpointReview => run_checkpoint_review(cli.json),
+        CliCommand::CheckpointDryRunAdmission => run_checkpoint_dry_run_admission(cli.json),
         CliCommand::InferenceStatus => run_inference_status(cli.json),
     }
 }
@@ -269,6 +275,24 @@ fn run_checkpoint_review(json: bool) -> Result<(), CliError> {
     println!(
         "registry: training/models/checkpoint_registry.json evidence: {} admission=false",
         state_paths::paradise_checkpoint_registry_admission_path()
+    );
+    Ok(())
+}
+
+fn run_checkpoint_dry_run_admission(json: bool) -> Result<(), CliError> {
+    let output = model_runtime::write_paradise_checkpoint_admission_dry_run();
+    if json {
+        print_file_or_fallback(
+            &state_paths::paradise_checkpoint_admission_dry_run_path(),
+            "{}",
+        )?;
+        return Ok(());
+    }
+
+    print!("{output}");
+    println!(
+        "dry_run_admission: {} admission=false",
+        state_paths::paradise_checkpoint_admission_dry_run_path()
     );
     Ok(())
 }
@@ -522,6 +546,7 @@ fn print_usage() {
   paradise [--state-dir DIR] [--json] status
   paradise [--state-dir DIR] [--json] worldcell
   paradise [--state-dir DIR] [--json] checkpoint review
+  paradise [--state-dir DIR] [--json] checkpoint dry-run-admit
   paradise [--state-dir DIR] [--json] inference status
   paradise [--state-dir DIR] [--json] run --dry-run <intent>
 
@@ -529,6 +554,8 @@ Commands:
   status              Print local runtime status without opening sockets.
   worldcell           Generate Paradise Worldcell evidence locally.
   checkpoint review   Review checkpoint registry admission policy; never admits weights.
+  checkpoint dry-run-admit
+                      Generate blocked checkpoint admission checks without admitting weights.
   inference status    Show native inference readiness; blocks until checkpoint admission.
   run --dry-run       Record intent and plan a permissioned action without execution.
 
@@ -576,6 +603,13 @@ mod tests {
         let cli = parse_cli(args(&["checkpoint", "review"])).unwrap();
 
         assert_eq!(cli.command, CliCommand::CheckpointReview);
+    }
+
+    #[test]
+    fn parses_checkpoint_dry_run_admission() {
+        let cli = parse_cli(args(&["checkpoint", "dry-run-admit"])).unwrap();
+
+        assert_eq!(cli.command, CliCommand::CheckpointDryRunAdmission);
     }
 
     #[test]
