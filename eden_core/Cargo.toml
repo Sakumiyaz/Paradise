@@ -28,6 +28,7 @@ rayon = "1.10"
 
 [features]
 default = []
+benchmark = []
 external-tests = []
 swarm = []
 

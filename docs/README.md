@@ -67,14 +67,17 @@ make paradise-non-gpu-readiness
 make paradise-dataset-manifest
 make paradise-module-semantic-eval
 make paradise-checkpoint-evidence-review
+make paradise-strong-eval
 make paradise-public-demo
 make paradise-release-package
+make paradise-external-validation-package
 ```
 
 These commands validate contracts, schema/OpenAPI manifest shape, dataset
 license boundaries, module semantic coverage, checkpoint evidence review,
-checkpoint registry policy and non-GPU product/runtime readiness. They do not
-use GPU, admit checkpoints or certify learned model capability.
+checkpoint registry policy, strong non-GPU family evidence, external validation
+packaging and non-GPU product/runtime readiness. They do not use GPU, admit
+checkpoints or certify learned model capability.
 
 ## Paradise CLI
 
@@ -84,6 +87,7 @@ use GPU, admit checkpoints or certify learned model capability.
 cargo run -p eden_core --bin paradise -- status
 cargo run -p eden_core --bin paradise -- worldcell
 cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit
 cargo run -p eden_core --bin paradise -- inference status
 cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
 ```

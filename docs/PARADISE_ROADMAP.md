@@ -12,6 +12,8 @@ lane and cannot turn into a production claim without checkpoint admission.
 - Keep checkpoint metadata separated from checkpoint weights.
 - Keep checkpoint review and inference readiness visible through native
   Paradise CLI commands while admission remains blocked.
+- Keep strong non-GPU evaluation and external validation packages reproducible
+  without GPU access.
 
 ## Next
 
@@ -21,17 +23,17 @@ lane and cannot turn into a production claim without checkpoint admission.
   views.
 - Add model adapter probes for real checkpoints once GPU runs produce accepted
   evidence.
-- Add release bundles with schema reports, API conformance and non-GPU
-  readiness attached.
+- Attach schema reports, API conformance, strong eval and external validation
+  manifests to future public releases.
 
 ## Later
 
 - Run module-specific continued pretraining and SFT for the 70B modular target.
-- Add stronger held-out evaluations for memory, planning, CWM, VLA, verifier and
-  runtime integration.
+- Replace non-GPU family evidence with held-out learned-model evaluations for
+  memory, planning, CWM, VLA, verifier and runtime integration.
 - Add reproducible inference adapters for accepted checkpoints only.
-- Add external validation artifacts that expose configs and aggregate metrics
-  without sharing private data or weights.
+- Add external validation results from independent reviewers without sharing
+  private data or weights.
 
 ## Non-Goals
 

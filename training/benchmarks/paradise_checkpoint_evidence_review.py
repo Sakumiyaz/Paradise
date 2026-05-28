@@ -33,6 +33,9 @@ def main() -> int:
     hard_admission = evidence["v04_hard_admission"]
     generated = evidence["v04_generative_probe"]
     training = evidence["training_evidence"]
+    entries = registry.get("entries", [])
+    if not isinstance(entries, list):
+        entries = []
 
     checkpoint_load_probe_seen = (
         inference.get("run", {}).get("checkpoint_loaded") is True
@@ -42,6 +45,13 @@ def main() -> int:
     training_probe_seen = bool(training.get("training_summary") or training.get("run"))
     candidate_gate_seen = hard_admission.get("candidate_runtime_admission_allowed") is True
     semantic_probe_seen = generated.get("runtime_smoke_passed") is True
+    checkpoint_hash_reviewed = any(
+        isinstance(entry, dict)
+        and entry.get("status") == "admitted"
+        and isinstance(entry.get("checkpoint_hash"), str)
+        and len(entry.get("checkpoint_hash", "")) >= 32
+        for entry in entries
+    )
 
     checks = [
         {"check": "public_registry_present", "passed": bool(registry)},
@@ -106,9 +116,11 @@ def main() -> int:
             "training_probe_seen": training_probe_seen,
             "candidate_gate_seen": candidate_gate_seen,
             "semantic_probe_seen": semantic_probe_seen,
+            "checkpoint_hash_reviewed": checkpoint_hash_reviewed,
             "model_id": inference.get("run", {}).get("model_id"),
             "generated_count": inference.get("run", {}).get("generated_count", 0),
         },
+        "checkpoint_hash_reviewed": checkpoint_hash_reviewed,
         "decision": "keep_public_checkpoint_registry_blocked; local probe evidence may be reviewed but not released as production",
         "required_before_real_admission": [
             "checkpoint_files_available_in_artifact_store",

@@ -51,6 +51,7 @@ measurable capability before expensive GPU work:
 | `benchmarks/eden_v03_generalization_eval.py` | v0.3 checkpoint-admission evaluator requiring a larger corpus, 1000-iteration 7B evidence, inference load, safety inheritance, checkpoint registry and 14B scaling policy. |
 | `benchmarks/paradise_non_gpu_readiness.py` | Paradise non-GPU product/runtime readiness gate. It validates docs, model-interface authority, dataset governance, checkpoint admission policy and public boundaries without GPU or checkpoints. |
 | `benchmarks/paradise_module_semantic_eval.py` | Non-GPU module semantic coverage gate for memory, planner, world model, safety, model router and observability routes. |
+| `benchmarks/paradise_strong_eval.py` | Aggregates non-GPU module, dataset, checkpoint, contract and readiness reports into family-level evidence while keeping checkpoint admission blocked. |
 | `benchmarks/paradise_checkpoint_evidence_review.py` | Reviews local checkpoint/inference probe evidence when present while keeping public checkpoint admission blocked. |
 | `data/build_paradise_dataset_manifest.py` | Writes hashes, row counts, schemas, category coverage and privacy/license posture for public dataset fixtures. |
 | `demos/eden_v01_operational_demo.py` | Non-mutating operational demo trace that connects semantic eval, inference and SFT/ELCP packets through GEWC. |
@@ -99,6 +100,8 @@ Python training code:
 | `eden_70b_module_training_blocked.json` | Contract for modules blocked by single-GPU memory limits. |
 | `eden_70b_modular_training_summary.json` | Local summary for module pilots and blocked modules; it is evidence, not a release artifact. |
 | `paradise_non_gpu_readiness_report.json` | Non-GPU product/runtime readiness report written by `make paradise-non-gpu-readiness`. |
+| `paradise_strong_eval/strong_eval_report.json` | Family-level non-GPU evidence written by `make paradise-strong-eval`. |
+| `paradise_external_validation/external_validation_manifest.json` | Non-confidential validation package written by `make paradise-external-validation-package`. |
 | `eden_70b_checkpoint_admission.json` | Defines per-module checkpoint admission gates and keeps every module unadmitted until evidence exists. |
 | `eden_70b_inference_runtime.json` | Defines the GEWC -> router -> module -> verifier inference contract while checkpoint loading remains false. |
 | `eden_70b_operational_demo.json` | Records a non-mutating demo trace across memory, planner, CWM, safety and primary modules. |

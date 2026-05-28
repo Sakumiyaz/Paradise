@@ -199,6 +199,7 @@ def main() -> int:
                 "training-eden-v04-operational-eval",
                 "eden-api-conformance",
                 "paradise-module-semantic-eval",
+                "paradise-strong-eval",
                 "paradise-checkpoint-evidence-review",
             ]),
             "v01/v02/v03/v04/API and Paradise module evidence targets present",
@@ -208,6 +209,7 @@ def main() -> int:
             "schemas/paradise-non-gpu-readiness-v1.json" in manifest_schema_set
             and "schemas/paradise-checkpoint-registry-v1.json" in manifest_schema_set
             and "schemas/paradise-checkpoint-registry-admission-v1.json" in manifest_schema_set
+            and "schemas/paradise-checkpoint-admission-dry-run-v1.json" in manifest_schema_set
             and "schemas/eden-70b-checkpoint-admission-v1.json" in manifest_schema_set
             and checkpoint_registry.get("schema") == "paradise.checkpoint_registry.v1"
             and checkpoint_registry.get("production_model_allowed") is False
@@ -243,7 +245,7 @@ def main() -> int:
         ),
         check(
             "technical_debt_registered",
-            "Benchmark module scaffold" in read_text(root / "docs/PARADISE_TECHNICAL_DEBT_REGISTER.md")
+            "Benchmark local tick harness" in read_text(root / "docs/PARADISE_TECHNICAL_DEBT_REGISTER.md")
             and "GPU model checkpoints" in read_text(root / "docs/PARADISE_TECHNICAL_DEBT_REGISTER.md"),
             "known non-GPU follow-ups are registered",
         ),

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-strong-eval-v1.json",
+  "title": "Paradise Strong Evaluation",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "gpu_required",
+    "passed",
+    "score",
+    "families",
+    "checks"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.strong_eval.v1" },
+    "artifact": { "const": "paradise_strong_eval" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "gpu_required": { "const": false },
+    "passed": { "type": "boolean" },
+    "score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "families": { "type": "array" },
+    "checks": { "type": "array" }
+  }
+}
