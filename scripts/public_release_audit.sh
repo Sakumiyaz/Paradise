@@ -39,6 +39,19 @@ record_warning() {
     printf '[public-audit] WARN: %s\n' "$1" >&2
 }
 
+resolve_scanner() {
+    local -r name="$1"
+    if command -v "${name}" >/dev/null 2>&1; then
+        command -v "${name}"
+        return
+    fi
+    if [[ -x "${HOME}/go/bin/${name}" ]]; then
+        printf '%s\n' "${HOME}/go/bin/${name}"
+        return
+    fi
+    return 1
+}
+
 run_required() {
     local -r label="$1"
     shift
@@ -160,19 +173,21 @@ check_public_docs() {
 check_optional_scanners() {
     local scanner_source
     scanner_source="$(prepare_scanner_source)"
+    local gitleaks_bin=""
+    local trufflehog_bin=""
 
-    if command -v gitleaks >/dev/null 2>&1; then
+    if gitleaks_bin="$(resolve_scanner gitleaks)"; then
         printf '[public-audit] check: gitleaks dir\n'
-        gitleaks dir --redact --exit-code 1 "${scanner_source}"
+        "${gitleaks_bin}" dir --redact --exit-code 1 "${scanner_source}"
     elif [[ "${STRICT_SCANNERS}" == true ]]; then
         record_failure "gitleaks not installed; strict scanner mode requires it"
     else
         record_warning "gitleaks not installed; fallback regex scan was used"
     fi
 
-    if command -v trufflehog >/dev/null 2>&1; then
+    if trufflehog_bin="$(resolve_scanner trufflehog)"; then
         printf '[public-audit] check: trufflehog filesystem\n'
-        trufflehog filesystem "${scanner_source}" --no-update --fail
+        "${trufflehog_bin}" filesystem "${scanner_source}" --no-update --fail
     elif [[ "${STRICT_SCANNERS}" == true ]]; then
         record_failure "trufflehog not installed; strict scanner mode requires it"
     else

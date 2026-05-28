@@ -49,6 +49,7 @@ enum CliCommand {
     RunDryRun(String),
     CheckpointReview,
     CheckpointDryRunAdmission,
+    CheckpointGate,
     InferenceStatus,
 }
 
@@ -121,11 +122,12 @@ fn parse_checkpoint(args: &[String]) -> Result<CliCommand, CliError> {
     match args.first().map(String::as_str) {
         Some("review" | "admission" | "audit") => Ok(CliCommand::CheckpointReview),
         Some("dry-run-admit" | "admit-dry-run") => Ok(CliCommand::CheckpointDryRunAdmission),
+        Some("gate" | "admission-gate" | "admit-gate") => Ok(CliCommand::CheckpointGate),
         Some("admit") if args.get(1).map(String::as_str) == Some("--dry-run") => {
             Ok(CliCommand::CheckpointDryRunAdmission)
         }
         _ => Err(CliError::Message(
-            "checkpoint requires review, admission, audit or dry-run-admit".to_string(),
+            "checkpoint requires review, admission, audit, dry-run-admit or gate".to_string(),
         )),
     }
 }
@@ -173,6 +175,7 @@ fn run(cli: Cli) -> Result<(), CliError> {
         CliCommand::RunDryRun(intent) => run_dry_run(&intent, cli.json),
         CliCommand::CheckpointReview => run_checkpoint_review(cli.json),
         CliCommand::CheckpointDryRunAdmission => run_checkpoint_dry_run_admission(cli.json),
+        CliCommand::CheckpointGate => run_checkpoint_gate(cli.json),
         CliCommand::InferenceStatus => run_inference_status(cli.json),
     }
 }
@@ -297,6 +300,25 @@ fn run_checkpoint_dry_run_admission(json: bool) -> Result<(), CliError> {
     Ok(())
 }
 
+fn run_checkpoint_gate(json: bool) -> Result<(), CliError> {
+    let output = model_runtime::write_paradise_checkpoint_admission_gate();
+    if json {
+        print_file_or_fallback(
+            &state_paths::paradise_checkpoint_admission_gate_path(),
+            "{}",
+        )?;
+        return Ok(());
+    }
+
+    print!("{output}");
+    println!(
+        "gate: {} admission={}",
+        state_paths::paradise_checkpoint_admission_gate_path(),
+        model_runtime::paradise_checkpoint_admission_allowed()
+    );
+    Ok(())
+}
+
 fn run_inference_status(json: bool) -> Result<(), CliError> {
     let output = eden_70b_modular::write_inference_runtime();
     if json {
@@ -304,10 +326,15 @@ fn run_inference_status(json: bool) -> Result<(), CliError> {
         return Ok(());
     }
 
+    let value = std::fs::read_to_string(state_paths::eden_70b_inference_runtime_path())
+        .ok()
+        .map(|body| parse_json(&body))
+        .unwrap_or(Value::Null);
+    let available = path_bool(&value, &["real_checkpoint_inference_available"]).unwrap_or(false);
     print!("{output}");
     println!(
-        "runtime: {} real_checkpoint_inference_available=false",
-        state_paths::eden_70b_inference_runtime_path()
+        "runtime: {} real_checkpoint_inference_available={available}",
+        state_paths::eden_70b_inference_runtime_path(),
     );
     Ok(())
 }
@@ -547,6 +574,7 @@ fn print_usage() {
   paradise [--state-dir DIR] [--json] worldcell
   paradise [--state-dir DIR] [--json] checkpoint review
   paradise [--state-dir DIR] [--json] checkpoint dry-run-admit
+  paradise [--state-dir DIR] [--json] checkpoint gate
   paradise [--state-dir DIR] [--json] inference status
   paradise [--state-dir DIR] [--json] run --dry-run <intent>
 
@@ -556,6 +584,7 @@ Commands:
   checkpoint review   Review checkpoint registry admission policy; never admits weights.
   checkpoint dry-run-admit
                       Generate blocked checkpoint admission checks without admitting weights.
+  checkpoint gate     Evaluate the real admission gate from registry and evidence.
   inference status    Show native inference readiness; blocks until checkpoint admission.
   run --dry-run       Record intent and plan a permissioned action without execution.
 
@@ -610,6 +639,13 @@ mod tests {
         let cli = parse_cli(args(&["checkpoint", "dry-run-admit"])).unwrap();
 
         assert_eq!(cli.command, CliCommand::CheckpointDryRunAdmission);
+    }
+
+    #[test]
+    fn parses_checkpoint_gate() {
+        let cli = parse_cli(args(&["checkpoint", "gate"])).unwrap();
+
+        assert_eq!(cli.command, CliCommand::CheckpointGate);
     }
 
     #[test]

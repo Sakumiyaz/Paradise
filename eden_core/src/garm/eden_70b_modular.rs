@@ -241,19 +241,32 @@ fn launcher_manifest_value() -> Value {
 }
 
 fn checkpoint_admission_value() -> Value {
+    let gate = model_runtime::paradise_checkpoint_admission_gate_snapshot();
+    let admission_allowed = gate
+        .get("checkpoint_admission_allowed")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
     serde_json::json!({
         "schema": EDEN_70B_CHECKPOINT_ADMISSION_SCHEMA,
         "artifact": "eden_70b_checkpoint_admission",
         "authority": AUTHORITY,
         "claim_allowed": false,
         "agi_claim": false,
-        "checkpoint_admission_allowed": false,
-        "production_release_allowed": false,
+        "checkpoint_admission_allowed": admission_allowed,
+        "production_release_allowed": admission_allowed,
+        "paradise_checkpoint_admission_gate": {
+            "schema": gate.get("schema").cloned().unwrap_or(Value::Null),
+            "artifact": gate.get("artifact").cloned().unwrap_or(Value::Null),
+            "passed": gate.get("passed").cloned().unwrap_or(Value::Null),
+            "total": gate.get("total").cloned().unwrap_or(Value::Null),
+            "decision": gate.get("decision").cloned().unwrap_or(Value::Null)
+        },
         "module_admissions": MODULES.iter().map(|module| serde_json::json!({
             "module_id": module.id,
             "parameters": module.parameters,
-            "admitted": false,
+            "admitted": admission_allowed,
             "checkpoint_loaded": false,
+            "admission_source": "paradise_checkpoint_admission_gate",
             "required_before_admission": [
                 "checkpoint_hash",
                 "training_evidence",
@@ -274,16 +287,35 @@ fn checkpoint_admission_value() -> Value {
 }
 
 fn inference_runtime_value() -> Value {
+    let gate = model_runtime::paradise_checkpoint_admission_gate_snapshot();
+    let admission_allowed = gate
+        .get("checkpoint_admission_allowed")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
+    let runtime_status = if admission_allowed {
+        "admitted_checkpoint_ready_for_governed_inference"
+    } else {
+        "contract_ready_waiting_for_admitted_checkpoints"
+    };
     serde_json::json!({
         "schema": EDEN_70B_INFERENCE_RUNTIME_SCHEMA,
         "artifact": "eden_70b_inference_runtime",
         "authority": AUTHORITY,
         "claim_allowed": false,
         "agi_claim": false,
-        "runtime_status": "contract_ready_waiting_for_admitted_checkpoints",
+        "runtime_status": runtime_status,
         "checkpoint_loaded": false,
-        "real_checkpoint_inference_available": false,
+        "checkpoint_loaded_now": false,
+        "admitted_checkpoint_available": admission_allowed,
+        "real_checkpoint_inference_available": admission_allowed,
         "not_a_single_model": true,
+        "admission_gate": {
+            "artifact": "paradise_checkpoint_admission_gate",
+            "allowed": admission_allowed,
+            "passed": gate.get("passed").cloned().unwrap_or(Value::Null),
+            "total": gate.get("total").cloned().unwrap_or(Value::Null),
+            "decision": gate.get("decision").cloned().unwrap_or(Value::Null)
+        },
         "request_contract": {
             "input": ["task", "context", "risk", "modality", "permission_scope"],
             "router_output": ["selected_modules", "reason", "required_verifiers"],

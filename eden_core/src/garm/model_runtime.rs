@@ -7,6 +7,7 @@ pub const PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA: &str =
     "paradise.checkpoint_registry_admission.v1";
 pub const PARADISE_CHECKPOINT_ADMISSION_DRY_RUN_SCHEMA: &str =
     "paradise.checkpoint_admission_dry_run.v1";
+pub const PARADISE_CHECKPOINT_ADMISSION_GATE_SCHEMA: &str = "paradise.checkpoint_admission_gate.v1";
 pub const TRAINING_HARNESS_SCHEMA: &str = "eden.training_harness.v1";
 pub const MODEL_GOVERNANCE_SCHEMA: &str = "eden.model_governance.v1";
 pub const FIRST_MODEL_CARD_SCHEMA: &str = "eden.first_model.card.v1";
@@ -56,6 +57,7 @@ pub fn run_all() -> String {
     out.push_str(&run_model_adapter_runtime_eval());
     out.push_str(&write_checkpoint_manifest());
     out.push_str(&write_paradise_checkpoint_admission_dry_run());
+    out.push_str(&write_paradise_checkpoint_admission_gate());
     out.push_str(&run_training_harness());
     out.push_str(&write_model_governance());
     out.push_str(&write_eden_70b_modular_target());
@@ -98,6 +100,27 @@ pub fn write_paradise_checkpoint_admission_dry_run() -> String {
         state_paths::paradise_checkpoint_admission_dry_run_path(),
         record,
     )
+}
+
+pub fn write_paradise_checkpoint_admission_gate() -> String {
+    let record = paradise_checkpoint_admission_gate_value();
+    write_report(
+        "PARADISE-CHECKPOINT-ADMISSION-GATE",
+        PARADISE_CHECKPOINT_ADMISSION_GATE_SCHEMA,
+        state_paths::paradise_checkpoint_admission_gate_path(),
+        record,
+    )
+}
+
+pub fn paradise_checkpoint_admission_gate_snapshot() -> Value {
+    paradise_checkpoint_admission_gate_value()
+}
+
+pub fn paradise_checkpoint_admission_allowed() -> bool {
+    paradise_checkpoint_admission_gate_value()
+        .get("checkpoint_admission_allowed")
+        .and_then(Value::as_bool)
+        .unwrap_or(false)
 }
 
 pub fn run_training_harness() -> String {
@@ -1833,7 +1856,116 @@ fn megatron_7b_capability_report_value() -> Value {
     })
 }
 
+#[derive(Clone, Debug)]
+struct AdmissionCheck {
+    check: &'static str,
+    passed: bool,
+    evidence: String,
+}
+
+struct ParadiseCheckpointAdmissionEvidence {
+    active_checkpoint: Value,
+    entry_count: usize,
+    admitted_entries: usize,
+    active_entry: Option<Value>,
+    checks: Vec<AdmissionCheck>,
+}
+
 fn paradise_checkpoint_admission_dry_run_value() -> Value {
+    let gate = paradise_checkpoint_admission_gate_value();
+    let would_allow = gate
+        .get("checkpoint_admission_allowed")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
+    let mut record = gate;
+    if let Some(object) = record.as_object_mut() {
+        object.insert(
+            "schema".to_string(),
+            Value::String(PARADISE_CHECKPOINT_ADMISSION_DRY_RUN_SCHEMA.to_string()),
+        );
+        object.insert(
+            "artifact".to_string(),
+            Value::String("paradise_checkpoint_admission_dry_run".to_string()),
+        );
+        object.insert(
+            "checkpoint_admission_allowed".to_string(),
+            Value::Bool(false),
+        );
+        object.insert(
+            "would_allow_checkpoint_admission".to_string(),
+            Value::Bool(would_allow),
+        );
+        object.insert(
+            "mode".to_string(),
+            Value::String("dry_run_only".to_string()),
+        );
+        object.insert(
+            "decision".to_string(),
+            Value::String("dry_run_completed_without_state_mutation".to_string()),
+        );
+    }
+    record
+}
+
+fn paradise_checkpoint_admission_gate_value() -> Value {
+    let evidence = paradise_checkpoint_admission_evidence();
+    let passed = evidence.checks.iter().filter(|check| check.passed).count();
+    let total = evidence.checks.len();
+    let checkpoint_admission_allowed = total > 0 && passed == total;
+    serde_json::json!({
+        "schema": PARADISE_CHECKPOINT_ADMISSION_GATE_SCHEMA,
+        "artifact": "paradise_checkpoint_admission_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "gpu_required": false,
+        "production_model_allowed": false,
+        "checkpoint_admission_allowed": checkpoint_admission_allowed,
+        "mode": "admission_gate",
+        "registry_source": PUBLIC_CHECKPOINT_REGISTRY,
+        "active_checkpoint": evidence.active_checkpoint,
+        "active_checkpoint_entry": evidence.active_entry.unwrap_or(Value::Null),
+        "entry_count": evidence.entry_count,
+        "admitted_entries": evidence.admitted_entries,
+        "passed": passed,
+        "total": total,
+        "checks": evidence.checks.into_iter().map(|check| {
+            serde_json::json!({
+                "check": check.check,
+                "passed": check.passed,
+                "evidence": check.evidence,
+            })
+        }).collect::<Vec<_>>(),
+        "decision": if checkpoint_admission_allowed {
+            "checkpoint_admitted_for_governed_inference_only"
+        } else {
+            "blocked_until_required_checkpoint_evidence_exists"
+        },
+        "admission_policy": {
+            "requires_real_checkpoint": true,
+            "requires_active_registry_entry": true,
+            "requires_hash_review": true,
+            "requires_semantic_eval": true,
+            "requires_strong_eval": true,
+            "requires_safety_eval": true,
+            "requires_inference_probe": true,
+            "requires_human_release_review": true,
+            "requires_rollback_plan": true,
+            "model_outputs_remain_hypotheses": true
+        },
+        "next_required_evidence": [
+            "admitted registry entry matching active_checkpoint",
+            "immutable checkpoint hash reviewed by the evidence review report",
+            "held-out semantic and safety evaluations",
+            "repeatable inference probe against the selected checkpoint",
+            "rollback and deactivation drill",
+            "explicit operator release approval"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn paradise_checkpoint_admission_evidence() -> ParadiseCheckpointAdmissionEvidence {
     let registry = read_repo_json(PUBLIC_CHECKPOINT_REGISTRY);
     let active_checkpoint = registry
         .as_ref()
@@ -1846,11 +1978,22 @@ fn paradise_checkpoint_admission_dry_run_value() -> Value {
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
+    let admitted_entries = entries
+        .iter()
+        .filter(|entry| checkpoint_entry_admitted(entry))
+        .count();
+    let active_entry = active_checkpoint.as_str().and_then(|active_id| {
+        entries
+            .iter()
+            .find(|entry| checkpoint_entry_matches_id(entry, active_id))
+            .cloned()
+    });
     let evidence_review = read_repo_json(
         "target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json",
     );
     let semantic_eval =
         read_repo_json("target/paradise_module_semantic_eval/module_semantic_eval_report.json");
+    let strong_eval = read_repo_json("target/paradise_strong_eval/strong_eval_report.json");
     let non_gpu_readiness =
         read_repo_json("target/paradise_non_gpu_readiness/non_gpu_readiness_report.json");
     let contract_validation = read_repo_json("target/public_contracts/validation_report.json");
@@ -1859,127 +2002,191 @@ fn paradise_checkpoint_admission_dry_run_value() -> Value {
         read_megatron_7b_inference_report_status(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH);
 
     let checks = vec![
-        (
-            "registry_present",
-            registry.is_some(),
-            PUBLIC_CHECKPOINT_REGISTRY.to_string(),
-        ),
-        (
-            "registry_schema_valid",
-            registry.as_ref().is_some_and(|value| {
+        AdmissionCheck {
+            check: "registry_present",
+            passed: registry.is_some(),
+            evidence: PUBLIC_CHECKPOINT_REGISTRY.to_string(),
+        },
+        AdmissionCheck {
+            check: "registry_schema_valid",
+            passed: registry.as_ref().is_some_and(|value| {
                 value.get("schema").and_then(Value::as_str)
                     == Some("paradise.checkpoint_registry.v1")
             }),
-            "schema=paradise.checkpoint_registry.v1".to_string(),
-        ),
-        (
-            "active_checkpoint_selected",
-            !active_checkpoint.is_null(),
-            format!("active_checkpoint={active_checkpoint}"),
-        ),
-        (
-            "checkpoint_entries_admitted",
-            entries
-                .iter()
-                .any(|entry| entry.get("status").and_then(Value::as_str) == Some("admitted")),
-            format!("entries={}", entries.len()),
-        ),
-        (
-            "checkpoint_hash_review_present",
-            evidence_review.as_ref().is_some_and(|value| {
+            evidence: "schema=paradise.checkpoint_registry.v1".to_string(),
+        },
+        AdmissionCheck {
+            check: "registry_no_claim_boundary",
+            passed: registry.as_ref().is_some_and(|value| {
+                value.get("claim_allowed").and_then(Value::as_bool) == Some(false)
+                    && value.get("agi_claim").and_then(Value::as_bool) == Some(false)
+                    && value
+                        .get("production_model_allowed")
+                        .and_then(Value::as_bool)
+                        == Some(false)
+            }),
+            evidence: "claim_allowed=false agi_claim=false production_model_allowed=false"
+                .to_string(),
+        },
+        AdmissionCheck {
+            check: "active_checkpoint_selected",
+            passed: !active_checkpoint.is_null(),
+            evidence: format!("active_checkpoint={active_checkpoint}"),
+        },
+        AdmissionCheck {
+            check: "active_checkpoint_matches_admitted_entry",
+            passed: active_entry
+                .as_ref()
+                .is_some_and(|entry| checkpoint_entry_admitted(entry)),
+            evidence: "active checkpoint must match a registry entry with status=admitted"
+                .to_string(),
+        },
+        AdmissionCheck {
+            check: "active_checkpoint_hash_declared",
+            passed: active_entry
+                .as_ref()
+                .and_then(checkpoint_entry_hash)
+                .is_some_and(|hash| hash.len() >= 32),
+            evidence: "active entry checkpoint_hash length >= 32".to_string(),
+        },
+        AdmissionCheck {
+            check: "checkpoint_hash_review_present",
+            passed: evidence_review.as_ref().is_some_and(|value| {
                 value
                     .get("checkpoint_hash_reviewed")
                     .and_then(Value::as_bool)
                     == Some(true)
             }),
-            "checkpoint_evidence_review.checkpoint_hash_reviewed=true".to_string(),
-        ),
-        (
-            "semantic_eval_passed",
-            semantic_eval
+            evidence: "checkpoint_evidence_review.checkpoint_hash_reviewed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "held_out_eval_passed",
+            passed: active_entry
+                .as_ref()
+                .is_some_and(|entry| checkpoint_entry_bool(entry, &["held_out_eval_passed"])),
+            evidence: "active entry held_out_eval_passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "safety_eval_passed",
+            passed: active_entry
+                .as_ref()
+                .is_some_and(|entry| checkpoint_entry_bool(entry, &["safety_eval_passed"])),
+            evidence: "active entry safety_eval_passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "rollback_plan_verified",
+            passed: active_entry.as_ref().is_some_and(|entry| {
+                checkpoint_entry_bool(entry, &["rollback_verified", "rollback_plan_verified"])
+            }),
+            evidence: "active entry rollback_verified=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "operator_release_approved",
+            passed: active_entry.as_ref().is_some_and(|entry| {
+                checkpoint_entry_bool(
+                    entry,
+                    &[
+                        "operator_release_approved",
+                        "operator_approval",
+                        "human_release_approved",
+                    ],
+                )
+            }),
+            evidence: "active entry operator_release_approved=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "semantic_eval_passed",
+            passed: semantic_eval
                 .as_ref()
                 .and_then(|value| value.get("passed"))
                 .and_then(Value::as_bool)
                 == Some(true),
-            "paradise_module_semantic_eval.passed=true".to_string(),
-        ),
-        (
-            "non_gpu_readiness_passed",
-            non_gpu_readiness
+            evidence: "paradise_module_semantic_eval.passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "strong_eval_passed",
+            passed: strong_eval
                 .as_ref()
                 .and_then(|value| value.get("passed"))
                 .and_then(Value::as_bool)
                 == Some(true),
-            "paradise_non_gpu_readiness.passed=true".to_string(),
-        ),
-        (
-            "public_contracts_passed",
-            contract_validation
+            evidence: "paradise_strong_eval.passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "non_gpu_readiness_passed",
+            passed: non_gpu_readiness
                 .as_ref()
                 .and_then(|value| value.get("passed"))
                 .and_then(Value::as_bool)
                 == Some(true),
-            "public_contracts.validation_report.passed=true".to_string(),
-        ),
-        (
-            "inference_probe_checkpoint_loaded",
-            inference_probe
+            evidence: "paradise_non_gpu_readiness.passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "public_contracts_passed",
+            passed: contract_validation
+                .as_ref()
+                .and_then(|value| value.get("passed"))
+                .and_then(Value::as_bool)
+                == Some(true),
+            evidence: "public_contracts.validation_report.passed=true".to_string(),
+        },
+        AdmissionCheck {
+            check: "inference_probe_checkpoint_loaded",
+            passed: inference_probe
                 .get("checkpoint_loaded")
                 .and_then(Value::as_bool)
                 == Some(true),
-            DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH.to_string(),
-        ),
-        (
-            "release_package_present",
-            release_package
+            evidence: DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH.to_string(),
+        },
+        AdmissionCheck {
+            check: "release_package_present",
+            passed: release_package
                 .as_ref()
                 .and_then(|value| value.get("schema"))
                 .and_then(Value::as_str)
                 == Some("paradise.release_package.v1"),
-            "target/paradise_release/release_package_manifest.json".to_string(),
-        ),
-    ];
-    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
-    serde_json::json!({
-        "schema": PARADISE_CHECKPOINT_ADMISSION_DRY_RUN_SCHEMA,
-        "artifact": "paradise_checkpoint_admission_dry_run",
-        "authority": AUTHORITY,
-        "claim_allowed": false,
-        "agi_claim": false,
-        "gpu_required": false,
-        "production_model_allowed": false,
-        "checkpoint_admission_allowed": false,
-        "mode": "dry_run_only",
-        "registry_source": PUBLIC_CHECKPOINT_REGISTRY,
-        "active_checkpoint": active_checkpoint,
-        "entry_count": entries.len(),
-        "passed": passed,
-        "total": checks.len(),
-        "checks": checks.into_iter().map(|(check, passed, evidence)| {
-            serde_json::json!({
-                "check": check,
-                "passed": passed,
-                "evidence": evidence,
-            })
-        }).collect::<Vec<_>>(),
-        "decision": "blocked_until_required_checkpoint_evidence_exists",
-        "admission_policy": {
-            "requires_real_checkpoint": true,
-            "requires_hash_review": true,
-            "requires_semantic_eval": true,
-            "requires_safety_eval": true,
-            "requires_human_release_review": true,
-            "requires_rollback_plan": true,
-            "model_outputs_remain_hypotheses": true
+            evidence: "target/paradise_release/release_package_manifest.json".to_string(),
         },
-        "next_required_evidence": [
-            "admitted registry entry with immutable checkpoint hash",
-            "held-out semantic and safety evaluations",
-            "repeatable inference probe against the selected checkpoint",
-            "rollback and deactivation drill",
-            "human release approval"
-        ],
-        "safety_boundary": model_safety_boundary(),
+    ];
+
+    ParadiseCheckpointAdmissionEvidence {
+        active_checkpoint,
+        entry_count: entries.len(),
+        admitted_entries,
+        active_entry,
+        checks,
+    }
+}
+
+fn checkpoint_entry_admitted(entry: &Value) -> bool {
+    entry.get("status").and_then(Value::as_str) == Some("admitted")
+}
+
+fn checkpoint_entry_matches_id(entry: &Value, active_id: &str) -> bool {
+    ["id", "checkpoint_id", "model_id"]
+        .iter()
+        .any(|field| entry.get(*field).and_then(Value::as_str) == Some(active_id))
+}
+
+fn checkpoint_entry_hash(entry: &Value) -> Option<&str> {
+    ["checkpoint_hash", "sha256", "weights_sha256"]
+        .iter()
+        .find_map(|field| entry.get(*field).and_then(Value::as_str))
+}
+
+fn checkpoint_entry_bool(entry: &Value, fields: &[&str]) -> bool {
+    fields.iter().any(|field| {
+        entry.get(*field).and_then(Value::as_bool) == Some(true)
+            || entry
+                .get("approval")
+                .and_then(|approval| approval.get(*field))
+                .and_then(Value::as_bool)
+                == Some(true)
+            || entry
+                .get("evidence")
+                .and_then(|evidence| evidence.get(*field))
+                .and_then(Value::as_bool)
+                == Some(true)
     })
 }
 
@@ -2834,6 +3041,7 @@ mod tests {
         assert!(
             std::fs::metadata(state_paths::paradise_checkpoint_admission_dry_run_path()).is_ok()
         );
+        assert!(std::fs::metadata(state_paths::paradise_checkpoint_admission_gate_path()).is_ok());
         assert!(std::fs::metadata(state_paths::training_harness_report_path()).is_ok());
         assert!(std::fs::metadata(state_paths::model_governance_report_path()).is_ok());
         assert!(std::fs::metadata(state_paths::eden_70b_modular_target_path()).is_ok());
@@ -2868,7 +3076,34 @@ mod tests {
         assert_eq!(parsed["production_model_allowed"], false);
         assert_eq!(parsed["checkpoint_admission_allowed"], false);
         assert_eq!(parsed["mode"], "dry_run_only");
+        assert_eq!(parsed["would_allow_checkpoint_admission"], false);
         assert!(parsed["total"].as_u64().unwrap() >= 1);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn paradise_checkpoint_gate_blocks_until_required_evidence_exists() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("paradise_checkpoint_gate_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = write_paradise_checkpoint_admission_gate();
+        let body = std::fs::read_to_string(state_paths::paradise_checkpoint_admission_gate_path())
+            .unwrap();
+        let parsed: Value = serde_json::from_str(&body).unwrap();
+
+        assert!(out.contains("[PARADISE-CHECKPOINT-ADMISSION-GATE]"));
+        assert_eq!(parsed["schema"], PARADISE_CHECKPOINT_ADMISSION_GATE_SCHEMA);
+        assert_eq!(parsed["claim_allowed"], false);
+        assert_eq!(parsed["agi_claim"], false);
+        assert_eq!(parsed["production_model_allowed"], false);
+        assert_eq!(parsed["checkpoint_admission_allowed"], false);
+        assert_eq!(parsed["mode"], "admission_gate");
+        assert!(parsed["total"].as_u64().unwrap() >= 10);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

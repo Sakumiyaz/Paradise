@@ -11,7 +11,7 @@
     "authority": {"const": "global_executive_workspace_core"},
     "claim_allowed": {"const": false},
     "agi_claim": {"const": false},
-    "checkpoint_admission_allowed": {"const": false},
+    "checkpoint_admission_allowed": {"type": "boolean"},
     "module_admissions": {"type": "array", "minItems": 6}
   }
 }

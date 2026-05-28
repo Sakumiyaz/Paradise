@@ -6,6 +6,8 @@
 #![allow(non_snake_case)]
 
 #[cfg(feature = "benchmark")]
+use crate::eden_garm::{reproducible_package, runtime_state_api};
+#[cfg(feature = "benchmark")]
 use std::time::Duration;
 use std::time::Instant;
 
@@ -168,23 +170,37 @@ struct LocalTickBenchmark {
     iterations: u64,
     elapsed: Duration,
     checksum: u64,
+    runtime_states: usize,
+    release_artifacts: usize,
 }
 
 #[cfg(feature = "benchmark")]
 fn run_local_tick_benchmark(mode: &'static str, iterations: u64) -> LocalTickBenchmark {
     let start = Instant::now();
     let mut checksum = 0xED3E_0001_u64;
+    let mut runtime_states = 0usize;
+    let mut release_artifacts = 0usize;
     for index in 0..iterations {
+        let states = runtime_state_api::state_specs();
+        let artifacts = reproducible_package::artifact_specs();
+        runtime_states = states.len();
+        release_artifacts = artifacts.len();
+        let state_bytes = states.iter().map(|spec| spec.name.len()).sum::<usize>() as u64;
+        let artifact_bytes = artifacts.iter().map(|spec| spec.name.len()).sum::<usize>() as u64;
         checksum = checksum
             .rotate_left((index % 31) as u32)
             .wrapping_mul(1_099_511_628_211)
-            .wrapping_add(index ^ 0xA11CE);
+            .wrapping_add(index ^ 0xA11CE)
+            .wrapping_add(state_bytes)
+            .wrapping_add(artifact_bytes);
     }
     LocalTickBenchmark {
         mode,
         iterations,
         elapsed: start.elapsed(),
         checksum,
+        runtime_states,
+        release_artifacts,
     }
 }
 
@@ -197,11 +213,28 @@ fn print_benchmark_result(result: &LocalTickBenchmark) {
         elapsed_ns / u128::from(result.iterations)
     };
     println!(
-        "[EDEN-BENCH] mode={} iterations={} elapsed_ms={:.3} ns_per_tick={} checksum={:016x} claim_allowed=false",
+        "[EDEN-BENCH] mode={} iterations={} elapsed_ms={:.3} ns_per_tick={} runtime_states={} release_artifacts={} checksum={:016x} claim_allowed=false",
         result.mode,
         result.iterations,
         result.elapsed.as_secs_f64() * 1000.0,
         ns_per_tick,
+        result.runtime_states,
+        result.release_artifacts,
         result.checksum
     );
+}
+
+#[cfg(all(test, feature = "benchmark"))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn local_benchmark_measures_runtime_catalog_hot_paths() {
+        let result = run_local_tick_benchmark("test", 4);
+
+        assert_eq!(result.iterations, 4);
+        assert!(result.runtime_states > 0);
+        assert!(result.release_artifacts > 0);
+        assert_ne!(result.checksum, 0);
+    }
 }

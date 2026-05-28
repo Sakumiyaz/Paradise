@@ -928,6 +928,8 @@
             <li><span>authority</span><strong>GEWC</strong></li>
             <li><span>admission</span><strong id="checkpoint-admission">blocked</strong></li>
             <li><span>dry-run checks</span><strong id="checkpoint-dry-run">pending</strong></li>
+            <li><span>gate checks</span><strong id="checkpoint-gate">pending</strong></li>
+            <li><span>inference</span><strong id="checkpoint-inference">blocked</strong></li>
           </ul>
           <a href="/api/artifact/catalog">Artifact catalog</a>
         </article>
@@ -947,6 +949,7 @@
             <li><span>tool call</span><strong>dry-run first</strong></li>
             <li><span>checkpoint</span><strong id="checkpoint-registry">registry gate</strong></li>
             <li><span>evidence</span><strong id="checkpoint-evidence">required</strong></li>
+            <li><span>gate decision</span><strong id="checkpoint-gate-decision">blocked</strong></li>
           </ul>
           <a href="/api/actions/dry-run">Review dry-runs</a>
         </article>
@@ -1103,19 +1106,24 @@
           command: "make paradise-operational-loop"
         }, null, 2));
 
-        const [nonGpuReadiness, checkpointAdmission, checkpointDryRun, strongEval, contractValidation] = await Promise.all([
+        const [nonGpuReadiness, checkpointAdmission, checkpointDryRun, checkpointGate, inferenceRuntime, strongEval, contractValidation] = await Promise.all([
           fetchOptionalJson("/api/artifact?name=paradise_non_gpu_readiness"),
           fetchOptionalJson("/api/artifact?name=paradise_checkpoint_registry_admission"),
           fetchOptionalJson("/api/artifact?name=paradise_checkpoint_admission_dry_run"),
+          fetchOptionalJson("/api/artifact?name=paradise_checkpoint_admission_gate"),
+          fetchOptionalJson("/api/artifact?name=eden_70b_inference_runtime"),
           fetchOptionalJson("/api/artifact?name=paradise_strong_eval"),
           fetchOptionalJson("/api/runtime/state?name=public_contract_validation")
         ]);
 
         text("checkpoint-family", checkpointAdmission?.entry_count === 0 ? "modular target" : `${checkpointAdmission.entry_count} entries`);
-        text("checkpoint-admission", checkpointAdmission?.checkpoint_admission_allowed === false ? "blocked" : "pending");
+        text("checkpoint-admission", checkpointGate?.checkpoint_admission_allowed === true ? "allowed" : "blocked");
         text("checkpoint-registry", checkpointAdmission?.registry_present ? "audited" : "generate");
         text("checkpoint-dry-run", checkpointDryRun ? `${checkpointDryRun.passed ?? 0}/${checkpointDryRun.total ?? 0}` : "generate");
-        text("checkpoint-evidence", checkpointDryRun?.checkpoint_admission_allowed === false ? "blocked" : "required");
+        text("checkpoint-gate", checkpointGate ? `${checkpointGate.passed ?? 0}/${checkpointGate.total ?? 0}` : "generate");
+        text("checkpoint-inference", inferenceRuntime?.real_checkpoint_inference_available === true ? "available" : "blocked");
+        text("checkpoint-evidence", checkpointGate?.checkpoint_admission_allowed === true ? "accepted" : "required");
+        text("checkpoint-gate-decision", checkpointGate?.decision || "blocked");
         text("dataset-private", nonGpuReadiness?.license_manifest?.contains_private_data === false ? "0" : "forbidden");
         text("dataset-licenses", nonGpuReadiness?.license_manifest?.dataset_count ?? "required");
         text("release-contracts", contractValidation?.passed === true ? "passed" : "pending");

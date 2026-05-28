@@ -509,6 +509,10 @@ pub fn artifact_specs() -> Vec<ReproducibleArtifactSpec> {
             state_paths::paradise_checkpoint_admission_dry_run_path(),
         ),
         artifact(
+            "paradise_checkpoint_admission_gate",
+            state_paths::paradise_checkpoint_admission_gate_path(),
+        ),
+        artifact(
             "paradise_non_gpu_readiness",
             "target/paradise_non_gpu_readiness/non_gpu_readiness_report.json".to_string(),
         ),

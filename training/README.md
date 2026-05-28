@@ -90,6 +90,7 @@ Python training code:
 | --- | --- |
 | `model_adapter_runtime.json` | Registers model adapters as subordinate GEWC modules. |
 | `model_checkpoint_manifest.json` | Records checkpoint admission policy; no weights are committed. |
+| `paradise_checkpoint_admission_gate.json` | Evaluates the real public checkpoint admission gate from registry, eval, inference, rollback and approval evidence. |
 | `training_harness_report.json` | Describes train/evaluate/compare/admit phases without running production training. |
 | `model_governance_report.json` | Defines permissions, verification and circuit breakers for model adapters. |
 | `eden_70b_modular_target.json` | Freezes the future 70B modular family under GEWC. It blocks single-checkpoint 70B training, monolithic LLM-brain authority and direct model writes. |
