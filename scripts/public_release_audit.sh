@@ -7,6 +7,15 @@ ROOT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 declare -a FAILURES=()
 declare -a WARNINGS=()
 STRICT_SCANNERS=false
+SCANNER_SOURCE_DIR=""
+
+cleanup() {
+    if [[ -n "${SCANNER_SOURCE_DIR}" && -d "${SCANNER_SOURCE_DIR}" ]]; then
+        rm -rf -- "${SCANNER_SOURCE_DIR}"
+    fi
+}
+
+trap cleanup EXIT
 
 for arg in "$@"; do
     case "${arg}" in
@@ -43,7 +52,7 @@ check_tracked_forbidden_paths() {
     local matches
     matches="$(
         git -C "${ROOT_DIR}" ls-files |
-            rg '(^|/)\.git($|/)|(^|/)\.git\.bak($|/)|\.bundle$|(__pycache__|\.pyc$|\.bak$|\.debug$|\.tmp$|\.env|secret|token|credential|private|\.pem$|\.p12$|\.pfx$|Cargo\.toml\.v|/reports/|language_reports)' || true
+            grep -E '(^|/)\.git($|/)|(^|/)\.git\.bak($|/)|\.bundle$|(__pycache__|\.pyc$|\.bak$|\.debug$|\.tmp$|\.env|secret|token|credential|private|\.pem$|\.p12$|\.pfx$|Cargo\.toml\.v|/reports/|language_reports)' || true
     )"
     if [[ -n "${matches}" ]]; then
         printf '%s\n' "${matches}" >&2
@@ -86,15 +95,42 @@ check_untracked_secret_files() {
 }
 
 check_secret_patterns() {
-    ! rg -n --hidden \
-        -g '!.git' \
-        -g '!target' \
-        -g '!eden_core/target' \
-        -g '!mnemosyne/target' \
-        -g '!Cargo.lock' \
-        -g '!scripts/public_release_audit.sh' \
-        '(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|xox[baprs]-|ghp_[A-Za-z0-9_]{20,}|-----BEGIN (RSA |OPENSSH |EC |DSA |PRIVATE )?PRIVATE KEY-----|OPENAI_API_KEY=|ANTHROPIC_API_KEY=|GITHUB_TOKEN=|AWS_SECRET_ACCESS_KEY=)' \
+    local -r pattern='(AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|xox[baprs]-|ghp_[A-Za-z0-9_]{20,}|-----BEGIN (RSA |OPENSSH |EC |DSA |PRIVATE )?PRIVATE KEY-----|OPENAI_API_KEY=|ANTHROPIC_API_KEY=|GITHUB_TOKEN=|AWS_SECRET_ACCESS_KEY=)'
+    if command -v rg >/dev/null 2>&1; then
+        ! rg -n --hidden \
+            -g '!.git' \
+            -g '!target' \
+            -g '!eden_core/target' \
+            -g '!mnemosyne/target' \
+            -g '!Cargo.lock' \
+            -g '!scripts/public_release_audit.sh' \
+            "${pattern}" \
+            "${ROOT_DIR}"
+        return
+    fi
+
+    ! grep -RInE \
+        --exclude-dir='.git' \
+        --exclude-dir='target' \
+        --exclude='Cargo.lock' \
+        --exclude='public_release_audit.sh' \
+        "${pattern}" \
         "${ROOT_DIR}"
+}
+
+prepare_scanner_source() {
+    if [[ -n "${SCANNER_SOURCE_DIR}" ]]; then
+        printf '%s\n' "${SCANNER_SOURCE_DIR}"
+        return
+    fi
+
+    SCANNER_SOURCE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/paradise-public-audit.XXXXXX")"
+    while IFS= read -r -d '' tracked_path; do
+        mkdir -p -- "${SCANNER_SOURCE_DIR}/$(dirname -- "${tracked_path}")"
+        cp -Pp -- "${ROOT_DIR}/${tracked_path}" "${SCANNER_SOURCE_DIR}/${tracked_path}"
+    done < <(git -C "${ROOT_DIR}" ls-files -z)
+
+    printf '%s\n' "${SCANNER_SOURCE_DIR}"
 }
 
 check_public_docs() {
@@ -122,9 +158,12 @@ check_public_docs() {
 }
 
 check_optional_scanners() {
+    local scanner_source
+    scanner_source="$(prepare_scanner_source)"
+
     if command -v gitleaks >/dev/null 2>&1; then
-        printf '[public-audit] check: gitleaks detect\n'
-        gitleaks detect --source "${ROOT_DIR}" --redact --exit-code 1
+        printf '[public-audit] check: gitleaks dir\n'
+        gitleaks dir --redact --exit-code 1 "${scanner_source}"
     elif [[ "${STRICT_SCANNERS}" == true ]]; then
         record_failure "gitleaks not installed; strict scanner mode requires it"
     else
@@ -133,7 +172,7 @@ check_optional_scanners() {
 
     if command -v trufflehog >/dev/null 2>&1; then
         printf '[public-audit] check: trufflehog filesystem\n'
-        trufflehog filesystem "${ROOT_DIR}" --no-update --fail
+        trufflehog filesystem "${scanner_source}" --no-update --fail
     elif [[ "${STRICT_SCANNERS}" == true ]]; then
         record_failure "trufflehog not installed; strict scanner mode requires it"
     else

@@ -1681,7 +1681,7 @@ fn megatron_7b_model_adapter_value() -> Value {
             "ffn_hidden_size": 12288,
             "attention_heads": 32,
             "sequence_length": 128,
-            "tokenizer": "eden_sentencepiece_vocab_2048"
+            "tokenizer": "eden_sentencepiece_vocab_2048" // gitleaks:allow false positive; public tokenizer identifier, not a secret.
         },
         "usable_capacity_boundary": {
             "accepted_for": [
