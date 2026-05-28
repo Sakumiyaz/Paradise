@@ -74,10 +74,13 @@ def main() -> int:
             "make paradise-strong-eval",
             "make paradise-checkpoint-evidence-review",
             "make paradise-checkpoint-registry-smoke",
+            "make paradise-checkpoint-admission-gate-smoke",
             "make paradise-public-demo",
+            "make paradise-benchmark-local",
             "make check",
             "make eden-api-conformance",
             "make public-audit",
+            "make paradise-external-validation-package",
         ],
         "optional_strict_commands": [
             "make install-secret-scanners",

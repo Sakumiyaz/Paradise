@@ -21,6 +21,7 @@ blocked.
 | Strong local eval bundle | Existing non-GPU reports can be composed into family-level evidence without model inference. | `make paradise-strong-eval` |
 | Checkpoint evidence review | Existing local probe reports can be reviewed without admitting weights. | `make paradise-checkpoint-evidence-review` |
 | Checkpoint admission dry-run | Registry, evidence and inference requirements can be evaluated while keeping admission blocked. | `cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit` |
+| Checkpoint admission gate | The real registry/evidence gate can be evaluated locally; it remains blocked until all required evidence exists. | `cargo run -p eden_core --bin paradise -- checkpoint gate` |
 | External validation package | Non-confidential reports can be bundled for outside reviewers without checkpoints or private data. | `make paradise-external-validation-package` |
 | Public release audit | Secret/path/document scans are available. | `make public-audit` |
 

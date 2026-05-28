@@ -1,4 +1,4 @@
-.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime eden-70b-modular-target eden-70b-operationalize first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability eden-v03-capability eden-v04-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart paradise-public-demo paradise-non-gpu-readiness contracts-validate training-dataset-license-manifest paradise-dataset-manifest paradise-module-semantic-eval paradise-strong-eval paradise-checkpoint-evidence-review paradise-checkpoint-registry-smoke paradise-model-adapter-smoke paradise-release-package paradise-external-validation-package paradise-ci-public runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-70b-dataset training-eden-70b-module-pilot training-eden-70b-modular-plan training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage training-eden-v03-dataset training-eden-v03-generalization-eval training-eden-v03-demo training-eden-v03-stage training-eden-v04-dataset training-eden-v04-operational-eval training-eden-v04-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy install-secret-scanners public-audit public-audit-strict verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
+.PHONY: fmt test workspace-test doctest external-tests check native-runtime-layout api-socket-test training-smoke training-evidence model-runtime eden-70b-modular-target eden-70b-operationalize first-model-prepare elcp-validate elcp-baseline elcp-trace-export elcp-training-dry-run elcp-admission-gate elcp-trace-quality elcp-replay-eval elcp-dataset-freeze elcp-metrics-board elcp-4b-readiness-contract elcp-hardening elcp-prepare eden-capable eden-capable-operationalize eden-learned-capability eden-real-capability eden-v01-capability eden-v02-stability eden-v03-capability eden-v04-capability paradise-status paradise-worldcell paradise-operational-loop paradise-quickstart paradise-public-demo paradise-non-gpu-readiness contracts-validate training-dataset-license-manifest paradise-dataset-manifest paradise-module-semantic-eval paradise-strong-eval paradise-checkpoint-evidence-review paradise-checkpoint-registry-smoke paradise-checkpoint-admission-gate-smoke paradise-benchmark-local paradise-model-adapter-smoke paradise-release-package paradise-external-validation-package paradise-ci-public runtime-spine training-rocm-profile training-megatron-offline-smoke training-megatron-eden-corpus-pilot training-megatron-eden-7b-base-pilot training-megatron-7b-evidence-json training-megatron-7b-evidence training-megatron-7b-inference-probe training-megatron-7b-inference-report-json training-megatron-7b-adapter training-eden-sft-elcp-dataset training-eden-sft-elcp-gpu-pilot training-eden-70b-dataset training-eden-70b-module-pilot training-eden-70b-modular-plan training-eden-real-capability-dataset training-eden-real-capability-eval training-eden-real-capability-stage training-eden-v01-dataset training-eden-v01-semantic-eval training-eden-v01-demo training-eden-v01-gpu-hygiene training-eden-v01-stage training-eden-v02-dataset training-eden-v02-stability-eval training-eden-v02-adversarial-eval training-eden-v02-rollback-drill training-eden-v02-model-card training-eden-v02-demo training-eden-v02-stage training-eden-v03-dataset training-eden-v03-generalization-eval training-eden-v03-demo training-eden-v03-stage training-eden-v04-dataset training-eden-v04-operational-eval training-eden-v04-stage operational-blackbox operational-evidence-bundle operational-demo-suite long-run-stability smoke smoke-api smoke-restart hrm-regression security js-policy install-secret-scanners public-audit public-audit-strict verify readiness readiness-bench eden-probe eden-validate-local eden-api-contracts eden-api-conformance edenctl-doctor eden-openapi-export eden-package eden-independent-validate eden-release-candidate eden-release-check
 
 GARM := cargo run -p eden_core --bin eden-garm --
 EDENCTL := cargo run -p eden_core --bin edenctl --
@@ -127,6 +127,7 @@ paradise-quickstart:
 	$(PARADISE) --state-dir /tmp/paradise_quickstart worldcell
 	$(PARADISE) --state-dir /tmp/paradise_quickstart checkpoint review
 	$(PARADISE) --state-dir /tmp/paradise_quickstart checkpoint dry-run-admit
+	$(PARADISE) --state-dir /tmp/paradise_quickstart checkpoint gate
 	$(PARADISE) --state-dir /tmp/paradise_quickstart inference status
 	$(PARADISE) --state-dir /tmp/paradise_quickstart run --dry-run "inspect runtime status safely"
 
@@ -158,9 +159,15 @@ paradise-checkpoint-registry-smoke:
 	python3 -m json.tool training/models/checkpoint_registry.json >/dev/null
 	printf 'paradise checkpoint registry audit\nartifact api eval\nquit\n' | EDEN_GARM_SKIP_LEGACY_MIGRATION=1 $(GARM) --state-dir /tmp/paradise_checkpoint_registry --api-port 0
 
+paradise-checkpoint-admission-gate-smoke:
+	$(PARADISE) --state-dir /tmp/paradise_checkpoint_admission_gate checkpoint gate
+
+paradise-benchmark-local:
+	cargo test -p eden_core benchmark --features benchmark --lib
+
 paradise-model-adapter-smoke: model-runtime
 
-paradise-release-package: contracts-validate paradise-non-gpu-readiness paradise-dataset-manifest paradise-module-semantic-eval paradise-strong-eval paradise-checkpoint-evidence-review paradise-checkpoint-registry-smoke paradise-public-demo
+paradise-release-package: contracts-validate paradise-non-gpu-readiness paradise-dataset-manifest paradise-module-semantic-eval paradise-strong-eval paradise-checkpoint-evidence-review paradise-checkpoint-registry-smoke paradise-checkpoint-admission-gate-smoke paradise-public-demo
 	python3 -m json.tool target/public_contracts/validation_report.json >/dev/null
 	python3 -m json.tool target/paradise_non_gpu_readiness/non_gpu_readiness_report.json >/dev/null
 	python3 -m json.tool target/paradise_dataset_manifest/paradise_dataset_manifest.json >/dev/null
@@ -173,7 +180,7 @@ paradise-release-package: contracts-validate paradise-non-gpu-readiness paradise
 paradise-external-validation-package: paradise-release-package
 	python3 scripts/build_paradise_external_validation_package.py
 
-paradise-ci-public: paradise-release-package paradise-external-validation-package public-audit check eden-api-conformance
+paradise-ci-public: paradise-release-package paradise-external-validation-package paradise-benchmark-local public-audit check eden-api-conformance
 
 runtime-spine:
 	rm -rf -- /tmp/eden_runtime_spine

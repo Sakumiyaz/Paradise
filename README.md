@@ -60,6 +60,7 @@ shipping weights:
 
 ```bash
 cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- checkpoint gate
 cargo run -p eden_core --bin paradise -- inference status
 ```
 

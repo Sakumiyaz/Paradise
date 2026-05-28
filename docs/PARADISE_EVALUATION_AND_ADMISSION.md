@@ -68,11 +68,15 @@ Audit the registry through the native GEWC runtime command:
 ```sh
 make paradise-checkpoint-registry-smoke
 cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit
+cargo run -p eden_core --bin paradise -- checkpoint gate
 ```
 
 This writes `paradise_checkpoint_registry_admission.json` under the selected
-runtime state directory plus `paradise_checkpoint_admission_dry_run.json` when
-the dry-run command is used. Both keep `checkpoint_admission_allowed=false`.
+runtime state directory plus `paradise_checkpoint_admission_dry_run.json` and
+`paradise_checkpoint_admission_gate.json` when the CLI commands are used. The
+dry-run never mutates admission. The gate is the real admission decision and
+stays blocked until the active registry entry, hash review, held-out eval,
+safety eval, inference probe, rollback drill and operator approval all pass.
 
 Review local probe evidence without admitting a checkpoint:
 

@@ -88,6 +88,7 @@ cargo run -p eden_core --bin paradise -- status
 cargo run -p eden_core --bin paradise -- worldcell
 cargo run -p eden_core --bin paradise -- checkpoint review
 cargo run -p eden_core --bin paradise -- checkpoint dry-run-admit
+cargo run -p eden_core --bin paradise -- checkpoint gate
 cargo run -p eden_core --bin paradise -- inference status
 cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
 ```

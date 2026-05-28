@@ -355,6 +355,8 @@ fn generator_command(name: &str) -> &'static str {
         "megatron 7b admission gate eval"
     } else if name == "paradise_checkpoint_registry_admission" {
         "paradise checkpoint registry audit"
+    } else if name == "paradise_checkpoint_admission_gate" {
+        "paradise checkpoint gate"
     } else if name.starts_with("elcp") {
         "elcp prepare"
     } else if name.starts_with("first_model") {

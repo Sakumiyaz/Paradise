@@ -194,6 +194,11 @@ fn curated_operational_schemas() -> Vec<serde_json::Value> {
             "/api/artifact?name=paradise_checkpoint_admission_dry_run",
         ),
         curated(
+            "paradise_checkpoint_admission_gate",
+            crate::eden_garm::model_runtime::PARADISE_CHECKPOINT_ADMISSION_GATE_SCHEMA,
+            "/api/artifact?name=paradise_checkpoint_admission_gate",
+        ),
+        curated(
             "paradise_non_gpu_readiness",
             "paradise.non_gpu_readiness.v1",
             "/api/artifact?name=paradise_non_gpu_readiness",

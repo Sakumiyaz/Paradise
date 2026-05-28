@@ -210,11 +210,13 @@ def main() -> int:
             and "schemas/paradise-checkpoint-registry-v1.json" in manifest_schema_set
             and "schemas/paradise-checkpoint-registry-admission-v1.json" in manifest_schema_set
             and "schemas/paradise-checkpoint-admission-dry-run-v1.json" in manifest_schema_set
+            and "schemas/paradise-checkpoint-admission-gate-v1.json" in manifest_schema_set
             and "schemas/eden-70b-checkpoint-admission-v1.json" in manifest_schema_set
             and checkpoint_registry.get("schema") == "paradise.checkpoint_registry.v1"
             and checkpoint_registry.get("production_model_allowed") is False
             and checkpoint_registry.get("entries") == []
             and "paradise-checkpoint-registry-smoke:" in makefile
+            and "paradise-checkpoint-admission-gate-smoke:" in makefile
             and "production_model_allowed" in read_text(root / "docs/PARADISE_EVALUATION_AND_ADMISSION.md"),
             "checkpoint admission remains contract-gated and no-claim",
         ),

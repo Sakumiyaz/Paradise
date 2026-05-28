@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-checkpoint-admission-gate-v1.json",
+  "title": "Paradise Checkpoint Admission Gate",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "checkpoint_admission_allowed",
+    "mode",
+    "passed",
+    "total",
+    "checks",
+    "decision"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.checkpoint_admission_gate.v1" },
+    "artifact": { "const": "paradise_checkpoint_admission_gate" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "checkpoint_admission_allowed": { "type": "boolean" },
+    "gpu_required": { "const": false },
+    "mode": { "const": "admission_gate" },
+    "passed": { "type": "integer", "minimum": 0 },
+    "total": { "type": "integer", "minimum": 1 },
+    "decision": { "type": "string" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "passed", "evidence"],
+        "properties": {
+          "check": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "evidence": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

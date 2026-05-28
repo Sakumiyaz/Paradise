@@ -88,6 +88,7 @@ def main() -> int:
             "make paradise-dataset-manifest",
             "make paradise-module-semantic-eval",
             "make paradise-checkpoint-evidence-review",
+            "make paradise-checkpoint-admission-gate-smoke",
             "make paradise-strong-eval",
             "make paradise-release-package",
             "make public-audit",

@@ -11,6 +11,7 @@ new users to learn every internal research term.
 | `cargo run -p eden_core --bin paradise -- status` | Socket-free local status and evidence path. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- worldcell` | Generate the Paradise Worldcell Runtime artifact. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- checkpoint review` | Review checkpoint registry policy without admitting weights. | Public quickstart |
+| `cargo run -p eden_core --bin paradise -- checkpoint gate` | Evaluate the real checkpoint admission gate from public evidence. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- inference status` | Show native inference readiness without loading production checkpoints. | Public quickstart |
 | `cargo run -p eden_core --bin paradise -- run --dry-run <intent>` | Record intent and produce a reviewable dry-run session without execution. | Public quickstart |
 | `make paradise-quickstart` | Run status, worldcell generation, checkpoint review, inference status and dry-run planning together. | Public quickstart |
@@ -50,8 +51,9 @@ explain a real boundary.
 
 1. Use `paradise status` to check local evidence generation.
 2. Use `paradise worldcell` to generate the public runtime identity artifact.
-3. Use `paradise checkpoint review` and `paradise inference status` to confirm
-   model/checkpoint boundaries remain blocked.
+3. Use `paradise checkpoint review`, `paradise checkpoint gate` and
+   `paradise inference status` to confirm model/checkpoint boundaries remain
+   blocked until evidence exists.
 4. Use `paradise run --dry-run "<intent>"` to produce a reviewable plan.
 5. Move to `edenctl` and the local API only when you need a live runtime daemon.
 6. Validate contracts through `make eden-api-conformance` before publishing an
