@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-megatron-7b-capability-report-v1.json",
+  "title": "EDEN Megatron 7B Capability Report",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "model_id",
+    "capability_id",
+    "accepted_capability",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.megatron.7b.capability_report.v1"
+    },
+    "artifact": {
+      "const": "megatron_7b_capability_report"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "model_id": {
+      "const": "eden-megatron-7b-base-pilot"
+    },
+    "accepted_capability": {
+      "type": "object",
+      "required": [
+        "checkpoint_load",
+        "token_generation",
+        "semantic_quality_admitted",
+        "production_inference_admitted",
+        "checkpoint_admission"
+      ],
+      "properties": {
+        "semantic_quality_admitted": {
+          "const": false
+        },
+        "production_inference_admitted": {
+          "const": false
+        },
+        "checkpoint_admission": {
+          "const": false
+        }
+      }
+    }
+  }
+}

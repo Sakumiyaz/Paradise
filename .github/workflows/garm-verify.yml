@@ -164,6 +164,88 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+  public_contracts:
+    name: Public Contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: false
+
+      - name: Install strict secret scanners
+        run: make install-secret-scanners
+
+      - name: Validate public contract surface
+        run: make contracts-validate
+
+      - name: Audit public release surface
+        run: make public-audit
+
+      - name: Audit public release surface with strict scanners
+        run: make public-audit-strict
+
+      - name: Upload public contract validation evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: paradise-public-contract-validation
+          path: target/public_contracts/validation_report.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  paradise_non_gpu_readiness:
+    name: Paradise Non-GPU Readiness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Run non-GPU readiness gate
+        run: make paradise-non-gpu-readiness
+
+      - name: Run checkpoint registry admission smoke
+        run: make paradise-checkpoint-registry-smoke
+
+      - name: Run dataset manifest gate
+        run: make paradise-dataset-manifest
+
+      - name: Run module semantic evaluation
+        run: make paradise-module-semantic-eval
+
+      - name: Run checkpoint evidence review
+        run: make paradise-checkpoint-evidence-review
+
+      - name: Build public demo transcript
+        run: make paradise-public-demo
+
+      - name: Build release package manifest
+        run: make paradise-release-package
+
+      - name: Upload non-GPU readiness evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: paradise-non-gpu-readiness
+          path: |
+            target/paradise_non_gpu_readiness/non_gpu_readiness_report.json
+            target/paradise_dataset_manifest/paradise_dataset_manifest.json
+            target/paradise_module_semantic_eval/module_semantic_eval_report.json
+            target/paradise_checkpoint_evidence_review/checkpoint_evidence_review.json
+            target/paradise_public_demo/public_demo_manifest.json
+            target/paradise_public_demo/demo_transcript.md
+            target/paradise_release/release_package_manifest.json
+          if-no-files-found: warn
+          retention-days: 14
+
   external_tests_optional:
     name: External Hardware And Network Tests
     runs-on: ubuntu-24.04
@@ -242,6 +324,45 @@ jobs:
 
       - name: Check examples and bins
         run: make check
+
+  paradise_quickstart:
+    name: Paradise Quickstart
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Paradise public quickstart
+        id: paradise
+        uses: ./.github/actions/paradise-verify
+        with:
+          state-dir: ${{ runner.temp }}/paradise-quickstart
+          intent: inspect runtime status safely
+
+      - name: Upload Paradise quickstart evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: paradise-quickstart-evidence
+          path: ${{ steps.paradise.outputs.state-dir }}
+          if-no-files-found: warn
+          retention-days: 14
 
   api_contracts:
     name: API Contract Package
@@ -542,6 +663,7 @@ jobs:
       - training_smoke
       - api_transport
       - check
+      - paradise_quickstart
       - api_contracts
       - api_conformance
       - operational_blackbox
@@ -560,6 +682,7 @@ jobs:
           test "${{ needs.training_smoke.result }}" = "success"
           test "${{ needs.api_transport.result }}" = "success"
           test "${{ needs.check.result }}" = "success"
+          test "${{ needs.paradise_quickstart.result }}" = "success"
           test "${{ needs.api_contracts.result }}" = "success"
           test "${{ needs.api_conformance.result }}" = "success"
           test "${{ needs.operational_blackbox.result }}" = "success"

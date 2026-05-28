@@ -1,0 +1,16 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 Checkpoint Admission",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "checkpoint_id", "candidate_runtime_admission_allowed", "production_model_allowed"],
+  "properties": {
+    "schema": { "const": "eden.v03.checkpoint_admission.v1" },
+    "artifact": { "const": "eden_v03_checkpoint_admission" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "checkpoint_id": { "type": "string" },
+    "candidate_runtime_admission_allowed": { "type": "boolean" },
+    "production_model_allowed": { "const": false }
+  }
+}

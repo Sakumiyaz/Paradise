@@ -831,7 +831,7 @@ fn ejecutar_simulacion(
                 let evento = Evento::EcosistemaState {
                     autons_vivos: estado.autons_vivos as u32,
                     energia_total: estado.energia_total_mar,
-                    escoria_total: 0.0, // TODO: implementar escoria_total en Mar
+                    escoria_total: 0.0, // Mar does not expose a stable aggregate yet.
                     densidad_promedio: estado.energia_total_mar
                         / TAMAÑO_MAR as f64
                         / TAMAÑO_MAR as f64,

@@ -4,7 +4,11 @@ All notable changes are tracked here.
 
 ## Unreleased
 
-- No unreleased changes.
+- Added the Paradise v0.2.0 public readiness package: dataset manifest,
+  module semantic eval, checkpoint evidence review, public demo transcript,
+  release package manifest and CI scanner installation path.
+- Hardened API conformance cleanup so socket-denied environments fail fast and
+  do not leave daemon processes running.
 
 ## v0.1.0
 

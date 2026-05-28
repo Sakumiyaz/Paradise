@@ -352,11 +352,254 @@ pub fn training_capability_markdown_report_path() -> String {
 pub fn training_capability_evidence_path() -> String {
     path("training_capability_evidence.json")
 }
+pub fn megatron_7b_training_evidence_path() -> String {
+    path("megatron_7b_training_evidence.json")
+}
+pub fn megatron_7b_model_adapter_path() -> String {
+    path("megatron_7b_model_adapter.json")
+}
+pub fn megatron_7b_inference_report_path() -> String {
+    path("megatron_7b_inference_report.json")
+}
+pub fn megatron_7b_capability_report_path() -> String {
+    path("megatron_7b_capability_report.json")
+}
+pub fn megatron_7b_admission_gate_path() -> String {
+    path("megatron_7b_admission_gate.json")
+}
+pub fn eden_70b_modular_target_path() -> String {
+    path("eden_70b_modular_target.json")
+}
+pub fn eden_70b_module_router_path() -> String {
+    path("eden_70b_module_router.json")
+}
+pub fn eden_70b_dataset_manifest_path() -> String {
+    path("eden_70b_dataset_manifest.json")
+}
+pub fn eden_70b_launcher_manifest_path() -> String {
+    path("eden_70b_launcher_manifest.json")
+}
+pub fn eden_70b_checkpoint_admission_path() -> String {
+    path("eden_70b_checkpoint_admission.json")
+}
+pub fn eden_70b_inference_runtime_path() -> String {
+    path("eden_70b_inference_runtime.json")
+}
+pub fn eden_70b_operational_demo_path() -> String {
+    path("eden_70b_operational_demo.json")
+}
+pub fn eden_70b_operational_gate_path() -> String {
+    path("eden_70b_operational_gate.json")
+}
+pub fn eden_capable_training_run_contract_path() -> String {
+    path("eden_capable_training_run_contract.json")
+}
+pub fn eden_cognitive_dataset_manifest_path() -> String {
+    path("eden_cognitive_dataset_manifest.json")
+}
+pub fn eden_native_inference_api_path() -> String {
+    path("eden_native_inference_api.json")
+}
+pub fn eden_capability_delta_eval_path() -> String {
+    path("eden_capability_delta_eval.json")
+}
+pub fn eden_structured_output_report_path() -> String {
+    path("eden_structured_output_report.json")
+}
+pub fn eden_checkpoint_registry_path() -> String {
+    path("eden_checkpoint_registry.json")
+}
+pub fn eden_sft_elcp_readiness_path() -> String {
+    path("eden_sft_elcp_readiness.json")
+}
+pub fn eden_capable_gate_path() -> String {
+    path("eden_capable_gate.json")
+}
+pub fn eden_live_inference_runtime_path() -> String {
+    path("eden_live_inference_runtime.json")
+}
+pub fn eden_cognitive_call_contract_path() -> String {
+    path("eden_cognitive_call_contract.json")
+}
+pub fn eden_cognitive_dataset_expansion_path() -> String {
+    path("eden_cognitive_dataset_expansion.json")
+}
+pub fn eden_capability_eval_suite_path() -> String {
+    path("eden_capability_eval_suite.json")
+}
+pub fn eden_sft_elcp_activation_gate_path() -> String {
+    path("eden_sft_elcp_activation_gate.json")
+}
+pub fn eden_memory_action_loop_path() -> String {
+    path("eden_memory_action_loop.json")
+}
+pub fn eden_capable_demo_trace_path() -> String {
+    path("eden_capable_demo_trace.json")
+}
+pub fn eden_capable_operational_gate_path() -> String {
+    path("eden_capable_operational_gate.json")
+}
+pub fn eden_sft_elcp_dataset_v2_manifest_path() -> String {
+    path("eden_sft_elcp_dataset_v2_manifest.json")
+}
+pub fn eden_sft_elcp_gpu_training_report_path() -> String {
+    path("eden_sft_elcp_gpu_training_report.json")
+}
+pub fn eden_sft_elcp_prepost_eval_path() -> String {
+    path("eden_sft_elcp_prepost_eval.json")
+}
+pub fn eden_sft_elcp_repeated_inference_eval_path() -> String {
+    path("eden_sft_elcp_repeated_inference_eval.json")
+}
+pub fn eden_sft_elcp_checkpoint_admission_review_path() -> String {
+    path("eden_sft_elcp_checkpoint_admission_review.json")
+}
+pub fn eden_sft_elcp_operational_demo_path() -> String {
+    path("eden_sft_elcp_operational_demo.json")
+}
+pub fn eden_external_tests_ci_gate_path() -> String {
+    path("eden_external_tests_ci_gate.json")
+}
+pub fn eden_learned_capability_gate_path() -> String {
+    path("eden_learned_capability_gate.json")
+}
+pub fn eden_real_capability_dataset_manifest_path() -> String {
+    path("eden_real_capability_dataset_manifest.json")
+}
+pub fn eden_real_capability_7b_training_path() -> String {
+    path("eden_real_capability_7b_training.json")
+}
+pub fn eden_real_capability_inference_bridge_path() -> String {
+    path("eden_real_capability_inference_bridge.json")
+}
+pub fn eden_real_capability_operational_eval_path() -> String {
+    path("eden_real_capability_operational_eval.json")
+}
+pub fn eden_real_capability_checkpoint_decision_path() -> String {
+    path("eden_real_capability_checkpoint_decision.json")
+}
+pub fn eden_real_capability_demo_path() -> String {
+    path("eden_real_capability_demo.json")
+}
+pub fn eden_real_capability_scaling_ladder_path() -> String {
+    path("eden_real_capability_scaling_ladder.json")
+}
+pub fn eden_real_capability_gate_path() -> String {
+    path("eden_real_capability_gate.json")
+}
+pub fn eden_v01_dataset_manifest_path() -> String {
+    path("eden_v01_dataset_manifest.json")
+}
+pub fn eden_v01_semantic_eval_path() -> String {
+    path("eden_v01_semantic_eval.json")
+}
+pub fn eden_v01_training_beyond_pilot_path() -> String {
+    path("eden_v01_training_beyond_pilot.json")
+}
+pub fn eden_v01_native_inference_runtime_path() -> String {
+    path("eden_v01_native_inference_runtime.json")
+}
+pub fn eden_v01_operational_demo_path() -> String {
+    path("eden_v01_operational_demo.json")
+}
+pub fn eden_v01_checkpoint_admission_path() -> String {
+    path("eden_v01_checkpoint_admission.json")
+}
+pub fn eden_v01_scaling_plan_path() -> String {
+    path("eden_v01_scaling_plan.json")
+}
+pub fn eden_v01_gpu_workspace_hygiene_path() -> String {
+    path("eden_v01_gpu_workspace_hygiene.json")
+}
+pub fn eden_v01_capability_gate_path() -> String {
+    path("eden_v01_capability_gate.json")
+}
+pub fn eden_v02_stability_corpus_manifest_path() -> String {
+    path("eden_v02_stability_corpus_manifest.json")
+}
+pub fn eden_v02_stability_eval_path() -> String {
+    path("eden_v02_stability_eval.json")
+}
+pub fn eden_v02_checkpoint_comparison_path() -> String {
+    path("eden_v02_checkpoint_comparison.json")
+}
+pub fn eden_v02_adversarial_eval_path() -> String {
+    path("eden_v02_adversarial_eval.json")
+}
+pub fn eden_v02_rollback_drill_path() -> String {
+    path("eden_v02_rollback_drill.json")
+}
+pub fn eden_v02_model_card_internal_path() -> String {
+    path("eden_v02_model_card_internal.json")
+}
+pub fn eden_v02_checkpoint_storage_path() -> String {
+    path("eden_v02_checkpoint_storage.json")
+}
+pub fn eden_v02_native_inference_service_path() -> String {
+    path("eden_v02_native_inference_service.json")
+}
+pub fn eden_v02_stability_demo_path() -> String {
+    path("eden_v02_stability_demo.json")
+}
+pub fn eden_v02_stability_gate_path() -> String {
+    path("eden_v02_stability_gate.json")
+}
+pub fn eden_v03_generalization_corpus_manifest_path() -> String {
+    path("eden_v03_generalization_corpus_manifest.json")
+}
+pub fn eden_v03_generalization_eval_path() -> String {
+    path("eden_v03_generalization_eval.json")
+}
+pub fn eden_v03_checkpoint_admission_path() -> String {
+    path("eden_v03_checkpoint_admission.json")
+}
+pub fn eden_v03_live_inference_runtime_path() -> String {
+    path("eden_v03_live_inference_runtime.json")
+}
+pub fn eden_v03_checkpoint_registry_path() -> String {
+    path("eden_v03_checkpoint_registry.json")
+}
+pub fn eden_v03_scaling_14b_plan_path() -> String {
+    path("eden_v03_scaling_14b_plan.json")
+}
+pub fn eden_v03_operational_demo_path() -> String {
+    path("eden_v03_operational_demo.json")
+}
+pub fn eden_v03_capability_gate_path() -> String {
+    path("eden_v03_capability_gate.json")
+}
+pub fn eden_v04_cognitive_capability_corpus_manifest_path() -> String {
+    path("eden_v04_cognitive_capability_corpus_manifest.json")
+}
+pub fn eden_v04_operational_capability_eval_path() -> String {
+    path("eden_v04_operational_capability_eval.json")
+}
+pub fn eden_v04_generative_probe_path() -> String {
+    path("eden_v04_generative_probe.json")
+}
+pub fn eden_v04_hard_checkpoint_admission_path() -> String {
+    path("eden_v04_hard_checkpoint_admission.json")
+}
+pub fn eden_v04_persistent_inference_service_path() -> String {
+    path("eden_v04_persistent_inference_service.json")
+}
+pub fn eden_v04_continuity_eval_path() -> String {
+    path("eden_v04_continuity_eval.json")
+}
+pub fn eden_v04_scaling_14b_preflight_path() -> String {
+    path("eden_v04_scaling_14b_preflight.json")
+}
+pub fn eden_v04_capability_gate_path() -> String {
+    path("eden_v04_capability_gate.json")
+}
 pub fn model_adapter_runtime_path() -> String {
     path("model_adapter_runtime.json")
 }
 pub fn model_checkpoint_manifest_path() -> String {
     path("model_checkpoint_manifest.json")
+}
+pub fn paradise_checkpoint_registry_admission_path() -> String {
+    path("paradise_checkpoint_registry_admission.json")
 }
 pub fn training_harness_report_path() -> String {
     path("training_harness_report.json")
@@ -1274,6 +1517,11 @@ pub fn artifacts_report() -> String {
             false,
         ),
         (
+            "paradise_checkpoint_registry_admission",
+            paradise_checkpoint_registry_admission_path(),
+            false,
+        ),
+        (
             "training_harness_report",
             training_harness_report_path(),
             false,
@@ -1281,6 +1529,46 @@ pub fn artifacts_report() -> String {
         (
             "model_governance_report",
             model_governance_report_path(),
+            false,
+        ),
+        (
+            "eden_70b_modular_target",
+            eden_70b_modular_target_path(),
+            false,
+        ),
+        (
+            "eden_70b_module_router",
+            eden_70b_module_router_path(),
+            false,
+        ),
+        (
+            "eden_70b_dataset_manifest",
+            eden_70b_dataset_manifest_path(),
+            false,
+        ),
+        (
+            "eden_70b_launcher_manifest",
+            eden_70b_launcher_manifest_path(),
+            false,
+        ),
+        (
+            "eden_70b_checkpoint_admission",
+            eden_70b_checkpoint_admission_path(),
+            false,
+        ),
+        (
+            "eden_70b_inference_runtime",
+            eden_70b_inference_runtime_path(),
+            false,
+        ),
+        (
+            "eden_70b_operational_demo",
+            eden_70b_operational_demo_path(),
+            false,
+        ),
+        (
+            "eden_70b_operational_gate",
+            eden_70b_operational_gate_path(),
             false,
         ),
         ("first_model_card", first_model_card_path(), false),

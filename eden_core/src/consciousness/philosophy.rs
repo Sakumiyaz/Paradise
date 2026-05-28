@@ -66,7 +66,7 @@
 //! ### The Core Formula
 //!
 //! In EDEN, Φ (phi) is calculated as a weighted combination:
-//! ```ignore
+//! ```text
 //! Φ_total = 0.6 × Φ_IIT + 0.25 × Φ_workspace + 0.15 × Φ_scorer
 //! ```
 //!

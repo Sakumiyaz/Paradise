@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-checkpoint-registry-v1.json",
+  "title": "Paradise Checkpoint Registry",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "authority",
+    "entries"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.checkpoint_registry.v1" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "authority": { "const": "global_executive_workspace_core" },
+    "active_checkpoint": {},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "checkpoint_id",
+          "module_id",
+          "status"
+        ],
+        "properties": {
+          "checkpoint_id": { "type": "string" },
+          "module_id": { "type": "string" },
+          "status": {
+            "enum": [
+              "candidate",
+              "blocked",
+              "admitted",
+              "revoked"
+            ]
+          },
+          "operator_approval": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

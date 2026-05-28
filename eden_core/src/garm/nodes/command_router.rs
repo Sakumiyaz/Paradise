@@ -42,9 +42,39 @@ pub enum GarmCommand {
     SovereignCognitionEval,
     ArtifactApiEval,
     TrainingEvidenceEval,
+    Megatron7bEvidenceEval,
+    Megatron7bAdapterPrepare,
+    Megatron7bInferenceEval,
+    Megatron7bCapabilityEval,
+    Megatron7bAdmissionGateEval,
+    EdenCapableEval,
+    EdenCapableTrainingRunContract,
+    EdenCognitiveDatasetEval,
+    EdenNativeInferenceEval,
+    EdenCapabilityDeltaEval,
+    EdenStructuredOutputEval,
+    EdenCheckpointRegistryEval,
+    EdenSftElcpReadinessEval,
+    EdenCapableGateEval,
+    EdenCapableOperationalize,
+    EdenLearnedCapabilityEval,
+    EdenRealCapabilityEval,
+    EdenV01CapabilityEval,
+    EdenV02StabilityEval,
+    EdenV03CapabilityEval,
+    EdenV04CapabilityEval,
+    Eden70bModularEval,
+    Eden70bRouterEval,
+    Eden70bDatasetEval,
+    Eden70bLauncherEval,
+    Eden70bCheckpointAdmissionEval,
+    Eden70bInferenceEval,
+    Eden70bDemoEval,
+    Eden70bGateEval,
     ModelRuntimeEval,
     ModelAdapterRuntimeEval,
     ModelCheckpointManifestEval,
+    ParadiseCheckpointRegistryAdmission,
     TrainingHarnessEval,
     ModelGovernanceEval,
     FirstModelPrepare,
@@ -504,6 +534,133 @@ impl CommandRouterNode {
             | "training capability evidence"
             | "capability training evidence"
             | "evidencia entrenamiento eval" => GarmCommand::TrainingEvidenceEval,
+            "megatron 7b evidence eval"
+            | "megatron 7b evidence"
+            | "training megatron 7b evidence"
+            | "training 7b evidence eval"
+            | "7b training evidence eval"
+            | "7b evidence eval"
+            | "evidencia 7b eval" => GarmCommand::Megatron7bEvidenceEval,
+            "megatron 7b adapter prepare"
+            | "megatron 7b adapter"
+            | "7b adapter prepare"
+            | "prepare 7b adapter"
+            | "adaptador 7b preparar" => GarmCommand::Megatron7bAdapterPrepare,
+            "megatron 7b inference eval"
+            | "megatron 7b inference"
+            | "7b inference eval"
+            | "7b inference report"
+            | "inferencia 7b eval" => GarmCommand::Megatron7bInferenceEval,
+            "megatron 7b capability eval"
+            | "megatron 7b capability"
+            | "7b capability eval"
+            | "capacidad 7b eval" => GarmCommand::Megatron7bCapabilityEval,
+            "megatron 7b admission gate eval"
+            | "megatron 7b admission"
+            | "7b admission gate eval"
+            | "7b admission"
+            | "admision 7b eval" => GarmCommand::Megatron7bAdmissionGateEval,
+            "eden capable eval" | "eden capable" | "eden capacity eval" | "eden capaz eval"
+            | "eden capaz" | "7 pasos eden" | "eden 7 steps" => GarmCommand::EdenCapableEval,
+            "eden capable training contract"
+            | "eden capable training eval"
+            | "eden 7b real training contract"
+            | "eden training run contract" => GarmCommand::EdenCapableTrainingRunContract,
+            "eden cognitive dataset eval" | "eden cognitive dataset" | "dataset cognitivo eden" => {
+                GarmCommand::EdenCognitiveDatasetEval
+            }
+            "eden native inference eval"
+            | "eden native inference"
+            | "eden structured inference api" => GarmCommand::EdenNativeInferenceEval,
+            "eden capability delta eval" | "eden capability delta" | "eden before after eval" => {
+                GarmCommand::EdenCapabilityDeltaEval
+            }
+            "eden structured output eval"
+            | "eden structured output"
+            | "eden output structuring eval" => GarmCommand::EdenStructuredOutputEval,
+            "eden checkpoint registry eval"
+            | "eden checkpoint registry"
+            | "checkpoint registry eden" => GarmCommand::EdenCheckpointRegistryEval,
+            "eden sft elcp readiness"
+            | "eden sft elcp readiness eval"
+            | "eden sft readiness"
+            | "eden elcp sft readiness" => GarmCommand::EdenSftElcpReadinessEval,
+            "eden capable gate"
+            | "eden capable gate eval"
+            | "eden capacity gate"
+            | "eden capaz gate" => GarmCommand::EdenCapableGateEval,
+            "eden capable operationalize"
+            | "eden capable operationalize eval"
+            | "eden capable runtime"
+            | "eden capable run"
+            | "eden capaz operativo"
+            | "eden operativo capaz" => GarmCommand::EdenCapableOperationalize,
+            "eden learned capability"
+            | "eden learned capability eval"
+            | "eden sft elcp learned"
+            | "eden sft elcp eval"
+            | "eden sft elcp gpu eval"
+            | "learned capability eval"
+            | "capacidad aprendida eden"
+            | "eden capacidad aprendida" => GarmCommand::EdenLearnedCapabilityEval,
+            "eden real capability"
+            | "eden real capability eval"
+            | "real capability eval"
+            | "eden capability real eval"
+            | "eden capability stage"
+            | "eden capacidad real"
+            | "capacidad real eden" => GarmCommand::EdenRealCapabilityEval,
+            "eden v01 capability"
+            | "eden v01 capability eval"
+            | "eden v0.1 capability"
+            | "eden v0.1 capability eval"
+            | "eden semantic capability eval"
+            | "eden capability v01"
+            | "eden capacidad v01" => GarmCommand::EdenV01CapabilityEval,
+            "eden v02 stability"
+            | "eden v02 stability eval"
+            | "eden v0.2 stability"
+            | "eden v0.2 stability eval"
+            | "eden stability checkpoint eval"
+            | "eden checkpoint stability"
+            | "eden estabilidad v02" => GarmCommand::EdenV02StabilityEval,
+            "eden v03 capability"
+            | "eden v03 capability eval"
+            | "eden v0.3 capability"
+            | "eden v0.3 capability eval"
+            | "eden long pretraining eval"
+            | "eden 1000 iter eval"
+            | "eden capacidad v03" => GarmCommand::EdenV03CapabilityEval,
+            "eden v04 capability"
+            | "eden v04 capability eval"
+            | "eden v0.4 capability"
+            | "eden v0.4 capability eval"
+            | "eden operational capability eval"
+            | "eden 10000 iter eval"
+            | "eden capacidad v04" => GarmCommand::EdenV04CapabilityEval,
+            "eden 70b modular"
+            | "eden 70b modular eval"
+            | "eden 70b operationalize"
+            | "eden 70b operationalize eval"
+            | "eden modular 70b eval"
+            | "eden capacidad 70b modular" => GarmCommand::Eden70bModularEval,
+            "eden 70b router" | "eden 70b router eval" | "eden 70b module router" => {
+                GarmCommand::Eden70bRouterEval
+            }
+            "eden 70b datasets" | "eden 70b dataset eval" | "eden 70b dataset manifest" => {
+                GarmCommand::Eden70bDatasetEval
+            }
+            "eden 70b launchers" | "eden 70b launcher eval" | "eden 70b rocm launchers" => {
+                GarmCommand::Eden70bLauncherEval
+            }
+            "eden 70b checkpoint admission" | "eden 70b admission" | "eden 70b checkpoint gate" => {
+                GarmCommand::Eden70bCheckpointAdmissionEval
+            }
+            "eden 70b inference" | "eden 70b inference runtime" => {
+                GarmCommand::Eden70bInferenceEval
+            }
+            "eden 70b demo" | "eden 70b operational demo" => GarmCommand::Eden70bDemoEval,
+            "eden 70b gate" | "eden 70b operational gate" => GarmCommand::Eden70bGateEval,
             "model runtime eval"
             | "training runtime eval"
             | "model runtime"
@@ -519,6 +676,11 @@ impl CommandRouterNode {
             | "checkpoint manifest eval"
             | "manifest checkpoint eval"
             | "manifiesto checkpoint eval" => GarmCommand::ModelCheckpointManifestEval,
+            "paradise checkpoint registry"
+            | "paradise checkpoint registry audit"
+            | "checkpoint registry admission"
+            | "checkpoint registry audit"
+            | "checkpoint registry validate" => GarmCommand::ParadiseCheckpointRegistryAdmission,
             "training harness eval"
             | "training harness"
             | "harness eval"
@@ -1453,6 +1615,75 @@ mod tests {
             parse("training evidence eval"),
             GarmCommand::TrainingEvidenceEval
         );
+        assert_eq!(
+            parse("megatron 7b evidence eval"),
+            GarmCommand::Megatron7bEvidenceEval
+        );
+        assert_eq!(
+            parse("megatron 7b adapter prepare"),
+            GarmCommand::Megatron7bAdapterPrepare
+        );
+        assert_eq!(
+            parse("megatron 7b inference eval"),
+            GarmCommand::Megatron7bInferenceEval
+        );
+        assert_eq!(
+            parse("megatron 7b capability eval"),
+            GarmCommand::Megatron7bCapabilityEval
+        );
+        assert_eq!(
+            parse("megatron 7b admission gate eval"),
+            GarmCommand::Megatron7bAdmissionGateEval
+        );
+        assert_eq!(parse("eden capable eval"), GarmCommand::EdenCapableEval);
+        assert_eq!(
+            parse("eden cognitive dataset eval"),
+            GarmCommand::EdenCognitiveDatasetEval
+        );
+        assert_eq!(
+            parse("eden structured output eval"),
+            GarmCommand::EdenStructuredOutputEval
+        );
+        assert_eq!(
+            parse("eden checkpoint registry eval"),
+            GarmCommand::EdenCheckpointRegistryEval
+        );
+        assert_eq!(
+            parse("eden capable operationalize"),
+            GarmCommand::EdenCapableOperationalize
+        );
+        assert_eq!(
+            parse("eden learned capability eval"),
+            GarmCommand::EdenLearnedCapabilityEval
+        );
+        assert_eq!(
+            parse("eden real capability eval"),
+            GarmCommand::EdenRealCapabilityEval
+        );
+        assert_eq!(
+            parse("eden v01 capability eval"),
+            GarmCommand::EdenV01CapabilityEval
+        );
+        assert_eq!(
+            parse("eden v02 stability eval"),
+            GarmCommand::EdenV02StabilityEval
+        );
+        assert_eq!(
+            parse("eden v03 capability eval"),
+            GarmCommand::EdenV03CapabilityEval
+        );
+        assert_eq!(
+            parse("eden v04 capability eval"),
+            GarmCommand::EdenV04CapabilityEval
+        );
+        assert_eq!(
+            parse("eden 70b modular eval"),
+            GarmCommand::Eden70bModularEval
+        );
+        assert_eq!(
+            parse("eden 70b inference runtime"),
+            GarmCommand::Eden70bInferenceEval
+        );
         assert_eq!(parse("model runtime eval"), GarmCommand::ModelRuntimeEval);
         assert_eq!(
             parse("model adapter runtime eval"),
@@ -1461,6 +1692,10 @@ mod tests {
         assert_eq!(
             parse("model checkpoint manifest eval"),
             GarmCommand::ModelCheckpointManifestEval
+        );
+        assert_eq!(
+            parse("paradise checkpoint registry audit"),
+            GarmCommand::ParadiseCheckpointRegistryAdmission
         );
         assert_eq!(
             parse("training harness eval"),

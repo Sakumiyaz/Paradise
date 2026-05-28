@@ -1,0 +1,16 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 Capability Gate",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed", "total", "checks"],
+  "properties": {
+    "schema": { "const": "eden.v03.capability_gate.v1" },
+    "artifact": { "const": "eden_v03_capability_gate" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "passed": { "type": "integer" },
+    "total": { "type": "integer" },
+    "checks": { "type": "array" }
+  }
+}

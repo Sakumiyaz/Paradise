@@ -44,6 +44,10 @@ name = "edenctl"
 path = "src/bin/edenctl.rs"
 
 [[bin]]
+name = "paradise"
+path = "src/bin/paradise.rs"
+
+[[bin]]
 name = "eden-garm"
 path = "src/bin/eden_garm.rs"
 

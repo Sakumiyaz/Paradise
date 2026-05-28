@@ -1438,9 +1438,39 @@ impl CommandProfile {
             | GarmCommand::SovereignCognitionEval
             | GarmCommand::ArtifactApiEval
             | GarmCommand::TrainingEvidenceEval
+            | GarmCommand::Megatron7bEvidenceEval
+            | GarmCommand::Megatron7bAdapterPrepare
+            | GarmCommand::Megatron7bInferenceEval
+            | GarmCommand::Megatron7bCapabilityEval
+            | GarmCommand::Megatron7bAdmissionGateEval
+            | GarmCommand::EdenCapableEval
+            | GarmCommand::EdenCapableTrainingRunContract
+            | GarmCommand::EdenCognitiveDatasetEval
+            | GarmCommand::EdenNativeInferenceEval
+            | GarmCommand::EdenCapabilityDeltaEval
+            | GarmCommand::EdenStructuredOutputEval
+            | GarmCommand::EdenCheckpointRegistryEval
+            | GarmCommand::EdenSftElcpReadinessEval
+            | GarmCommand::EdenCapableGateEval
+            | GarmCommand::EdenCapableOperationalize
+            | GarmCommand::EdenLearnedCapabilityEval
+            | GarmCommand::EdenRealCapabilityEval
+            | GarmCommand::EdenV01CapabilityEval
+            | GarmCommand::EdenV02StabilityEval
+            | GarmCommand::EdenV03CapabilityEval
+            | GarmCommand::EdenV04CapabilityEval
+            | GarmCommand::Eden70bModularEval
+            | GarmCommand::Eden70bRouterEval
+            | GarmCommand::Eden70bDatasetEval
+            | GarmCommand::Eden70bLauncherEval
+            | GarmCommand::Eden70bCheckpointAdmissionEval
+            | GarmCommand::Eden70bInferenceEval
+            | GarmCommand::Eden70bDemoEval
+            | GarmCommand::Eden70bGateEval
             | GarmCommand::ModelRuntimeEval
             | GarmCommand::ModelAdapterRuntimeEval
             | GarmCommand::ModelCheckpointManifestEval
+            | GarmCommand::ParadiseCheckpointRegistryAdmission
             | GarmCommand::TrainingHarnessEval
             | GarmCommand::ModelGovernanceEval
             | GarmCommand::FirstModelPrepare

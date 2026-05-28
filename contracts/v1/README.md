@@ -34,3 +34,27 @@ The export command writes runtime-generated `runtime.openapi.json` and
   directory, `eden_core::sdk`, `edenctl`, or local HTTP.
 - All validation and release contracts preserve `claim_allowed=false` and
   `agi_claim=false`.
+- `schemas/paradise-non-gpu-readiness-v1.json` covers the local product/runtime
+  readiness gate that does not require GPU, network, hardware devices or
+  checkpoints.
+- `schemas/paradise-public-contract-validation-v1.json` covers the stdlib-only
+  manifest/schema/OpenAPI validation report.
+- `schemas/paradise-dataset-license-manifest-v1.json` and
+  `schemas/paradise-checkpoint-registry-v1.json` cover public dataset and
+  checkpoint-admission boundaries.
+- `schemas/paradise-checkpoint-registry-admission-v1.json` covers the native
+  GEWC registry audit artifact.
+- `schemas/paradise-dataset-manifest-v1.json`,
+  `schemas/paradise-module-semantic-eval-v1.json`,
+  `schemas/paradise-checkpoint-evidence-review-v1.json`,
+  `schemas/paradise-public-demo-v1.json` and
+  `schemas/paradise-release-package-v1.json` cover the non-GPU release package
+  evidence added for Paradise public readiness.
+
+Validate the public contract surface locally:
+
+```sh
+make contracts-validate
+```
+
+The command writes `target/public_contracts/validation_report.json`.

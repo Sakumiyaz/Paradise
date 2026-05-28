@@ -1,0 +1,15 @@
+{
+  "schema": "eden-json-schema-v1",
+  "title": "EDEN v0.3 Generalization Corpus Manifest",
+  "type": "object",
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "records", "valid_records"],
+  "properties": {
+    "schema": { "const": "eden.v03.generalization_corpus_manifest.v1" },
+    "artifact": { "const": "eden_v03_generalization_corpus_manifest" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "records": { "type": "integer" },
+    "valid_records": { "type": "integer" }
+  }
+}

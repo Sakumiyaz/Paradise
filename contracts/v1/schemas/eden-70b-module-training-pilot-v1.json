@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-70b-module-training-pilot-v1.json",
+  "title": "EDEN 70B Module Training Pilot",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "checkpoint_admission_allowed",
+    "external_model_dependency",
+    "module",
+    "training",
+    "governance"
+  ],
+  "properties": {
+    "schema": { "const": "eden.modular_70b.module_training_pilot.v1" },
+    "artifact": { "const": "eden_70b_module_training_pilot" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "training_executed": { "const": true },
+    "checkpoint_admission_allowed": { "const": false },
+    "production_release_allowed": { "const": false },
+    "external_model_dependency": { "const": false },
+    "network": { "const": "none" },
+    "module": {
+      "type": "object",
+      "required": ["id", "role", "target_parameters"],
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string" },
+        "target_parameters": { "type": "integer", "minimum": 1 },
+        "observed_parameters": { "type": "integer", "minimum": 1 },
+        "observed_total_parameters_b": { "type": "number", "minimum": 0 }
+      }
+    },
+    "training": {
+      "type": "object",
+      "required": ["train_iters", "seq_length", "mock_data", "checkpoint_written"],
+      "properties": {
+        "train_iters": { "type": "integer", "minimum": 1 },
+        "seq_length": { "type": "integer", "minimum": 1 },
+        "mock_data": { "const": false },
+        "checkpoint_written": { "type": "boolean" },
+        "loss": { "type": ["number", "null"] },
+        "iteration_ms": { "type": ["number", "null"] },
+        "allocated_mb": { "type": ["number", "null"] }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "required": [
+        "model_outputs_are_hypotheses",
+        "direct_memory_writes",
+        "direct_objective_writes",
+        "direct_tool_execution",
+        "requires_gewc_review_before_admission"
+      ],
+      "properties": {
+        "model_outputs_are_hypotheses": { "const": true },
+        "direct_memory_writes": { "const": false },
+        "direct_objective_writes": { "const": false },
+        "direct_tool_execution": { "const": false },
+        "requires_gewc_review_before_admission": { "const": true }
+      }
+    }
+  }
+}

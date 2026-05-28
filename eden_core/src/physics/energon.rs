@@ -27,17 +27,16 @@
 //!
 //! ## Ejemplo de Uso
 //!
-//! ```ignore
-//! use eden_core::physics::energon::{Energon, Vector3D, FixedPoint};
-//! use eden_core::physics::energon::ConstantesCosmicas;
+//! ```rust
+//! use eden_core::physics::energon::{ConstantesCosmicas, Energon};
 //!
-//! let semilla = SEMILLA_GENESIS;
+//! let semilla = [0x42; 128];
 //! let constantes = ConstantesCosmicas::from_semilla(&semilla);
 //!
-//! let e1 = Energon::nuevo(espín: 100, carga: [50, 30, 20], fase: 0);
-//! let e2 = Energon::nuevo(espín: 200, carga: [10, 20, 30], fase: 314159);
+//! let e1 = Energon::nuevo(100, [50, 30, 20], 0);
+//! let e2 = Energon::nuevo(200, [10, 20, 30], 314159);
 //!
-//! let fuerza = e1.interactuar(&e2, &constantes);
+//! let _fuerza = e1.interactuar(&e2, &constantes);
 //! ```
 #![allow(dead_code)]
 #![allow(non_snake_case)]

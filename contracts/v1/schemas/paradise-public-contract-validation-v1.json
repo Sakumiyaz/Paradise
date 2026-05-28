@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-public-contract-validation-v1.json",
+  "title": "Paradise Public Contract Validation",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "passed",
+    "checked_schema_count",
+    "checked_openapi_count",
+    "errors"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.public_contract_validation.v1" },
+    "passed": { "type": "boolean" },
+    "checked_schema_count": { "type": "integer", "minimum": 1 },
+    "checked_openapi_count": { "type": "integer", "minimum": 1 },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

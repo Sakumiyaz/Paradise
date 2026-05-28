@@ -62,6 +62,10 @@ operator forge eval
 operator forge synth causal risk model for local action cost under uncertainty
 operator forge verify
 operator forge audit
+model runtime eval
+model audit
+eden 70b modular eval
+artifact api eval
 operational runtime eval
 tts hola desde GARM
 garm audit
@@ -128,9 +132,25 @@ operator_expression_graphs.jsonl
 operator_verification_report.json
 operator_model_registry.json
 locus_operator_bridge.json
+eden_70b_modular_target.json
+eden_70b_module_router.json
+eden_70b_dataset_manifest.json
+eden_70b_launcher_manifest.json
+eden_70b_checkpoint_admission.json
+eden_70b_inference_runtime.json
+eden_70b_operational_demo.json
+eden_70b_operational_gate.json
 backup/
 legacy_memory.txt
 ```
+
+`eden_70b_modular_target.json` is a governed target definition only. It records
+EDEN's future 70B modular family as six GEWC-routed models, not a single dense
+checkpoint, and does not execute training or admit weights.
+
+`eden 70b modular eval` writes the seven follow-up artifacts that make that
+target operationally inspectable: router, datasets, launchers, checkpoint
+admission, inference runtime, demo trace and aggregate gate.
 
 ## API Endpoints
 

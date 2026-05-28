@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-checkpoint-evidence-review-v1.json",
+  "title": "Paradise Checkpoint Evidence Review",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "checkpoint_admission_allowed",
+    "gpu_required",
+    "public_registry",
+    "local_evidence",
+    "candidate_probe",
+    "checks",
+    "passed"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.checkpoint_evidence_review.v1" },
+    "artifact": { "const": "paradise_checkpoint_evidence_review" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "checkpoint_admission_allowed": { "const": false },
+    "gpu_required": { "const": false },
+    "public_registry": { "type": "object" },
+    "local_evidence": { "type": "array" },
+    "candidate_probe": { "type": "object" },
+    "checks": { "type": "array" },
+    "passed": { "type": "boolean" }
+  }
+}

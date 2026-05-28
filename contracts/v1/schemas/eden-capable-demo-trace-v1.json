@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-capable-demo-trace-v1.json",
+  "title": "EDEN Capable Demo Trace",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "steps"],
+  "properties": {
+    "schema": {"const": "eden.capable.demo_trace.v1"},
+    "artifact": {"const": "eden_capable_demo_trace"},
+    "authority": {"const": "global_executive_workspace_core"},
+    "claim_allowed": {"const": false},
+    "agi_claim": {"const": false},
+    "steps": {"type": "array", "minItems": 1}
+  }
+}

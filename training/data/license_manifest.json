@@ -1,0 +1,76 @@
+{
+  "schema": "paradise.dataset_license_manifest.v1",
+  "contains_private_data": false,
+  "external_model_dependency": false,
+  "policy": "Only repo-authored, synthetic or explicitly licensed datasets may be used by default. Private corpora, credentials, user files and checkpoint weights are excluded from this manifest.",
+  "datasets": [
+    {
+      "id": "eden_70b_modular",
+      "path": "training/data/eden_70b_modular_*.jsonl",
+      "origin": "repo-authored synthetic governance and routing corpus",
+      "license": "project-local-public-research",
+      "language": [
+        "en",
+        "es"
+      ],
+      "domain": [
+        "GEWC routing",
+        "checkpoint admission",
+        "model authority",
+        "dataset governance"
+      ],
+      "contains_private_data": false,
+      "external_model_dependency": false
+    },
+    {
+      "id": "eden_v04_cognitive_capability",
+      "path": "training/data/eden_v04_cognitive_capability_*.jsonl",
+      "origin": "repo-authored synthetic cognitive capability corpus",
+      "license": "project-local-public-research",
+      "language": [
+        "en",
+        "es"
+      ],
+      "domain": [
+        "planning",
+        "world model",
+        "safety",
+        "memory",
+        "operational reasoning"
+      ],
+      "contains_private_data": false,
+      "external_model_dependency": false
+    },
+    {
+      "id": "eden_elcp",
+      "path": "training/data/eden_cognitive_sft_elcp_*.jsonl",
+      "origin": "repo-authored synthetic ELCP transitions",
+      "license": "project-local-public-research",
+      "language": [
+        "en",
+        "es"
+      ],
+      "domain": [
+        "latent cognitive prediction",
+        "state transitions",
+        "admission gates"
+      ],
+      "contains_private_data": false,
+      "external_model_dependency": false
+    }
+  ],
+  "excluded": [
+    {
+      "pattern": ".env",
+      "reason": "credentials and local configuration are never training data"
+    },
+    {
+      "pattern": "target/**",
+      "reason": "generated artifacts and checkpoints are not committed datasets"
+    },
+    {
+      "pattern": "training/models/checkpoints/**",
+      "reason": "weights are governed by checkpoint registry and release gates"
+    }
+  ]
+}

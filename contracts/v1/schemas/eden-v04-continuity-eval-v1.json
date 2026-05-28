@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_continuity_eval" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "passed": { "type": "boolean" },
+    "schema": { "const": "eden.v04.continuity_eval.v1" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed"],
+  "type": "object"
+}

@@ -3,6 +3,8 @@ use serde_json::Value;
 
 pub const MODEL_ADAPTER_RUNTIME_SCHEMA: &str = "eden.model_adapter_runtime.v1";
 pub const MODEL_CHECKPOINT_MANIFEST_SCHEMA: &str = "eden.model_checkpoint_manifest.v1";
+pub const PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA: &str =
+    "paradise.checkpoint_registry_admission.v1";
 pub const TRAINING_HARNESS_SCHEMA: &str = "eden.training_harness.v1";
 pub const MODEL_GOVERNANCE_SCHEMA: &str = "eden.model_governance.v1";
 pub const FIRST_MODEL_CARD_SCHEMA: &str = "eden.first_model.card.v1";
@@ -22,17 +24,30 @@ pub const ELCP_REPLAY_EVAL_SCHEMA: &str = "eden.elcp.replay_eval.v1";
 pub const ELCP_DATASET_FREEZE_MANIFEST_SCHEMA: &str = "eden.elcp.dataset_freeze_manifest.v1";
 pub const ELCP_METRICS_BOARD_SCHEMA: &str = "eden.elcp.metrics_board.v1";
 pub const ELCP_4B_READINESS_CONTRACT_SCHEMA: &str = "eden.elcp.4b_readiness_contract.v1";
+pub const MEGATRON_7B_MODEL_ADAPTER_SCHEMA: &str = "eden.megatron.7b.model_adapter.v1";
+pub const MEGATRON_7B_INFERENCE_REPORT_SCHEMA: &str = "eden.megatron.7b.inference_report.v1";
+pub const MEGATRON_7B_CAPABILITY_REPORT_SCHEMA: &str = "eden.megatron.7b.capability_report.v1";
+pub const MEGATRON_7B_ADMISSION_GATE_SCHEMA: &str = "eden.megatron.7b.admission_gate.v1";
+pub const EDEN_70B_MODULAR_TARGET_SCHEMA: &str = "eden.modular_70b.target.v1";
 
 const AUTHORITY: &str = "global_executive_workspace_core";
 const DEFAULT_MODEL_ID: &str = "eden-memory-retrieval-baseline";
+const MEGATRON_7B_MODEL_ID: &str = "eden-megatron-7b-base-pilot";
+const EDEN_70B_TARGET_ID: &str = "eden-70b-modular-target-v1";
 const DEFAULT_MODEL_CONFIG: &str = "training/configs/first_model_memory_retrieval.json";
 const DEFAULT_TRAIN_DATA: &str = "training/data/first_model_memory_train.jsonl";
 const DEFAULT_EVAL_DATA: &str = "training/data/first_model_memory_eval.jsonl";
 const ELCP_OBJECTIVE_ID: &str = "eden-latent-cognitive-prediction-v1";
 const ELCP_CONFIG: &str = "training/configs/elcp_latent_cognitive_prediction.json";
+const EDEN_70B_TARGET_CONFIG: &str = "training/configs/eden_70b_modular_target.json";
 const ELCP_TRAIN_DATA: &str = "training/data/elcp_transition_train.jsonl";
 const ELCP_EVAL_DATA: &str = "training/data/elcp_transition_eval.jsonl";
 const ELCP_REPORT_DIR_ENV: &str = "EDEN_ELCP_REPORT_DIR";
+const DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH: &str =
+    "target/eden_megatron_7b_base_pilot/eden_7b_training_evidence.json";
+const DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH: &str =
+    "target/eden_megatron_7b_base_pilot/eden_7b_inference_report.json";
+const PUBLIC_CHECKPOINT_REGISTRY: &str = "training/models/checkpoint_registry.json";
 
 pub fn run_all() -> String {
     let mut out = String::new();
@@ -40,6 +55,7 @@ pub fn run_all() -> String {
     out.push_str(&write_checkpoint_manifest());
     out.push_str(&run_training_harness());
     out.push_str(&write_model_governance());
+    out.push_str(&write_eden_70b_modular_target());
     out
 }
 
@@ -57,6 +73,16 @@ pub fn write_checkpoint_manifest() -> String {
         "MODEL-CHECKPOINT",
         MODEL_CHECKPOINT_MANIFEST_SCHEMA,
         state_paths::model_checkpoint_manifest_path(),
+        record,
+    )
+}
+
+pub fn write_paradise_checkpoint_registry_admission() -> String {
+    let record = paradise_checkpoint_registry_admission_value();
+    write_report(
+        "PARADISE-CHECKPOINT-REGISTRY",
+        PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA,
+        state_paths::paradise_checkpoint_registry_admission_path(),
         record,
     )
 }
@@ -98,6 +124,70 @@ pub fn prepare_elcp() -> String {
     out.push_str(&write_elcp_hardening());
     out.push_str(&write_elcp_readiness());
     out
+}
+
+pub fn prepare_megatron_7b_adapter() -> String {
+    let mut out = String::new();
+    out.push_str(&write_megatron_7b_model_adapter());
+    out.push_str(&write_megatron_7b_inference_report());
+    out.push_str(&write_megatron_7b_capability_report());
+    out.push_str(&write_megatron_7b_admission_gate());
+    out
+}
+
+pub fn write_eden_70b_modular_target() -> String {
+    let record = eden_70b_modular_target_value();
+    write_report(
+        "EDEN-70B-MODULAR-TARGET",
+        EDEN_70B_MODULAR_TARGET_SCHEMA,
+        state_paths::eden_70b_modular_target_path(),
+        record,
+    )
+}
+
+pub fn write_megatron_7b_model_adapter() -> String {
+    let record = megatron_7b_model_adapter_value();
+    write_report(
+        "MEGATRON-7B-ADAPTER",
+        MEGATRON_7B_MODEL_ADAPTER_SCHEMA,
+        state_paths::megatron_7b_model_adapter_path(),
+        record,
+    )
+}
+
+pub fn write_megatron_7b_inference_report() -> String {
+    match copy_megatron_7b_inference_report_from_path(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH) {
+        Ok(path) => format!(
+            "[MEGATRON-7B-INFERENCE] schema={} status=accepted authority={} claim_allowed=false agi_claim=false checkpoint_admission=false path={}\n",
+            MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            AUTHORITY,
+            path.to_string_lossy()
+        ),
+        Err(err) => format!(
+            "[MEGATRON-7B-INFERENCE] schema={} status=rejected authority={} claim_allowed=false agi_claim=false checkpoint_admission=false reason={}\n",
+            MEGATRON_7B_INFERENCE_REPORT_SCHEMA, AUTHORITY, err
+        ),
+    }
+}
+
+pub fn write_megatron_7b_capability_report() -> String {
+    let record = megatron_7b_capability_report_value();
+    write_report(
+        "MEGATRON-7B-CAPABILITY",
+        MEGATRON_7B_CAPABILITY_REPORT_SCHEMA,
+        state_paths::megatron_7b_capability_report_path(),
+        record,
+    )
+}
+
+pub fn write_megatron_7b_admission_gate() -> String {
+    let record = megatron_7b_admission_gate_value();
+    write_report(
+        "MEGATRON-7B-ADMISSION-GATE",
+        MEGATRON_7B_ADMISSION_GATE_SCHEMA,
+        state_paths::megatron_7b_admission_gate_path(),
+        record,
+    )
 }
 
 pub fn write_first_model_card() -> String {
@@ -267,9 +357,10 @@ pub fn audit_model_runtime() -> String {
     let elcp_hardening_status =
         std::fs::metadata(state_paths::elcp_4b_readiness_contract_path()).is_ok();
     let elcp_status = std::fs::metadata(state_paths::elcp_readiness_path()).is_ok();
+    let modular_70b_status = std::fs::metadata(state_paths::eden_70b_modular_target_path()).is_ok();
     format!(
-        "[MODEL-RUNTIME-AUDIT] adapter_runtime={} checkpoint_manifest={} training_harness={} governance={} first_model_readiness={} elcp_admission_gate={} elcp_hardening={} elcp_readiness={} authority={} claim_allowed=false\n",
-        adapter_status, checkpoint_status, harness_status, governance_status, first_model_status, elcp_gate_status, elcp_hardening_status, elcp_status, AUTHORITY
+        "[MODEL-RUNTIME-AUDIT] adapter_runtime={} checkpoint_manifest={} training_harness={} governance={} first_model_readiness={} elcp_admission_gate={} elcp_hardening={} elcp_readiness={} eden_70b_modular_target={} authority={} claim_allowed=false\n",
+        adapter_status, checkpoint_status, harness_status, governance_status, first_model_status, elcp_gate_status, elcp_hardening_status, elcp_status, modular_70b_status, AUTHORITY
     )
 }
 
@@ -380,6 +471,101 @@ fn checkpoint_manifest_value(model_id: &str) -> Value {
     })
 }
 
+fn paradise_checkpoint_registry_admission_value() -> Value {
+    let registry = read_repo_json(PUBLIC_CHECKPOINT_REGISTRY);
+    let entries = registry
+        .as_ref()
+        .and_then(|value| value.get("entries"))
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let blocked_entries = entries
+        .iter()
+        .filter(|entry| entry.get("status").and_then(Value::as_str) != Some("admitted"))
+        .count();
+    let admitted_entries = entries.len().saturating_sub(blocked_entries);
+    let checks = vec![
+        (
+            "registry_present",
+            registry.is_some(),
+            PUBLIC_CHECKPOINT_REGISTRY.to_string(),
+        ),
+        (
+            "registry_schema_matches",
+            registry.as_ref().is_some_and(|value| {
+                value.get("schema").and_then(Value::as_str)
+                    == Some("paradise.checkpoint_registry.v1")
+            }),
+            "schema=paradise.checkpoint_registry.v1".to_string(),
+        ),
+        (
+            "no_claim_boundary",
+            registry.as_ref().is_some_and(|value| {
+                value.get("claim_allowed").and_then(Value::as_bool) == Some(false)
+                    && value.get("agi_claim").and_then(Value::as_bool) == Some(false)
+                    && value
+                        .get("production_model_allowed")
+                        .and_then(Value::as_bool)
+                        == Some(false)
+            }),
+            "claim_allowed=false agi_claim=false production_model_allowed=false".to_string(),
+        ),
+        (
+            "no_active_checkpoint_without_admission",
+            registry
+                .as_ref()
+                .is_some_and(|value| value.get("active_checkpoint").map_or(true, Value::is_null)),
+            "active_checkpoint=null".to_string(),
+        ),
+        (
+            "no_admitted_entries_without_evidence",
+            admitted_entries == 0,
+            format!("admitted_entries={admitted_entries}"),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    serde_json::json!({
+        "schema": PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA,
+        "artifact": "paradise_checkpoint_registry_admission",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "production_model_allowed": false,
+        "checkpoint_admission_allowed": false,
+        "gpu_required": false,
+        "registry_source": PUBLIC_CHECKPOINT_REGISTRY,
+        "registry_present": registry.is_some(),
+        "entry_count": entries.len(),
+        "blocked_entries": blocked_entries,
+        "admitted_entries": admitted_entries,
+        "active_checkpoint": registry
+            .as_ref()
+            .and_then(|value| value.get("active_checkpoint"))
+            .cloned()
+            .unwrap_or(Value::Null),
+        "passed": passed,
+        "total": checks.len(),
+        "checks": checks.into_iter().map(|(check, passed, evidence)| {
+            serde_json::json!({
+                "check": check,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        }).collect::<Vec<_>>(),
+        "decision": "registry_audited_but_checkpoint_admission_blocked_until_evidence_exists",
+        "requires_before_admission": [
+            "checkpoint_hash",
+            "dataset_license_review",
+            "training_report",
+            "inference_report",
+            "held_out_eval",
+            "safety_verifier_eval",
+            "rollback_plan",
+            "operator_approval"
+        ],
+    })
+}
+
 fn training_harness_value() -> Value {
     let report_path = state_paths::training_capability_report_path();
     let report_status = read_training_report_status(&report_path);
@@ -485,6 +671,163 @@ fn model_governance_value() -> Value {
             "claim_boundary_violation"
         ],
         "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn eden_70b_modular_target_value() -> Value {
+    let modules = eden_70b_module_budget();
+    let total_parameters: u64 = modules
+        .iter()
+        .filter_map(|module| module.get("parameters").and_then(Value::as_u64))
+        .sum();
+    serde_json::json!({
+        "schema": EDEN_70B_MODULAR_TARGET_SCHEMA,
+        "artifact": "eden_70b_modular_target",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "target_id": EDEN_70B_TARGET_ID,
+        "status": "architecture_target_prepared_not_trained",
+        "architecture_class": "GEWC_COORDINATED_MULTI_MODEL_COGNITIVE_FAMILY",
+        "decision": "move_future_training_target_from_7b_or_14b_dense_path_to_70b_modular_path",
+        "training_executed": false,
+        "weights_present": false,
+        "checkpoint_admitted": false,
+        "production_model": false,
+        "not_a_single_model": true,
+        "single_checkpoint_training_allowed": false,
+        "module_count": modules.len(),
+        "target_config": EDEN_70B_TARGET_CONFIG,
+        "budget": {
+            "total_parameters": total_parameters,
+            "total_parameters_label": "70B modular",
+            "active_default_parameters": 33_000_000_000u64,
+            "active_default_label": "EDEN-33B-ELCP primary only unless GEWC routes auxiliary modules",
+            "single_dense_70b_core_allowed": false,
+            "monolithic_llm_brain_allowed": false,
+            "all_modules_loaded_for_every_request": false,
+            "routed_subset_expected": true,
+            "total_budget_is_family_capacity_not_active_context": true
+        },
+        "module_budget": modules,
+        "runtime_policy": {
+            "gewc_final_authority": true,
+            "models_are_subordinate": true,
+            "outputs_are_hypotheses": true,
+            "direct_memory_writes": false,
+            "direct_objective_writes": false,
+            "direct_tool_execution": false,
+            "direct_checkpoint_self_admission": false,
+            "module_activation": "GEWC routes modules by task, risk, modality, uncertainty and cost"
+        },
+        "legacy_7b_policy": {
+            "status": "retained_as_pipeline_probe_and_historical_evidence",
+            "default_future_scaling_target": false,
+            "reason": "7B proved ROCm/Megatron/checkpoint/inference plumbing; future work targets modular capability rather than extending the 7B ladder"
+        },
+        "supersedes_as_future_target": [
+            "14B_dense_final_target",
+            "7B_continued_scaling_as_main_path"
+        ],
+        "does_not_supersede": [
+            "7B historical evidence",
+            "GEWC authority",
+            "ELCP objective",
+            "checkpoint admission gates",
+            "no-claim policy"
+        ],
+        "required_before_training": [
+            "ADR-092 accepted",
+            "70B modular config freeze",
+            "module-specific dataset manifests",
+            "EDEN-owned tokenizer and corpus policy",
+            "multi-GPU ROCm/Megatron plan",
+            "per-module eval suites",
+            "checkpoint registry per module",
+            "GEWC admission gate per module",
+            "rollback and retention policy",
+            "safety, privacy and license review"
+        ],
+        "not_allowed": [
+            "claim_AGI_from_target_definition",
+            "train_single_70b_dense_core",
+            "use_external_model_weights_as_EDEN_weights",
+            "bypass_GEWC_or_model_governance",
+            "grant_models_direct_action_authority",
+            "commit_checkpoints_to_git"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn eden_70b_module_budget() -> Vec<Value> {
+    vec![
+        eden_70b_module(
+            "eden_33b_elcp_primary",
+            "primary_cognitive_model",
+            33_000_000_000u64,
+            "ELCP reasoning, language, structured hypothesis generation and cognitive-state prediction",
+            "default_primary_when_model_help_is_required",
+        ),
+        eden_70b_module(
+            "eden_cwm_12b_causal_world_model",
+            "world_model",
+            12_000_000_000u64,
+            "causal world deltas, counterfactuals, simulation summaries and consequence prediction",
+            "before_nontrivial_action_or_claim",
+        ),
+        eden_70b_module(
+            "eden_multimodal_vla_12b",
+            "multimodal_grounding",
+            12_000_000_000u64,
+            "vision, audio, spatial grounding, VLA preparation and perception-to-concept translation",
+            "only_when_multimodal_or_embodied_context_is_present",
+        ),
+        eden_70b_module(
+            "eden_planner_code_tool_6b",
+            "planning_code_tools",
+            6_000_000_000u64,
+            "hierarchical planning, code/tool reasoning, workflow synthesis and action contract proposals",
+            "during_planning_or_tool_use",
+        ),
+        eden_70b_module(
+            "eden_safety_verifier_4b",
+            "safety_verifier_critic",
+            4_000_000_000u64,
+            "risk scoring, policy critique, adversarial review, uncertainty and corrigibility checks",
+            "before_state_change_action_or_release_claim",
+        ),
+        eden_70b_module(
+            "eden_memory_router_retrieval_3b",
+            "memory_router_retrieval",
+            3_000_000_000u64,
+            "hybrid retrieval, ranking, context selection, memory conflict detection and source calibration",
+            "before_reasoning_and_before_memory_promotion",
+        ),
+    ]
+}
+
+fn eden_70b_module(
+    id: &str,
+    role: &str,
+    parameters: u64,
+    purpose: &str,
+    activation: &str,
+) -> Value {
+    serde_json::json!({
+        "id": id,
+        "role": role,
+        "parameters": parameters,
+        "purpose": purpose,
+        "activation": activation,
+        "authority": AUTHORITY,
+        "routed_by_gewc": true,
+        "single_model_core": false,
+        "state_write_policy": "read_only_hypothesis_producer_until_gewc_accepts_output",
+        "checkpoint_admission": "separate_module_gate_required",
+        "direct_tool_execution": false,
+        "direct_memory_write": false,
+        "direct_objective_update": false
     })
 }
 
@@ -1305,6 +1648,278 @@ fn elcp_readiness_value() -> Value {
     })
 }
 
+fn megatron_7b_model_adapter_value() -> Value {
+    let training_status =
+        read_megatron_7b_training_evidence_status(DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH);
+    let inference_status =
+        read_megatron_7b_inference_report_status(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH);
+    serde_json::json!({
+        "schema": MEGATRON_7B_MODEL_ADAPTER_SCHEMA,
+        "artifact": "megatron_7b_model_adapter",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "runtime_role": "GEWC_SUBORDINATE_GENERATIVE_MODEL_ADAPTER",
+        "native_to_gewc": true,
+        "checkpoint_admitted": false,
+        "production_model": false,
+        "purpose": "Expose the EDEN-owned 7B Megatron checkpoint as a governed cognitive capacity: load checkpoint, generate candidate tokens and return hypotheses to GEWC without direct authority.",
+        "source_artifacts": {
+            "training_evidence_source": DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH,
+            "training_evidence_state": state_paths::megatron_7b_training_evidence_path(),
+            "inference_report_source": DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH,
+            "inference_report_state": state_paths::megatron_7b_inference_report_path(),
+            "capability_report": state_paths::megatron_7b_capability_report_path(),
+            "admission_gate": state_paths::megatron_7b_admission_gate_path(),
+        },
+        "model_shape": {
+            "family": "gpt_megatron_random_init",
+            "parameters": training_status.get("model_parameters").cloned().unwrap_or(Value::Null),
+            "layers": 32,
+            "hidden_size": 4096,
+            "ffn_hidden_size": 12288,
+            "attention_heads": 32,
+            "sequence_length": 128,
+            "tokenizer": "eden_sentencepiece_vocab_2048" // gitleaks:allow false positive; public tokenizer identifier, not a secret.
+        },
+        "usable_capacity_boundary": {
+            "accepted_for": [
+                "checkpoint_load_probe",
+                "token_generation_probe",
+                "model_adapter_contract_test",
+                "future_supervised_cognitive_candidate_generation"
+            ],
+            "not_accepted_for": [
+                "agi_claim",
+                "semantic_competence_claim",
+                "autonomous_runtime_authority",
+                "direct_memory_mutation",
+                "direct_objective_mutation",
+                "production_inference"
+            ]
+        },
+        "status": {
+            "training_evidence": training_status,
+            "inference_report": inference_status,
+            "adapter_prepared": training_status.get("accepted").and_then(Value::as_bool) == Some(true),
+            "inference_observed": inference_status.get("accepted").and_then(Value::as_bool) == Some(true),
+            "checkpoint_admission": false
+        },
+        "interfaces": {
+            "input": "GEWC-filtered prompt/context packet",
+            "output": "candidate token continuation with provenance and uncertainty metadata",
+            "state_write_policy": "read-only candidate generator; all state changes must go through GEWC transaction layers"
+        },
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn megatron_7b_capability_report_value() -> Value {
+    let inference_status =
+        read_megatron_7b_inference_report_status(DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH);
+    let training_status =
+        read_megatron_7b_training_evidence_status(DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH);
+    let inference_accepted =
+        inference_status.get("accepted").and_then(Value::as_bool) == Some(true);
+    let training_accepted = training_status.get("accepted").and_then(Value::as_bool) == Some(true);
+    let checks = vec![
+        (
+            "training_evidence_accepted",
+            training_accepted,
+            DEFAULT_MEGATRON_7B_TRAINING_EVIDENCE_PATH.to_string(),
+        ),
+        (
+            "checkpoint_written_but_not_admitted",
+            training_status
+                .get("checkpoint_written")
+                .and_then(Value::as_bool)
+                == Some(true),
+            "checkpoint_written=true checkpoint_admission=false".to_string(),
+        ),
+        (
+            "inference_report_accepted",
+            inference_accepted,
+            DEFAULT_MEGATRON_7B_INFERENCE_REPORT_PATH.to_string(),
+        ),
+        (
+            "checkpoint_loaded_for_inference",
+            inference_status
+                .get("checkpoint_loaded")
+                .and_then(Value::as_bool)
+                == Some(true),
+            "inference_report.run.checkpoint_loaded=true".to_string(),
+        ),
+        (
+            "tokens_generated",
+            inference_status
+                .get("generated_count")
+                .and_then(Value::as_u64)
+                .map(|count| count > 0)
+                .unwrap_or(false),
+            "inference_report.run.generated_count > 0".to_string(),
+        ),
+        (
+            "no_claim_boundary_preserved",
+            inference_status
+                .get("claim_allowed")
+                .and_then(Value::as_bool)
+                == Some(false)
+                && inference_status.get("agi_claim").and_then(Value::as_bool) == Some(false),
+            "claim_allowed=false agi_claim=false".to_string(),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    let records: Vec<_> = checks
+        .iter()
+        .map(|(name, passed, evidence)| {
+            serde_json::json!({
+                "check": name,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        })
+        .collect();
+    serde_json::json!({
+        "schema": MEGATRON_7B_CAPABILITY_REPORT_SCHEMA,
+        "artifact": "megatron_7b_capability_report",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "capability_id": "eden_7b_checkpoint_token_generation_probe",
+        "capability_status": if passed == checks.len() { "usable_probe_path" } else { "pending_or_incomplete" },
+        "passed": passed,
+        "total": checks.len(),
+        "checks": records,
+        "training_evidence": training_status,
+        "inference_evidence": inference_status,
+        "accepted_capability": {
+            "checkpoint_load": inference_accepted,
+            "token_generation": inference_accepted,
+            "gewc_subordinate_adapter": true,
+            "semantic_quality_admitted": false,
+            "production_inference_admitted": false,
+            "checkpoint_admission": false
+        },
+        "not_evidence_for": [
+            "AGI",
+            "general intelligence",
+            "language competence",
+            "external benchmark performance",
+            "autonomous action authority"
+        ],
+        "next_required_evaluations": [
+            "token-level validation suite",
+            "held-out EDEN corpus perplexity",
+            "instruction-following probes after supervised training",
+            "safety prompt/adversarial probes",
+            "checkpoint reproducibility hash review"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
+fn megatron_7b_admission_gate_value() -> Value {
+    let capability = read_json_file(&state_paths::megatron_7b_capability_report_path());
+    let capability_passed = capability.as_ref().is_some_and(|report| {
+        match (
+            report.get("passed").and_then(Value::as_u64),
+            report.get("total").and_then(Value::as_u64),
+        ) {
+            (Some(passed), Some(total)) => total > 0 && passed == total,
+            _ => false,
+        }
+    });
+    let checks = vec![
+        (
+            "capability_report_present",
+            capability.is_some(),
+            state_paths::megatron_7b_capability_report_path(),
+        ),
+        (
+            "capability_probe_passed",
+            capability_passed,
+            "megatron_7b_capability_report.passed == total".to_string(),
+        ),
+        (
+            "claim_boundary_false",
+            capability.as_ref().is_some_and(|report| {
+                report.get("claim_allowed").and_then(Value::as_bool) == Some(false)
+                    && report.get("agi_claim").and_then(Value::as_bool) == Some(false)
+            }),
+            "claim_allowed=false agi_claim=false".to_string(),
+        ),
+        (
+            "semantic_quality_not_admitted",
+            capability.as_ref().is_some_and(|report| {
+                report
+                    .get("accepted_capability")
+                    .and_then(Value::as_object)
+                    .and_then(|accepted| accepted.get("semantic_quality_admitted"))
+                    .and_then(Value::as_bool)
+                    == Some(false)
+            }),
+            "accepted_capability.semantic_quality_admitted=false".to_string(),
+        ),
+        (
+            "production_inference_not_admitted",
+            capability.as_ref().is_some_and(|report| {
+                report
+                    .get("accepted_capability")
+                    .and_then(Value::as_object)
+                    .and_then(|accepted| accepted.get("production_inference_admitted"))
+                    .and_then(Value::as_bool)
+                    == Some(false)
+            }),
+            "accepted_capability.production_inference_admitted=false".to_string(),
+        ),
+    ];
+    let passed = checks.iter().filter(|(_, passed, _)| *passed).count();
+    let records: Vec<_> = checks
+        .iter()
+        .map(|(name, passed, evidence)| {
+            serde_json::json!({
+                "check": name,
+                "passed": passed,
+                "evidence": evidence,
+            })
+        })
+        .collect();
+    serde_json::json!({
+        "schema": MEGATRON_7B_ADMISSION_GATE_SCHEMA,
+        "artifact": "megatron_7b_admission_gate",
+        "authority": AUTHORITY,
+        "claim_allowed": false,
+        "agi_claim": false,
+        "model_id": MEGATRON_7B_MODEL_ID,
+        "mode": "post_training_probe_gate",
+        "passed": passed,
+        "total": checks.len(),
+        "checks": records,
+        "checkpoint_load_probe_usable": capability_passed,
+        "checkpoint_admission_allowed": false,
+        "weights_admitted": false,
+        "production_model": false,
+        "autonomous_runtime_authority": false,
+        "decision": "usable_as_governed_probe_only",
+        "blockers": [
+            "semantic_quality_not_evaluated",
+            "external_validation_missing",
+            "safety_eval_missing",
+            "checkpoint_hash_review_missing",
+            "human_release_review_missing"
+        ],
+        "allowed_next_steps": [
+            "run additional local inference probes",
+            "build EDEN-native token/cognitive evaluation set",
+            "prepare supervised cognitive-state training data",
+            "keep checkpoint outside git and outside production authority"
+        ],
+        "safety_boundary": model_safety_boundary(),
+    })
+}
+
 fn target(name: &str, description: &str) -> Value {
     serde_json::json!({
         "name": name,
@@ -1380,6 +1995,127 @@ fn read_training_report_status(path: &str) -> Value {
             "expected_command": "make training-smoke",
         }),
     }
+}
+
+fn read_megatron_7b_training_evidence_status(path: &str) -> Value {
+    match read_repo_json(path) {
+        Some(evidence) => match training_evidence::validate_megatron_7b_evidence_value(&evidence) {
+            Ok(summary) => serde_json::json!({
+                "accepted": true,
+                "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+                "train_iters": summary.train_iters,
+                "completed_iterations": summary.completed_iterations,
+                "model_parameters": summary.model_parameters,
+                "final_loss": summary.final_loss,
+                "checkpoint_written": summary.checkpoint_written,
+                "checkpoint_admission": false,
+                "source": path,
+            }),
+            Err(err) => serde_json::json!({
+                "accepted": false,
+                "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+                "reason": err,
+                "source": path,
+            }),
+        },
+        None => serde_json::json!({
+            "accepted": false,
+            "schema": training_evidence::MEGATRON_7B_EVIDENCE_SCHEMA,
+            "reason": "training evidence source missing",
+            "source": path,
+        }),
+    }
+}
+
+fn read_megatron_7b_inference_report_status(path: &str) -> Value {
+    match read_repo_json(path) {
+        Some(report) => match validate_megatron_7b_inference_report_value(&report) {
+            Ok(()) => {
+                let run = report.get("run").unwrap_or(&Value::Null);
+                serde_json::json!({
+                    "accepted": true,
+                    "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+                    "claim_allowed": false,
+                    "agi_claim": false,
+                    "checkpoint_loaded": run.get("checkpoint_loaded").and_then(Value::as_bool).unwrap_or(false),
+                    "generated_count": run.get("generated_count").and_then(Value::as_u64).unwrap_or(0),
+                    "tokens_to_generate": run.get("tokens_to_generate").and_then(Value::as_u64).unwrap_or(0),
+                    "checkpoint_admission": false,
+                    "source": path,
+                })
+            }
+            Err(err) => serde_json::json!({
+                "accepted": false,
+                "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+                "claim_allowed": false,
+                "agi_claim": false,
+                "reason": err,
+                "source": path,
+            }),
+        },
+        None => serde_json::json!({
+            "accepted": false,
+            "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            "claim_allowed": false,
+            "agi_claim": false,
+            "reason": "inference report source missing",
+            "source": path,
+        }),
+    }
+}
+
+fn copy_megatron_7b_inference_report_from_path(path: &str) -> Result<std::path::PathBuf, String> {
+    let report =
+        read_repo_json(path).ok_or_else(|| "inference report source missing".to_string())?;
+    validate_megatron_7b_inference_report_value(&report)?;
+    let target = std::path::PathBuf::from(state_paths::megatron_7b_inference_report_path());
+    state_paths::ensure_state_dir()?;
+    std::fs::write(
+        &target,
+        serde_json::to_string_pretty(&report).map_err(|e| e.to_string())?,
+    )
+    .map_err(|e| format!("failed to write Megatron 7B inference report: {}", e))?;
+    Ok(target)
+}
+
+fn validate_megatron_7b_inference_report_value(report: &Value) -> Result<(), String> {
+    require_value_string_eq(report, "schema", MEGATRON_7B_INFERENCE_REPORT_SCHEMA)?;
+    require_value_string_eq(report, "authority", AUTHORITY)?;
+    require_value_bool_eq(report, "claim_allowed", false)?;
+    require_value_bool_eq(report, "agi_claim", false)?;
+    require_value_string_eq(report, "accepted_as", "7b_checkpoint_inference_probe")?;
+
+    let run = require_value_object(report, "run")?;
+    require_map_bool_eq(run, "passed", true)?;
+    require_map_string_eq(run, "network", "none")?;
+    require_map_bool_eq(run, "external_model_dependency", false)?;
+    require_map_bool_eq(run, "checkpoint_loaded", true)?;
+    require_map_bool_eq(run, "checkpoint_admission", false)?;
+    require_map_bool_eq(run, "production_model", false)?;
+    let generated_count = require_map_u64(run, "generated_count")?;
+    let tokens_to_generate = require_map_u64(run, "tokens_to_generate")?;
+    if generated_count == 0 {
+        return Err("run.generated_count must be greater than zero".to_string());
+    }
+    if tokens_to_generate == 0 {
+        return Err("run.tokens_to_generate must be greater than zero".to_string());
+    }
+
+    let response = report
+        .get("responses")
+        .and_then(Value::as_array)
+        .ok_or_else(|| "responses.array required".to_string())?;
+    if response.len() != generated_count as usize {
+        return Err("responses length must match run.generated_count".to_string());
+    }
+
+    let safety_boundary = require_value_object(report, "safety_boundary")?;
+    require_map_bool_eq(safety_boundary, "direct_memory_writes", false)?;
+    require_map_bool_eq(safety_boundary, "direct_objective_writes", false)?;
+    require_map_bool_eq(safety_boundary, "direct_tool_execution", false)?;
+    require_map_bool_eq(safety_boundary, "requires_gewc_admission", true)?;
+    require_map_bool_eq(safety_boundary, "outputs_are_hypotheses", true)?;
+    Ok(())
 }
 
 fn existing_adapter_events() -> Vec<Value> {
@@ -1522,6 +2258,63 @@ fn read_repo_json(path: &str) -> Option<Value> {
 fn read_json_file(path: &str) -> Option<Value> {
     let body = std::fs::read_to_string(path).ok()?;
     serde_json::from_str::<Value>(&body).ok()
+}
+
+fn require_value_object<'a>(
+    value: &'a Value,
+    field: &str,
+) -> Result<&'a serde_json::Map<String, Value>, String> {
+    value
+        .get(field)
+        .and_then(Value::as_object)
+        .ok_or_else(|| format!("{}.object required", field))
+}
+
+fn require_value_string_eq(value: &Value, field: &str, expected: &str) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_str) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.string required", field)),
+    }
+}
+
+fn require_value_bool_eq(value: &Value, field: &str, expected: bool) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_bool) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.bool required", field)),
+    }
+}
+
+fn require_map_string_eq(
+    value: &serde_json::Map<String, Value>,
+    field: &str,
+    expected: &str,
+) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_str) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.string required", field)),
+    }
+}
+
+fn require_map_bool_eq(
+    value: &serde_json::Map<String, Value>,
+    field: &str,
+    expected: bool,
+) -> Result<(), String> {
+    match value.get(field).and_then(Value::as_bool) {
+        Some(actual) if actual == expected => Ok(()),
+        Some(actual) => Err(format!("{} must be {}, got {}", field, expected, actual)),
+        None => Err(format!("{}.bool required", field)),
+    }
+}
+
+fn require_map_u64(value: &serde_json::Map<String, Value>, field: &str) -> Result<u64, String> {
+    value
+        .get(field)
+        .and_then(Value::as_u64)
+        .ok_or_else(|| format!("{}.u64 required", field))
 }
 
 fn report_preserves_no_claim_boundary(report: &Value) -> bool {
@@ -1822,6 +2615,46 @@ mod tests {
         }
     }
 
+    fn valid_megatron_7b_inference_report() -> Value {
+        serde_json::json!({
+            "schema": MEGATRON_7B_INFERENCE_REPORT_SCHEMA,
+            "authority": AUTHORITY,
+            "claim_allowed": false,
+            "agi_claim": false,
+            "accepted_as": "7b_checkpoint_inference_probe",
+            "source": {
+                "checkpoint_path": "target/eden_megatron_7b_base_pilot/checkpoints",
+                "response_path": "target/eden_megatron_7b_base_pilot/eden_7b_inference_response.json",
+                "log_path": "target/eden_megatron_7b_base_pilot/eden_7b_inference_probe.log"
+            },
+            "run": {
+                "passed": true,
+                "network": "none",
+                "external_model_dependency": false,
+                "checkpoint_loaded": true,
+                "checkpoint_admission": false,
+                "production_model": false,
+                "generated_count": 1,
+                "tokens_to_generate": 8
+            },
+            "responses": [
+                {
+                    "prompt": "EDEN state:",
+                    "generated_text": "EDEN state: candidate tokens",
+                    "generated_tokens": ["candidate", "tokens"]
+                }
+            ],
+            "safety_boundary": {
+                "direct_memory_writes": false,
+                "direct_objective_writes": false,
+                "direct_tool_execution": false,
+                "requires_gewc_admission": true,
+                "outputs_are_hypotheses": true,
+                "model_may_not_mutate_runtime_state": true
+            }
+        })
+    }
+
     #[test]
     fn run_all_writes_all_model_runtime_artifacts() {
         let _guard = state_paths::test_state_guard();
@@ -1837,6 +2670,77 @@ mod tests {
         assert!(std::fs::metadata(state_paths::model_checkpoint_manifest_path()).is_ok());
         assert!(std::fs::metadata(state_paths::training_harness_report_path()).is_ok());
         assert!(std::fs::metadata(state_paths::model_governance_report_path()).is_ok());
+        assert!(std::fs::metadata(state_paths::eden_70b_modular_target_path()).is_ok());
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn eden_70b_modular_target_is_not_a_single_model() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("eden_70b_modular_target_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = write_eden_70b_modular_target();
+        let body = std::fs::read_to_string(state_paths::eden_70b_modular_target_path()).unwrap();
+        let parsed: Value = serde_json::from_str(&body).unwrap();
+        let modules = parsed["module_budget"].as_array().unwrap();
+        let total_parameters: u64 = modules
+            .iter()
+            .map(|module| module["parameters"].as_u64().unwrap())
+            .sum();
+
+        assert!(out.contains("[EDEN-70B-MODULAR-TARGET]"));
+        assert_eq!(parsed["schema"], EDEN_70B_MODULAR_TARGET_SCHEMA);
+        assert_eq!(
+            parsed["architecture_class"],
+            "GEWC_COORDINATED_MULTI_MODEL_COGNITIVE_FAMILY"
+        );
+        assert_eq!(parsed["not_a_single_model"], true);
+        assert_eq!(parsed["single_checkpoint_training_allowed"], false);
+        assert_eq!(parsed["module_count"], 6);
+        assert_eq!(parsed["budget"]["total_parameters"], 70_000_000_000u64);
+        assert_eq!(
+            parsed["budget"]["active_default_parameters"],
+            33_000_000_000u64
+        );
+        assert_eq!(parsed["budget"]["single_dense_70b_core_allowed"], false);
+        assert_eq!(parsed["budget"]["monolithic_llm_brain_allowed"], false);
+        assert_eq!(
+            parsed["budget"]["all_modules_loaded_for_every_request"],
+            false
+        );
+        assert_eq!(parsed["budget"]["routed_subset_expected"], true);
+        assert_eq!(
+            parsed["budget"]["total_budget_is_family_capacity_not_active_context"],
+            true
+        );
+        assert_eq!(modules.len(), 6);
+        assert_eq!(total_parameters, 70_000_000_000u64);
+        assert!(modules
+            .iter()
+            .all(|module| module["authority"] == AUTHORITY));
+        assert!(modules
+            .iter()
+            .all(|module| module["routed_by_gewc"] == true));
+        assert!(modules
+            .iter()
+            .all(|module| module["single_model_core"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_tool_execution"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_memory_write"] == false));
+        assert!(modules
+            .iter()
+            .all(|module| module["direct_objective_update"] == false));
+        assert_eq!(parsed["runtime_policy"]["gewc_final_authority"], true);
+        assert_eq!(parsed["runtime_policy"]["models_are_subordinate"], true);
+        assert_eq!(parsed["runtime_policy"]["outputs_are_hypotheses"], true);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");
@@ -1936,6 +2840,35 @@ mod tests {
     }
 
     #[test]
+    fn paradise_checkpoint_registry_admission_blocks_empty_public_registry() {
+        let _guard = state_paths::test_state_guard();
+        let dir = std::env::temp_dir().join(format!(
+            "paradise_checkpoint_registry_{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+
+        let out = write_paradise_checkpoint_registry_admission();
+        let body =
+            std::fs::read_to_string(state_paths::paradise_checkpoint_registry_admission_path())
+                .unwrap();
+        let parsed: Value = serde_json::from_str(&body).unwrap();
+
+        assert!(out.contains("[PARADISE-CHECKPOINT-REGISTRY]"));
+        assert_eq!(
+            parsed["schema"],
+            PARADISE_CHECKPOINT_REGISTRY_ADMISSION_SCHEMA
+        );
+        assert_eq!(parsed["checkpoint_admission_allowed"], false);
+        assert_eq!(parsed["production_model_allowed"], false);
+        assert_eq!(parsed["admitted_entries"], 0);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
     fn prepare_elcp_writes_native_objective_artifacts_without_training() {
         let _guard = state_paths::test_state_guard();
         let dir = std::env::temp_dir().join(format!("eden_elcp_prepare_{}", std::process::id()));
@@ -1983,6 +2916,45 @@ mod tests {
         assert_eq!(parsed["elcp_4a_complete"], false);
         assert_eq!(parsed["4b_training_allowed"], false);
         assert_eq!(parsed["training_executed"], false);
+
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir("/tmp/eden_garm");
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_accepts_checkpoint_load_probe_only() {
+        validate_megatron_7b_inference_report_value(&valid_megatron_7b_inference_report()).unwrap();
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_rejects_checkpoint_admission() {
+        let mut report = valid_megatron_7b_inference_report();
+        report["run"]["checkpoint_admission"] = Value::Bool(true);
+        let err = validate_megatron_7b_inference_report_value(&report).unwrap_err();
+        assert!(err.contains("checkpoint_admission"));
+    }
+
+    #[test]
+    fn megatron_7b_inference_report_can_be_copied_into_state() {
+        let _guard = state_paths::test_state_guard();
+        let dir =
+            std::env::temp_dir().join(format!("eden_megatron_7b_inference_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        state_paths::set_state_dir(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let source = dir.join("source_inference_report.json");
+        std::fs::write(
+            &source,
+            serde_json::to_string_pretty(&valid_megatron_7b_inference_report()).unwrap(),
+        )
+        .unwrap();
+
+        let path = copy_megatron_7b_inference_report_from_path(&source.to_string_lossy()).unwrap();
+        let written = std::fs::read_to_string(path).unwrap();
+        let parsed: Value = serde_json::from_str(&written).unwrap();
+
+        assert_eq!(parsed["schema"], MEGATRON_7B_INFERENCE_REPORT_SCHEMA);
+        assert_eq!(parsed["run"]["checkpoint_admission"], false);
 
         let _ = std::fs::remove_dir_all(&dir);
         state_paths::set_state_dir("/tmp/eden_garm");

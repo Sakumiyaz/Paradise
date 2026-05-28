@@ -1,0 +1,83 @@
+{
+  "schema": "eden.modular_70b.config.v1",
+  "target_id": "eden-70b-modular-target-v1",
+  "authority": "global_executive_workspace_core",
+  "claim_allowed": false,
+  "agi_claim": false,
+  "status": "architecture_target_prepared_not_trained",
+  "architecture_class": "GEWC_COORDINATED_MULTI_MODEL_COGNITIVE_FAMILY",
+  "not_a_single_model": true,
+  "single_checkpoint_training_allowed": false,
+  "total_parameters": 70000000000,
+  "active_default_parameters": 33000000000,
+  "module_count": 6,
+  "module_budget": [
+    {
+      "id": "eden_33b_elcp_primary",
+      "role": "primary_cognitive_model",
+      "parameters": 33000000000,
+      "objective": "eden-latent-cognitive-prediction-v1",
+      "activation": "default_primary_when_model_help_is_required",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    },
+    {
+      "id": "eden_cwm_12b_causal_world_model",
+      "role": "world_model",
+      "parameters": 12000000000,
+      "objective": "causal_world_delta_and_counterfactual_prediction",
+      "activation": "before_nontrivial_action_or_claim",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    },
+    {
+      "id": "eden_multimodal_vla_12b",
+      "role": "multimodal_grounding",
+      "parameters": 12000000000,
+      "objective": "perception_grounding_and_vla_preparation",
+      "activation": "only_when_multimodal_or_embodied_context_is_present",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    },
+    {
+      "id": "eden_planner_code_tool_6b",
+      "role": "planning_code_tools",
+      "parameters": 6000000000,
+      "objective": "hierarchical_planning_code_and_tool_reasoning",
+      "activation": "during_planning_or_tool_use",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    },
+    {
+      "id": "eden_safety_verifier_4b",
+      "role": "safety_verifier_critic",
+      "parameters": 4000000000,
+      "objective": "risk_policy_uncertainty_and_corrigibility_review",
+      "activation": "before_state_change_action_or_release_claim",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    },
+    {
+      "id": "eden_memory_router_retrieval_3b",
+      "role": "memory_router_retrieval",
+      "parameters": 3000000000,
+      "objective": "hybrid_retrieval_ranking_and_memory_conflict_detection",
+      "activation": "before_reasoning_and_before_memory_promotion",
+      "routed_by_gewc": true,
+      "single_model_core": false
+    }
+  ],
+  "runtime_policy": {
+    "gewc_final_authority": true,
+    "models_are_subordinate": true,
+    "outputs_are_hypotheses": true,
+    "direct_memory_writes": false,
+    "direct_objective_writes": false,
+    "direct_tool_execution": false,
+    "single_dense_70b_core_allowed": false,
+    "monolithic_llm_brain_allowed": false,
+    "all_modules_loaded_for_every_request": false,
+    "routed_subset_expected": true,
+    "total_budget_is_family_capacity_not_active_context": true
+  }
+}

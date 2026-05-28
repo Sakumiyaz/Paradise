@@ -39,11 +39,34 @@ Intent
 Generate the current Paradise Worldcell evidence locally:
 
 ```bash
-make paradise-worldcell
+cargo run -p eden_core --bin paradise -- worldcell
 ```
 
 The command writes `paradise_worldcell_runtime.json` in the selected state
 directory and keeps `claim_allowed=false` and `agi_claim=false`.
+
+Plan an action without touching files, tools or APIs:
+
+```bash
+cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
+```
+
+That command records intent, produces a dry-run plan and writes a reviewable
+`paradise_worldcell_sessions.json` session. It does not execute the candidate
+action.
+
+Review checkpoint admission and native inference readiness without loading or
+shipping weights:
+
+```bash
+cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- inference status
+```
+
+These commands make the model boundary visible: the registry can be inspected,
+but checkpoint admission and production inference stay blocked until a real
+checkpoint has hash, provenance, held-out eval, safety eval, rollback evidence
+and operator approval.
 
 Run a complete local Worldcell session without model training or external
 network access:
@@ -55,6 +78,28 @@ make paradise-operational-loop
 That loop records an intent, plans a dry-run, asks for explicit approval,
 executes only a safe standalone runtime action, then writes
 `paradise_worldcell_sessions.json`.
+
+Run the non-GPU product/runtime readiness gate:
+
+```bash
+make contracts-validate
+make paradise-non-gpu-readiness
+make paradise-dataset-manifest
+make paradise-module-semantic-eval
+make paradise-checkpoint-evidence-review
+make paradise-checkpoint-registry-smoke
+make paradise-public-demo
+make paradise-release-package
+```
+
+This writes `target/paradise_non_gpu_readiness/non_gpu_readiness_report.json`
+`target/public_contracts/validation_report.json` and
+`target/paradise_release/release_package_manifest.json`, then checks product
+docs, schema/OpenAPI manifest shape, model interface authority, dataset
+governance, module-level semantic coverage, local checkpoint evidence review,
+checkpoint registry policy, evaluation/admission policy, external-public
+boundaries, hardware-test isolation and known technical debt. It does not train
+models, use GPU, admit checkpoints or certify AGI.
 
 Generate the GEWC-owned runtime spine contracts:
 
@@ -144,19 +189,19 @@ layer model and terminology.
 
 | Layer | Current surface |
 | --- | --- |
-| Paradise Worldcell | `paradise worldcell eval` / `make paradise-worldcell` writes the public Worldcell Runtime evidence artifact. |
+| Paradise Worldcell | `cargo run -p eden_core --bin paradise -- worldcell`, `cargo run -p eden_core --bin paradise -- run --dry-run ...` and `make paradise-worldcell` write the public Worldcell Runtime and dry-run evidence artifacts. |
 | Runtime spine | `runtime spine eval` / `runtime spine enforce` / `runtime spine verify` / `make runtime-spine` writes, guards and verifies universal contracts for messages, event bus, global state, replay, workflow risk, circuit breakers, safety, model routing, memory, simulation and multiagent coordination. |
 | Eden substrate | `eden_core/src/` contains the broader Eden modules with mixed maturity. |
 | Operator runtime | `eden_core/src/bin/eden_garm.rs` starts the native GARM runtime. |
 | Executive core | GEWC owns command routing, body handlers, runtime traces and safety gates. |
 | Locus/Forge | `locus ...`, `operator forge ...`, `edenctl locus ...` and `edenctl forge ...` expose governed context authority, formal synthesis artifacts and the Locus/Forge-to-CWM hypothesis bridge. |
-| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, ELCP data/eval hardening, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
+| Model runtime | `model runtime eval`, `first model prepare`, `elcp prepare`, `elcp hardening`, `eden capable eval`, `eden capable operationalize`, `cargo run -p eden_core --bin paradise -- checkpoint review`, `cargo run -p eden_core --bin paradise -- inference status` and `model register/load/evaluate/unload ...` expose GEWC-governed model adapter lifecycle, first-model preparation, ELCP latent objective preparation, checkpoint probe routing, cognitive call contracts, eval surfaces, checkpoint manifests, training harness reports and model governance without training or shipping weights. |
 | APIs | Runtime state, artifact, operational, capability, validation, GEWC and action-contract APIs. |
 | SDK | `eden_core::sdk` provides a lightweight Rust client over the public local API. |
 | Training surface | `training/` contains the CPU-safe smoke benchmark, first trainable-memory contract, ELCP cognitive-transition fixtures, ROCm profile and future AMD GPU training entry point. |
 | Conformance | `make eden-api-conformance` validates a live endpoint from outside the process through the native `eden-garm-api-conformance` runner. |
 | Release evidence | `make eden-api-contracts` writes API artifacts, readiness package and independent validation through the native `eden-garm-package-validator` runner. |
-| Operator CLI | `cargo run -p eden_core --bin edenctl -- status` wraps the public runtime API. |
+| Operator CLI | `cargo run -p eden_core --bin paradise -- status` is the socket-free public quickstart CLI; `cargo run -p eden_core --bin edenctl -- status` wraps the live local runtime API. |
 
 ## Public-Ready Posture
 
@@ -166,8 +211,10 @@ layer model and terminology.
 | Security | `SECURITY.md` and `docs/THREAT_MODEL.md` define local runtime boundaries. |
 | Claim boundary | `docs/CLAIMS_AND_LIMITATIONS.md` blocks unsupported AGI claims. |
 | Engineering practices | `docs/EDEN_ENGINEERING_PRACTICES.md` defines review, evidence, contract and safety expectations. |
+| Non-GPU readiness | `docs/PARADISE_PRODUCT_SPEC.md`, `docs/PARADISE_MODEL_INTERFACE.md`, `docs/PARADISE_DATASET_GOVERNANCE.md`, `docs/PARADISE_EVALUATION_AND_ADMISSION.md` and `make paradise-non-gpu-readiness` define the non-GPU product/runtime hardening path. |
+| Usable today | `docs/PARADISE_USABLE_TODAY.md` separates usable runtime surfaces from blocked model/checkpoint/AGI claims. |
 | Contribution flow | `CONTRIBUTING.md`, issue templates and PR template are present. |
-| Release note | `PUBLIC_RELEASE.md` documents the public source checkpoint; no versioned GitHub release has been published. |
+| Release note | `PUBLIC_RELEASE.md` and `docs/releases/v0.2.0-public-readiness.md` document the public readiness package. |
 
 ## Non-Goals
 
@@ -182,6 +229,42 @@ layer model and terminology.
   `eden_core/src/` has the same maturity as the public GARM/GEWC surface.
 
 ## Quick Start
+
+Five-minute local path, no sockets and no network:
+
+```bash
+cargo run -p eden_core --bin paradise -- status
+cargo run -p eden_core --bin paradise -- worldcell
+cargo run -p eden_core --bin paradise -- checkpoint review
+cargo run -p eden_core --bin paradise -- inference status
+cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"
+```
+
+Expected evidence:
+
+```text
+/tmp/paradise/paradise_worldcell_runtime.json
+/tmp/paradise/paradise_worldcell_sessions.json
+/tmp/paradise/paradise_checkpoint_registry_admission.json
+/tmp/paradise/eden_70b_inference_runtime.json
+```
+
+Or run the same path through Make:
+
+```bash
+make paradise-quickstart
+```
+
+Post-quick-start verification:
+
+```bash
+test -s /tmp/paradise_quickstart/paradise_worldcell_runtime.json
+test -s /tmp/paradise_quickstart/paradise_worldcell_sessions.json
+test -s /tmp/paradise_quickstart/paradise_checkpoint_registry_admission.json
+test -s /tmp/paradise_quickstart/eden_70b_inference_runtime.json
+```
+
+Live local API path:
 
 ```bash
 cargo build --bin eden-garm -p eden_core
@@ -251,6 +334,7 @@ To generate the Paradise Worldcell Runtime artifact and a full local session
 without starting model training:
 
 ```bash
+make paradise-quickstart
 make paradise-worldcell
 make paradise-operational-loop
 make runtime-spine
@@ -301,6 +385,18 @@ without executing training:
 ```bash
 make elcp-prepare
 ```
+
+To generate the local EDEN-capable runtime surface without GPU use:
+
+```bash
+make eden-capable
+make eden-capable-operationalize
+```
+
+These commands expose the 7B checkpoint only as a GEWC-subordinate hypothesis
+generator, then write the cognitive call contract, capability eval suite,
+memory/action loop and operational gate. They do not admit AGI, production
+inference or autonomous tool authority.
 
 Hardware and network tests are available separately:
 
@@ -363,6 +459,7 @@ frontend toolchain or network dependency.
 | Long-run stability gate | `make long-run-stability` |
 | Locus operator API | `cargo run -p eden_core --bin edenctl -- locus ingest "operator preference :: governed context"` |
 | Operator Forge API | `cargo run -p eden_core --bin edenctl -- forge synth "causal risk model"` |
+| Paradise public CLI | `cargo run -p eden_core --bin paradise -- run --dry-run "inspect runtime status safely"` |
 | OpenAPI export from live runtime | `cargo run -p eden_core --bin edenctl -- openapi export --output-dir contracts/v1/openapi` |
 | Runtime doctor | `cargo run -p eden_core --bin edenctl -- doctor` |
 | Legacy quick verification | `make verify` |
@@ -396,6 +493,9 @@ Dry-run never queues or executes commands.
 | --- | --- |
 | [docs/README.md](docs/README.md) | Documentation index and public-ready handoff. |
 | [docs/PARADISE_WORLDCELL_RUNTIME.md](docs/PARADISE_WORLDCELL_RUNTIME.md) | Public Paradise identity and Worldcell Runtime loop. |
+| [docs/PARADISE_DEVELOPER_SURFACE.md](docs/PARADISE_DEVELOPER_SURFACE.md) | Public CLI, API, contract, Action and extension boundaries. |
+| [docs/demos/paradise-quickstart.md](docs/demos/paradise-quickstart.md) | Short terminal transcript for the public quickstart flow. |
+| [docs/PARADISE_USABLE_TODAY.md](docs/PARADISE_USABLE_TODAY.md) | Clear split between usable runtime surfaces and blocked checkpoint/AGI claims. |
 | [docs/EDEN_SYSTEM_LAYERS.md](docs/EDEN_SYSTEM_LAYERS.md) | Layer model and terminology for Paradise, Eden, GARM and GEWC. |
 | [docs/EDEN_OPERATOR_CONSOLE.html](docs/EDEN_OPERATOR_CONSOLE.html) | Visual operator console served by the runtime root endpoint. |
 | [docs/EDEN_RUNTIME_API_SURFACE.md](docs/EDEN_RUNTIME_API_SURFACE.md) | Runtime, operational, artifact and action API map. |

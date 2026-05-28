@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-dataset-license-manifest-v1.json",
+  "title": "Paradise Dataset License Manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "contains_private_data",
+    "external_model_dependency",
+    "datasets"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.dataset_license_manifest.v1" },
+    "contains_private_data": { "const": false },
+    "external_model_dependency": { "const": false },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "origin",
+          "license",
+          "contains_private_data"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "origin": { "type": "string" },
+          "license": { "type": "string" },
+          "contains_private_data": { "const": false },
+          "external_model_dependency": { "const": false }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

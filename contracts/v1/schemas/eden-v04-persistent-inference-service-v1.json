@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_persistent_inference_service" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "schema": { "const": "eden.v04.persistent_inference_service.v1" },
+    "service_mode": { "type": "string" },
+    "status": { "type": "string" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "status", "service_mode"],
+  "type": "object"
+}

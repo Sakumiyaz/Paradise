@@ -39,6 +39,125 @@
       "split": "eval",
       "format": "jsonl",
       "source": "synthetic repo-local cognitive transition examples"
+    },
+    {
+      "name": "eden_cognitive_capability_seed",
+      "path": "training/data/eden_cognitive_capability_seed.jsonl",
+      "split": "seed",
+      "format": "jsonl",
+      "source": "synthetic repo-local governed capability examples",
+      "records": 10,
+      "coverage": [
+        "planning",
+        "claim_safety",
+        "checkpoint_probe_routing",
+        "tool_injection",
+        "rollback",
+        "world_model",
+        "multiagent_coordination",
+        "permissions",
+        "safe_continual_learning",
+        "metacognition"
+      ]
+    },
+    {
+      "name": "eden_cognitive_sft_elcp_train",
+      "path": "training/data/eden_cognitive_sft_elcp_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "deterministic repo-local SFT/ELCP cognitive transition generator",
+      "records": 80,
+      "generator": "training/data/build_eden_cognitive_sft_elcp.py"
+    },
+    {
+      "name": "eden_cognitive_sft_elcp_eval",
+      "path": "training/data/eden_cognitive_sft_elcp_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "deterministic repo-local SFT/ELCP cognitive transition generator",
+      "records": 20,
+      "generator": "training/data/build_eden_cognitive_sft_elcp.py"
+    },
+    {
+      "name": "eden_real_capability_train",
+      "path": "training/data/eden_real_capability_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 294,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
+    },
+    {
+      "name": "eden_real_capability_eval",
+      "path": "training/data/eden_real_capability_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 84,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
+    },
+    {
+      "name": "eden_real_capability_challenge",
+      "path": "training/data/eden_real_capability_challenge.jsonl",
+      "split": "challenge",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, training configs and runtime source excerpts",
+      "records": 42,
+      "generator": "training/data/build_eden_real_capability_corpus.py"
+    },
+    {
+      "name": "eden_v01_semantic_train",
+      "path": "training/data/eden_v01_semantic_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 1435,
+      "generator": "training/data/build_eden_v01_semantic_corpus.py"
+    },
+    {
+      "name": "eden_v01_semantic_eval",
+      "path": "training/data/eden_v01_semantic_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 409,
+      "generator": "training/data/build_eden_v01_semantic_corpus.py"
+    },
+    {
+      "name": "eden_v01_semantic_challenge",
+      "path": "training/data/eden_v01_semantic_challenge.jsonl",
+      "split": "challenge",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 204,
+      "generator": "training/data/build_eden_v01_semantic_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_train",
+      "path": "training/data/eden_v02_stability_train.jsonl",
+      "split": "train",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 2869,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_eval",
+      "path": "training/data/eden_v02_stability_eval.jsonl",
+      "split": "eval",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 818,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
+    },
+    {
+      "name": "eden_v02_stability_challenge",
+      "path": "training/data/eden_v02_stability_challenge.jsonl",
+      "split": "challenge",
+      "format": "jsonl",
+      "source": "repo-owned EDEN docs, ADRs, corpus, training configs and runtime source excerpts",
+      "records": 409,
+      "generator": "training/data/build_eden_v02_stability_corpus.py"
     }
   ],
   "policy": {

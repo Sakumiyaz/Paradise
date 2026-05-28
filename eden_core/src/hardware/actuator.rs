@@ -86,7 +86,7 @@ impl Actuator {
                 self.state = ActuatorState::On;
             }
             ActuatorType::Relay { .. } => {
-                // TODO: implementar con GpioPin guardado
+                // Relay state is mirrored locally until a persisted GPIO handle is attached.
                 self.state = ActuatorState::On;
             }
             _ => {}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-v01-training-beyond-pilot-v1.json",
+  "title": "EDEN v0.1 Training Beyond Pilot",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "completed_iterations", "minimum_iterations"],
+  "properties": {
+    "schema": {"const": "eden.v01.training_beyond_pilot.v1"},
+    "artifact": {"const": "eden_v01_training_beyond_pilot"},
+    "authority": {"const": "global_executive_workspace_core"},
+    "claim_allowed": {"const": false},
+    "agi_claim": {"const": false},
+    "completed_iterations": {"type": ["integer", "null"], "minimum": 0},
+    "minimum_iterations": {"const": 100}
+  }
+}

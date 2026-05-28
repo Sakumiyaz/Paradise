@@ -1,0 +1,60 @@
+name: Paradise Verify
+description: Generate Paradise quickstart evidence from the checked action source.
+
+inputs:
+  mode:
+    description: quickstart, status or worldcell.
+    required: false
+    default: quickstart
+  state-dir:
+    description: Directory where Paradise writes local evidence.
+    required: false
+    default: ""
+  intent:
+    description: Intent used for quickstart dry-run planning.
+    required: false
+    default: inspect runtime status safely
+
+outputs:
+  state-dir:
+    description: Directory containing generated Paradise evidence.
+    value: ${{ steps.paradise.outputs.state-dir }}
+
+runs:
+  using: composite
+  steps:
+    - id: paradise
+      shell: bash
+      run: |
+        set -Eeuo pipefail
+
+        repo_root="$(cd -- "${GITHUB_ACTION_PATH}/../../.." && pwd -P)"
+        state_dir="${{ inputs.state-dir }}"
+        mode="${{ inputs.mode }}"
+        intent="${{ inputs.intent }}"
+        if [[ -z "$state_dir" ]]; then
+          state_dir="${RUNNER_TEMP:-/tmp}/paradise"
+        fi
+
+        mkdir -p "$state_dir"
+        cd "$repo_root"
+
+        case "$mode" in
+          quickstart)
+            cargo run -p eden_core --bin paradise -- --state-dir "$state_dir" status
+            cargo run -p eden_core --bin paradise -- --state-dir "$state_dir" worldcell
+            cargo run -p eden_core --bin paradise -- --state-dir "$state_dir" run --dry-run "$intent"
+            ;;
+          status)
+            cargo run -p eden_core --bin paradise -- --state-dir "$state_dir" status
+            ;;
+          worldcell)
+            cargo run -p eden_core --bin paradise -- --state-dir "$state_dir" worldcell
+            ;;
+          *)
+            printf 'unsupported Paradise verify mode: %s\n' "$mode" >&2
+            exit 2
+            ;;
+        esac
+
+        printf 'state-dir=%s\n' "$state_dir" >> "$GITHUB_OUTPUT"

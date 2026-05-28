@@ -105,17 +105,22 @@ const MODULOS_CRITICOS: &[&str] = &["core", "identity", "consciousness", "emerge
 ///
 /// # Ejemplo de Uso
 ///
-/// ```rust,ignore
+/// ```rust
+/// use eden_core::autonomous::{RecursiveSelfModifier, TipoParche};
+///
 /// let mut modifier = RecursiveSelfModifier::new();
 ///
 /// // Generar parche de optimización
-/// let parche = modifier.generar_parche("neural_engine", TipoParche::Optimizacion)?;
+/// let parche = modifier
+///     .generar_parche("neural_engine", TipoParche::Optimizacion)
+///     .unwrap();
 ///
 /// // Aprobar manualmente (en modo seguro)
-/// modifier.aprobar_parche(parche.id)?;
+/// modifier.aprobar_parche(parche.id).unwrap();
 ///
 /// // Aplicar con salvaguardas
-/// let resultado = modifier.aplicar_parche(parche.id)?;
+/// let resultado = modifier.aplicar_parche(parche.id).unwrap();
+/// assert!(resultado.exito);
 /// ```
 #[derive(Debug, Clone)]
 pub struct RecursiveSelfModifier {

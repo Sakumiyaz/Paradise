@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/paradise-checkpoint-registry-admission-v1.json",
+  "title": "Paradise Checkpoint Registry Admission",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "artifact",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "production_model_allowed",
+    "checkpoint_admission_allowed",
+    "entry_count",
+    "checks"
+  ],
+  "properties": {
+    "schema": { "const": "paradise.checkpoint_registry_admission.v1" },
+    "artifact": { "const": "paradise_checkpoint_registry_admission" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "production_model_allowed": { "const": false },
+    "checkpoint_admission_allowed": { "const": false },
+    "gpu_required": { "const": false },
+    "entry_count": { "type": "integer", "minimum": 0 },
+    "blocked_entries": { "type": "integer", "minimum": 0 },
+    "admitted_entries": { "type": "integer", "minimum": 0 },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "passed", "evidence"],
+        "properties": {
+          "check": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "evidence": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

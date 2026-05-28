@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "agi_claim": { "const": false },
+    "artifact": { "const": "eden_v04_generative_probe" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "passed": { "type": "boolean" },
+    "schema": { "const": "eden.v04.generative_probe.v1" },
+    "stats": { "type": "object" }
+  },
+  "required": ["schema", "artifact", "authority", "claim_allowed", "agi_claim", "passed", "stats"],
+  "type": "object"
+}

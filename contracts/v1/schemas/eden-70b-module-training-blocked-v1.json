@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eden.local/contracts/v1/schemas/eden-70b-module-training-blocked-v1.json",
+  "title": "EDEN 70B Module Training Blocked",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "training_executed",
+    "module_id",
+    "role",
+    "target_parameters",
+    "status",
+    "reason",
+    "required_before_training"
+  ],
+  "properties": {
+    "schema": { "const": "eden.modular_70b.module_training_blocked.v1" },
+    "authority": { "const": "global_executive_workspace_core" },
+    "claim_allowed": { "const": false },
+    "agi_claim": { "const": false },
+    "training_executed": { "const": false },
+    "module_id": { "type": "string" },
+    "role": { "type": "string" },
+    "target_parameters": { "type": "integer", "minimum": 1 },
+    "estimated_single_gpu_vram_gb": { "type": "integer", "minimum": 1 },
+    "status": { "const": "blocked_before_gpu_training" },
+    "reason": { "type": "string", "minLength": 1 },
+    "required_before_training": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

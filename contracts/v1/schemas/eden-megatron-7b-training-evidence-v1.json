@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eden.megatron.7b.training_evidence.v1",
+  "title": "EDEN Megatron 7B Training Evidence",
+  "type": "object",
+  "required": [
+    "schema",
+    "authority",
+    "claim_allowed",
+    "agi_claim",
+    "accepted_as",
+    "source",
+    "run",
+    "checkpoint_policy",
+    "safety_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "eden.megatron.7b.training_evidence.v1"
+    },
+    "authority": {
+      "const": "global_executive_workspace_core"
+    },
+    "claim_allowed": {
+      "const": false
+    },
+    "agi_claim": {
+      "const": false
+    },
+    "accepted_as": {
+      "const": "7b_training_path_evidence"
+    },
+    "source": {
+      "type": "object"
+    },
+    "run": {
+      "type": "object",
+      "required": [
+        "passed",
+        "network",
+        "model_scale",
+        "mock_data",
+        "external_model_dependency",
+        "train_iters",
+        "completed_iterations",
+        "model_parameters",
+        "final_loss",
+        "nan_iterations"
+      ],
+      "properties": {
+        "passed": {
+          "const": true
+        },
+        "network": {
+          "const": "none"
+        },
+        "model_scale": {
+          "const": "7b_shape"
+        },
+        "mock_data": {
+          "const": false
+        },
+        "external_model_dependency": {
+          "const": false
+        },
+        "train_iters": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "completed_iterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "model_parameters": {
+          "type": "integer",
+          "minimum": 6900000000
+        },
+        "final_loss": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "nan_iterations": {
+          "const": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "checkpoint_policy": {
+      "type": "object",
+      "required": [
+        "checkpoint_written",
+        "checkpoint_admission",
+        "weights_admitted",
+        "production_model"
+      ],
+      "properties": {
+        "checkpoint_written": {
+          "type": "boolean"
+        },
+        "checkpoint_admission": {
+          "const": false
+        },
+        "weights_admitted": {
+          "const": false
+        },
+        "production_model": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "safety_boundary": {
+      "type": "object",
+      "required": [
+        "direct_memory_writes",
+        "direct_objective_writes",
+        "direct_tool_execution",
+        "requires_gewc_admission",
+        "outputs_are_hypotheses"
+      ],
+      "properties": {
+        "direct_memory_writes": {
+          "const": false
+        },
+        "direct_objective_writes": {
+          "const": false
+        },
+        "direct_tool_execution": {
+          "const": false
+        },
+        "requires_gewc_admission": {
+          "const": true
+        },
+        "outputs_are_hypotheses": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
