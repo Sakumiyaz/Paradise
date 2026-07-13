@@ -6,17 +6,16 @@ An AI coding agent that learns your style, remembers your patterns, and improves
 
 | Feature | Copilot / Cursor | OpenCode | Paradise |
 |---------|------------------|----------|----------|
-| Learns your coding style | ❌ | ❌ | ✅ StyleLearner |
-| Remembers across sessions | ❌ | ❌ | ✅ EWC + replay buffer |
-| Self-improves its own code | ❌ | ❌ | ✅ ARBOR evolution engine |
-| Multi-paradigm reasoning | ❌ | ❌ | ✅ FLUX/SPARK/ROOTS/WYRM |
+| Learns your coding style | ❌ | ❌ | ✅ |
+| Remembers across sessions | ❌ | ❌ | ✅ |
+| Self-improves its own code | ❌ | ❌ | ✅ |
+| Multi-paradigm reasoning | ❌ | ❌ | ✅ |
 | Works offline | ❌ | ✅ | ✅ |
-| MIT open source | ❌ | ✅ | ✅ |
 
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Sakumiyaz/ParadiseApp/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Sakumiyaz/Paradise/main/install.sh | bash
 ```
 
 ## Quick Start
@@ -71,4 +70,5 @@ Toggle with `/theme` in the TUI.
 
 ## License
 
-MIT
+Proprietary — all rights reserved. Source code is not distributed.
+Binary releases are provided for installation and use only.
