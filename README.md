@@ -8,11 +8,12 @@ This public repository publishes the installer and release binaries only. The im
 
 ## Supported systems
 
-| System | Status |
+| System | Asset |
 | --- | --- |
-| Linux aarch64 | Published binary |
-| Linux x86_64 | Not published. The installer exits with an error instead of failing silently. |
-| macOS | Not published. The installer exits with an error. |
+| Linux aarch64 | `paradise-aarch64-linux` |
+| Linux x86_64 | `paradise-x86_64-linux` |
+| macOS Apple Silicon | `paradise-aarch64-darwin` |
+| macOS Intel | Not published. ONNX Runtime has no prebuilt for that target. |
 
 Requirements: `curl`, `install`, and `sha256sum` (from coreutils). Python 3 is used when present to parse the GitHub release JSON; without it the installer uses a narrower fallback parser.
 
@@ -29,7 +30,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.2 bash install.sh
+PARADISE_VERSION=v0.4.3 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS` before copying the binary, and installs it as root:root mode 0755 when `/usr/local/bin` is not writable. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -40,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.2 or later. v0.4.0 and v0.4.1 are withdrawn.
+Install v0.4.3 or later. v0.4.0 and v0.4.1 are withdrawn. v0.4.2 is Linux aarch64 only and is not signed.
 
 ## First run
 

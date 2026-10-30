@@ -4,12 +4,12 @@ on:
   push:
     paths:
       - install.sh
-      - tests/install_test.sh
+      - tests/**
       - .github/workflows/install-shellcheck.yml
   pull_request:
     paths:
       - install.sh
-      - tests/install_test.sh
+      - tests/**
 
 permissions:
   contents: read

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.3
+
+- Linux x86_64 and macOS Apple Silicon binaries are published. macOS Intel is not, because ONNX Runtime has no prebuilt for that target.
+- GPU SSH commands are compiled only with `--features operator-gpu`. Public binaries do not enable that feature.
+- `SHA256SUMS` is signed with minisign. The secret key is not in the GitHub account. The public key is `minisign.pub` and is embedded in `install.sh`.
+
 ## v0.4.2
 
 - Installer reads GitHub release JSON with Python without consuming stdin in a heredoc.

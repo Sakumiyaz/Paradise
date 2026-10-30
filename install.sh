@@ -68,7 +68,7 @@ case "${1:-}" in
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.2.
+  PARADISE_VERSION          Release tag to install, for example v0.4.3.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
@@ -76,7 +76,8 @@ Environment:
 
 Unknown arguments are refused. A typo such as --unistall does not install.
 
-Published today: linux/aarch64 only.
+Published from v0.4.3: Linux aarch64, Linux x86_64, and macOS Apple Silicon.
+macOS Intel is not published.
 This public repository does not contain source code, so a failed download
 cannot fall back to compiling.
 State is stored in ~/.config/paradise, not in the current directory and not in /tmp.
@@ -104,23 +105,23 @@ info ""
 
 case "${OS}" in
   linux) ;;
-  darwin)
-    die "macOS is not published yet. Supported today: linux/aarch64. No binary was downloaded."
-    ;;
+  darwin) ;;
   *)
-    die "unsupported operating system: ${OS}. Supported today: linux/aarch64."
+    die "unsupported operating system: ${OS}. Published targets: linux and darwin, aarch64 and x86_64."
     ;;
 esac
 
 case "${ARCH}" in
   aarch64|arm64) ASSET_ARCH="aarch64" ;;
-  x86_64|amd64)
-    die "linux/x86_64 is not published yet. The current release only has paradise-aarch64-linux. No binary was downloaded."
-    ;;
+  x86_64|amd64) ASSET_ARCH="x86_64" ;;
   *)
-    die "unsupported architecture: ${ARCH}. Supported today: linux/aarch64."
+    die "unsupported architecture: ${ARCH}. Published targets: aarch64 and x86_64."
     ;;
 esac
+
+if [[ "${OS}" == "darwin" && "${ASSET_ARCH}" == "x86_64" ]]; then
+  die "macOS Intel is not published. ONNX Runtime has no prebuilt for that target. Use Apple Silicon or Linux."
+fi
 
 ASSET_NAME="paradise-${ASSET_ARCH}-${OS}"
 
@@ -199,6 +200,43 @@ list_asset_names() {
   extract_download_urls | awk -F/ '{ print $NF }'
 }
 
+# Trust this key, not a key downloaded from the same release. The secret key
+# is not stored in the GitHub account.
+EMBEDDED_MINISIGN_PUB='RWQlxz3WKJ4Yidsn4mlE0fVRE9ZRcayJPfNw2nmBSw/7VVn/wvWLchjy'
+
+verify_signature() {
+  local sums_file="$1"
+  local sig_url sig_file pub_file
+  if command -v python3 >/dev/null 2>&1; then
+    sig_url="$(printf '%s' "${API_JSON}" | parse_release_json "SHA256SUMS.minisig")"
+  else
+    sig_url="$(printf '%s\n' "${API_JSON}" | extract_exact_asset_url "SHA256SUMS.minisig" || true)"
+  fi
+  if [[ -z "${sig_url}" ]]; then
+    die "this release has no SHA256SUMS.minisig. Refusing to install an unsigned checksum file."
+  fi
+  sig_file="$(mktemp)"
+  TMPFILES+=("${sig_file}")
+  info "Downloading SHA256SUMS.minisig"
+  curl -fsSL --retry 2 --retry-delay 1 "${sig_url}" -o "${sig_file}"
+  if ! command -v minisign >/dev/null 2>&1; then
+    info "warning: minisign is not installed, so the signature was not checked."
+    info "Install minisign and verify with public key ${PARADISE_MINISIGN_PUB:-${EMBEDDED_MINISIGN_PUB}}"
+    return 0
+  fi
+  pub_file="$(mktemp)"
+  TMPFILES+=("${pub_file}")
+  if [[ -n "${PARADISE_MINISIGN_PUB:-}" && -f "${PARADISE_MINISIGN_PUB}" ]]; then
+    cp "${PARADISE_MINISIGN_PUB}" "${pub_file}"
+  else
+    printf '%s\n%s\n' 'untrusted comment: minisign public key' "${EMBEDDED_MINISIGN_PUB}" >"${pub_file}"
+  fi
+  if ! minisign -V -p "${pub_file}" -m "${sums_file}" -x "${sig_file}" >/dev/null; then
+    die "minisign rejected SHA256SUMS. Not installed."
+  fi
+  info "minisign signature verified."
+}
+
 if command -v python3 >/dev/null 2>&1; then
   if ! LATEST="$(printf '%s' "${API_JSON}" | parse_release_json tag)"; then
     die "could not parse the GitHub release JSON with python3."
@@ -222,7 +260,7 @@ fi
 info "Release: ${LATEST}"
 
 if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" ]]; then
-  die "${LATEST} is withdrawn. Install v0.4.2 or later."
+  die "${LATEST} is withdrawn. Install v0.4.3 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then
@@ -256,6 +294,9 @@ if [[ -n "${SUMS_URL}" ]]; then
     die "SHA-256 mismatch for ${ASSET_NAME}. expected ${expected}, got ${actual}. Not installed."
   fi
   info "SHA-256 verified."
+  if [[ "${LATEST}" != "v0.4.2" ]]; then
+    verify_signature "${TMP_SUMS}"
+  fi
 elif [[ "${ALLOW_UNVERIFIED}" == "1" ]]; then
   info "warning: this release has no SHA256SUMS. Installing because PARADISE_ALLOW_UNVERIFIED=1."
 else
