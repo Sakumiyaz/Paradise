@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.9
+
+- `DONE` is rejected unless a file was actually written or edited. A failed or missing edit exits non-zero.
+- The model is no longer told invented action statistics, and a read-only response is not marked `NOT APPLIED`.
+- The same edit is not applied again in the same turn.
+- Chat history is stored per project and only the recent messages are sent.
+- `--api-key` is a flag, not part of the prompt. A remote provider without a key is not called.
+- `chat --help` shows help instead of sending that text to the model.
+- `--yes` no longer claims that confirmation will be requested. Shell commands run in a sandbox that cannot write outside the project.
+- `WRITE_FILE` creates missing directories inside the project.
+
 ## v0.4.8
 
 - Model output is not permission to act. Writes, shell commands, and git commands wait for confirmation. `--yes` is the explicit override.

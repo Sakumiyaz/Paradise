@@ -30,7 +30,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.8 bash install.sh
+PARADISE_VERSION=v0.4.9 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS`, and verifies `SHA256SUMS.minisig` with the embedded public key. Set `PARADISE_MINISIGN_PUB` to a key file you saved outside GitHub if you do not want to trust the copy in this repository. `PARADISE_ALLOW_UNSIGNED=1` skips that check. It installs mode 0755, using sudo only when the install directory is not writable by you. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -41,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.8 or later. v0.4.3, v0.4.4, and v0.4.5 are withdrawn.
+Install v0.4.9 or later. v0.4.3, v0.4.4, and v0.4.5 are withdrawn.
 
 ## First run
 
@@ -71,7 +71,7 @@ There is no compiled-in model server. A remote Eden module server is used only w
 
 Earlier text compared Paradise with Copilot and Cursor as if those products never keep session memory. That is not a fair claim: Cursor can retain project memory, and Copilot has its own history features. Paradise's local distinction is that its state files stay on the machine you choose, and that model output is not treated as permission to act. Test counts are not listed here until a public CI run publishes them.
 
-Writes, shell commands, and git commands proposed by the model wait for a `y` confirmation. `paradise chat --yes` skips that prompt. File paths must stay inside the current directory. Skill files are stored in the state directory, not in the project.
+Writes, shell commands, and git commands proposed by the model wait for a `y` confirmation. `paradise chat --yes` skips that prompt and runs shell commands in a sandbox that can write only in the current directory. `DONE` is not treated as success unless a file was written or edited. Chat history stays with that project. Skill files are stored in the state directory, not in the project.
 
 ## License
 
