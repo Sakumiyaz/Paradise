@@ -1,0 +1,18 @@
+name: install-shellcheck
+
+on:
+  push:
+    paths:
+      - install.sh
+      - .github/workflows/install-shellcheck.yml
+  pull_request:
+    paths:
+      - install.sh
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck installer
+        run: shellcheck -x install.sh
