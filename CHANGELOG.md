@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.12
+
+- Writes through a symlink into `.git`, and paths spelled `.GIT`, are refused.
+- A requested name counts only as a definition such as `def multiply`, not as a comment, string, or filename. If the request also asks for a test, that test definition is required.
+- An edit request that changes nothing, or only part of what was asked, exits non-zero.
+- `TEST:` and `CHECK:` accept a command again. The command runs in the sandbox.
+
 ## v0.4.11
 
 - `git diff` and `git status` used after an edit no longer honor `core.fsmonitor`, hooks, or a global git config. Writes inside `.git/` are refused, and shell commands cannot modify `.git/`.
