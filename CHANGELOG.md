@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.4
+
+- The installer refuses to continue when `minisign` is missing, unless `PARADISE_ALLOW_UNSIGNED=1`.
+- Pinning an older unsigned release no longer skips the signature check.
+- Creating `~/.local` for a user install no longer calls sudo.
+- `paradise --version` reports 0.4.4 and does not claim a test count.
+- `paradise status` creates the state directory mode 0700.
+- Public help no longer lists GPU SSH commands or `PARADISE_GPU_*`.
+
 ## v0.4.3
 
 - Linux x86_64 and macOS Apple Silicon binaries are published. macOS Intel is not, because ONNX Runtime has no prebuilt for that target.

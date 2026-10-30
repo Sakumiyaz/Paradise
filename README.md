@@ -15,7 +15,7 @@ This public repository publishes the installer and release binaries only. The im
 | macOS Apple Silicon | `paradise-aarch64-darwin` |
 | macOS Intel | Not published. ONNX Runtime has no prebuilt for that target. |
 
-Requirements: `curl`, `install`, and `sha256sum` (from coreutils). Python 3 is used when present to parse the GitHub release JSON; without it the installer uses a narrower fallback parser.
+Requirements: `curl`, `install`, `sha256sum`, and `minisign`. Without `minisign` the installer stops, unless you set `PARADISE_ALLOW_UNSIGNED=1`. Linux binaries need OpenSSL 3, so Ubuntu 20.04 and Debian 11 are not supported. Python 3 is used when present to parse the GitHub release JSON; without it the installer uses a narrower fallback parser.
 
 ## Install
 
@@ -30,10 +30,10 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.3 bash install.sh
+PARADISE_VERSION=v0.4.4 bash install.sh
 ```
 
-The installer downloads one GitHub release object, checks `SHA256SUMS` before copying the binary, and installs it as root:root mode 0755 when `/usr/local/bin` is not writable. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
+The installer downloads one GitHub release object, checks `SHA256SUMS`, and verifies `SHA256SUMS.minisig` with the embedded public key. Set `PARADISE_MINISIGN_PUB` to a key file you saved outside GitHub if you do not want to trust the copy in this repository. `PARADISE_ALLOW_UNSIGNED=1` skips that check. It installs mode 0755, using sudo only when the install directory is not writable by you. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
 
 Uninstall:
 
@@ -41,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.3 or later. v0.4.0 and v0.4.1 are withdrawn. v0.4.2 is Linux aarch64 only and is not signed.
+Install v0.4.4 or later. Older releases are missing a platform, a signature check, or both.
 
 ## First run
 

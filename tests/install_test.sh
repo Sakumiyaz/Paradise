@@ -31,6 +31,7 @@ if ! command -v minisign >/dev/null 2>&1; then
 else
   ln -s "$(command -v minisign)" "${tmp}/bin/minisign"
 fi
+export PATH="${tmp}/bin:${PATH}"
 printf 'fake-binary\n' >"${tmp}/payload/paradise-aarch64-linux"
 digest="$(sha256sum "${tmp}/payload/paradise-aarch64-linux" | awk '{print $1}')"
 printf '%s  paradise-aarch64-linux\n' "${digest}" >"${tmp}/payload/SHA256SUMS"
@@ -131,5 +132,45 @@ if PATH="${tmp}/bin:${nopy}" command -v python3 >/dev/null 2>&1; then
   fail "could not hide python3 for the fallback test"
 fi
 run_install fallback "${tmp}/bin:${nopy}"
+
+# A modified signature must be rejected.
+printf 'not-a-signature\n' >"${tmp}/payload/SHA256SUMS.minisig"
+if PATH="${tmp}/bin:${PATH}" PARADISE_INSTALL_DIR="${tmp}/bad-sig" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/badsig.out" 2>"${tmp}/badsig.err"; then
+  fail "invalid signature was accepted"
+fi
+grep -q 'minisign rejected' "${tmp}/badsig.err" || fail "invalid signature did not report rejection"
+minisign -S -W -s "${tmp}/keys/minisign.key" -m "${tmp}/payload/SHA256SUMS" -x "${tmp}/payload/SHA256SUMS.minisig" >/dev/null
+
+# Missing minisign must fail unless the operator opts out.
+mv "${tmp}/bin/minisign" "${tmp}/minisign.bak"
+if PATH="${tmp}/bin:${nopy}" command -v minisign >/dev/null 2>&1; then
+  fail "could not hide minisign"
+fi
+if PATH="${tmp}/bin:${nopy}" PARADISE_INSTALL_DIR="${tmp}/no-mini" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/nomini.out" 2>"${tmp}/nomini.err"; then
+  fail "install succeeded without minisign"
+fi
+grep -q 'minisign is required' "${tmp}/nomini.err" || { cat "${tmp}/nomini.err" >&2; fail "missing minisign was not a hard error"; }
+if ! PATH="${tmp}/bin:${nopy}" PARADISE_ALLOW_UNSIGNED=1 PARADISE_INSTALL_DIR="${tmp}/allow-unsigned" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/allow.out" 2>"${tmp}/allow.err"; then
+  cat "${tmp}/allow.err" >&2
+  fail "PARADISE_ALLOW_UNSIGNED=1 should install"
+fi
+grep -q 'PARADISE_ALLOW_UNSIGNED=1' "${tmp}/allow.out" || fail "unsigned opt-in was not announced"
+mv "${tmp}/minisign.bak" "${tmp}/bin/minisign"
+
+# A missing parent under the user home must not call sudo.
+cat >"${tmp}/bin/sudo" <<'EOF'
+#!/bin/sh
+echo "sudo should not be used" >&2
+exit 9
+EOF
+chmod +x "${tmp}/bin/sudo"
+if ! PATH="${tmp}/bin:${PATH}" PARADISE_INSTALL_DIR="${tmp}/fresh-home/bin" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/nosudo.out" 2>"${tmp}/nosudo.err"; then
+  cat "${tmp}/nosudo.err" >&2
+  fail "install into a new home directory failed"
+fi
+test -x "${tmp}/fresh-home/bin/paradise" || fail "binary was not installed under the new home directory"
+if [[ "$(stat -c '%U' "${tmp}/fresh-home")" == "root" ]]; then
+  fail "new home directory is owned by root"
+fi
 
 echo "install_test ok"

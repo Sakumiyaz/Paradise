@@ -31,11 +31,21 @@ need() {
   command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"
 }
 
+nearest_existing_dir() {
+  local dir="$1"
+  while [[ ! -d "${dir}" && "${dir}" != "/" ]]; do
+    dir="$(dirname "${dir}")"
+  done
+  printf '%s\n' "${dir}"
+}
+
 install_binary() {
   local src="$1"
   local dest="${INSTALL_DIR}/${BIN_NAME}"
   if [[ ! -d "${INSTALL_DIR}" ]]; then
-    if [[ -w "$(dirname "${INSTALL_DIR}")" ]]; then
+    local ancestor
+    ancestor="$(nearest_existing_dir "${INSTALL_DIR}")"
+    if [[ -w "${ancestor}" ]]; then
       mkdir -p -- "${INSTALL_DIR}"
     else
       sudo mkdir -p -- "${INSTALL_DIR}"
@@ -68,11 +78,15 @@ case "${1:-}" in
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.3.
+  PARADISE_VERSION          Release tag to install, for example v0.4.4.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
                             Not recommended.
+  PARADISE_ALLOW_UNSIGNED   Set to 1 to install when minisign is missing
+                            or the signature cannot be checked. Not recommended.
+  PARADISE_MINISIGN_PUB     Public key file. Default: the key embedded below.
+                            Use a copy you saved outside GitHub.
 
 Unknown arguments are refused. A typo such as --unistall does not install.
 
@@ -219,10 +233,12 @@ verify_signature() {
   TMPFILES+=("${sig_file}")
   info "Downloading SHA256SUMS.minisig"
   curl -fsSL --retry 2 --retry-delay 1 "${sig_url}" -o "${sig_file}"
-  if ! command -v minisign >/dev/null 2>&1; then
-    info "warning: minisign is not installed, so the signature was not checked."
-    info "Install minisign and verify with public key ${PARADISE_MINISIGN_PUB:-${EMBEDDED_MINISIGN_PUB}}"
+  if [[ "${PARADISE_ALLOW_UNSIGNED:-0}" == "1" ]]; then
+    info "warning: signature not checked because PARADISE_ALLOW_UNSIGNED=1."
     return 0
+  fi
+  if ! command -v minisign >/dev/null 2>&1; then
+    die "minisign is required to verify SHA256SUMS. Install minisign, or set PARADISE_ALLOW_UNSIGNED=1 to skip the check."
   fi
   pub_file="$(mktemp)"
   TMPFILES+=("${pub_file}")
@@ -260,7 +276,7 @@ fi
 info "Release: ${LATEST}"
 
 if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" ]]; then
-  die "${LATEST} is withdrawn. Install v0.4.3 or later."
+  die "${LATEST} is withdrawn. Install v0.4.4 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then
@@ -294,9 +310,7 @@ if [[ -n "${SUMS_URL}" ]]; then
     die "SHA-256 mismatch for ${ASSET_NAME}. expected ${expected}, got ${actual}. Not installed."
   fi
   info "SHA-256 verified."
-  if [[ "${LATEST}" != "v0.4.2" ]]; then
-    verify_signature "${TMP_SUMS}"
-  fi
+  verify_signature "${TMP_SUMS}"
 elif [[ "${ALLOW_UNVERIFIED}" == "1" ]]; then
   info "warning: this release has no SHA256SUMS. Installing because PARADISE_ALLOW_UNVERIFIED=1."
 else
