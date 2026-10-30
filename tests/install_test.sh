@@ -139,6 +139,10 @@ if PATH="${tmp}/bin:${PATH}" PARADISE_INSTALL_DIR="${tmp}/bad-sig" PARADISE_MINI
   fail "invalid signature was accepted"
 fi
 grep -q 'minisign rejected' "${tmp}/badsig.err" || fail "invalid signature did not report rejection"
+if PATH="${tmp}/bin:${PATH}" PARADISE_ALLOW_UNSIGNED=1 PARADISE_INSTALL_DIR="${tmp}/bad-sig-allow" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/badsig-allow.out" 2>"${tmp}/badsig-allow.err"; then
+  fail "PARADISE_ALLOW_UNSIGNED accepted an invalid signature"
+fi
+grep -q 'minisign rejected' "${tmp}/badsig-allow.err" || fail "invalid signature was not rejected with PARADISE_ALLOW_UNSIGNED=1"
 minisign -S -W -s "${tmp}/keys/minisign.key" -m "${tmp}/payload/SHA256SUMS" -x "${tmp}/payload/SHA256SUMS.minisig" >/dev/null
 
 # Missing minisign must fail unless the operator opts out.

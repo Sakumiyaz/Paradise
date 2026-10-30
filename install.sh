@@ -78,14 +78,14 @@ case "${1:-}" in
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.5.
+  PARADISE_VERSION          Release tag to install, for example v0.4.6.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
                             Not recommended.
-  PARADISE_ALLOW_UNSIGNED   Set to 1 to skip minisign verification.
+  PARADISE_ALLOW_UNSIGNED   Set to 1 only when minisign is not installed.
+                            An invalid signature is still refused.
                             A release without SHA256SUMS.minisig is still refused.
-                            Not recommended.
   PARADISE_MINISIGN_PUB     Public key file. Default: the key embedded below.
                             Use a copy you saved outside GitHub.
 
@@ -234,11 +234,11 @@ verify_signature() {
   TMPFILES+=("${sig_file}")
   info "Downloading SHA256SUMS.minisig"
   curl -fsSL --retry 2 --retry-delay 1 "${sig_url}" -o "${sig_file}"
-  if [[ "${PARADISE_ALLOW_UNSIGNED:-0}" == "1" ]]; then
-    info "warning: signature not checked because PARADISE_ALLOW_UNSIGNED=1."
-    return 0
-  fi
   if ! command -v minisign >/dev/null 2>&1; then
+    if [[ "${PARADISE_ALLOW_UNSIGNED:-0}" == "1" ]]; then
+      info "warning: minisign is not installed, so the signature was not checked because PARADISE_ALLOW_UNSIGNED=1."
+      return 0
+    fi
     die "minisign is required to verify SHA256SUMS. Install minisign, or set PARADISE_ALLOW_UNSIGNED=1 to skip the check."
   fi
   pub_file="$(mktemp)"
@@ -279,8 +279,8 @@ fi
 
 info "Release: ${LATEST}"
 
-if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" ]]; then
-  die "${LATEST} is withdrawn. Install v0.4.5 or later."
+if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" || "${LATEST}" == "v0.4.4" ]]; then
+  die "${LATEST} is withdrawn. Install v0.4.6 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then

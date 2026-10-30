@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.6
+
+- State files created by `status` and `init` are mode 0600, not the user umask.
+- An invalid signature is refused even if `PARADISE_ALLOW_UNSIGNED=1`.
+- v0.4.4 is withdrawn. It still selected the remote ollama-cloud provider.
+- The default local provider URL is `http://127.0.0.1:11434`.
+- Release builds remap runner paths and no longer embed `/tmp/eden_garm`.
+
 ## v0.4.5
 
 - A new install uses local Ollama. It does not select a remote provider.
