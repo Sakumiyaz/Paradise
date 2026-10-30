@@ -145,6 +145,16 @@ fi
 grep -q 'minisign rejected' "${tmp}/badsig-allow.err" || fail "invalid signature was not rejected with PARADISE_ALLOW_UNSIGNED=1"
 minisign -S -W -s "${tmp}/keys/minisign.key" -m "${tmp}/payload/SHA256SUMS" -x "${tmp}/payload/SHA256SUMS.minisig" >/dev/null
 
+# A changed checksum file must be rejected while the previous signature stays in place.
+# The asset hash line still matches, so this fails in minisign rather than the hash check.
+cp "${tmp}/payload/SHA256SUMS" "${tmp}/payload/SHA256SUMS.good"
+printf '%s  paradise-aarch64-linux\n# tampered\n' "${digest}" >"${tmp}/payload/SHA256SUMS"
+if PATH="${tmp}/bin:${PATH}" PARADISE_INSTALL_DIR="${tmp}/tampered-sums" PARADISE_MINISIGN_PUB="${tmp}/keys/minisign.pub" /bin/bash "${installer}" >"${tmp}/tampered-sums.out" 2>"${tmp}/tampered-sums.err"; then
+  fail "tampered SHA256SUMS was accepted with the old signature"
+fi
+grep -q 'minisign rejected' "${tmp}/tampered-sums.err" || { cat "${tmp}/tampered-sums.err" >&2; fail "tampered SHA256SUMS was not rejected by minisign"; }
+mv "${tmp}/payload/SHA256SUMS.good" "${tmp}/payload/SHA256SUMS"
+
 # Missing minisign must fail unless the operator opts out.
 mv "${tmp}/bin/minisign" "${tmp}/minisign.bak"
 if PATH="${tmp}/bin:${nopy}" command -v minisign >/dev/null 2>&1; then

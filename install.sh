@@ -78,7 +78,7 @@ case "${1:-}" in
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.6.
+  PARADISE_VERSION          Release tag to install, for example v0.4.7.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
@@ -279,8 +279,8 @@ fi
 
 info "Release: ${LATEST}"
 
-if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" || "${LATEST}" == "v0.4.4" ]]; then
-  die "${LATEST} is withdrawn. Install v0.4.6 or later."
+if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" || "${LATEST}" == "v0.4.4" || "${LATEST}" == "v0.4.5" ]]; then
+  die "${LATEST} is withdrawn. Install v0.4.7 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then

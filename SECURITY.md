@@ -11,6 +11,7 @@ Report a vulnerability privately. Do not open a public issue that includes a tok
 
 - Install only after `SHA256SUMS` matches the downloaded asset.
 - v0.4.0 compiled in an operator HTTP endpoint. It has been withdrawn and the installer refuses that tag.
+- v0.4.5 wrote CLI state files as mode 0644. It has been withdrawn and the installer refuses that tag.
 - From v0.4.3, `SHA256SUMS` is signed with minisign. The secret key is kept outside this GitHub account. The public key is in `minisign.pub` and in `install.sh`. Save that public key somewhere that is not this repository, then check later releases against the saved copy.
 - Verify with `minisign -V -p minisign.pub -m SHA256SUMS -x SHA256SUMS.minisig` and then `sha256sum -c SHA256SUMS`.
 - v0.4.2 and earlier are not signed.

@@ -30,7 +30,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.6 bash install.sh
+PARADISE_VERSION=v0.4.7 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS`, and verifies `SHA256SUMS.minisig` with the embedded public key. Set `PARADISE_MINISIGN_PUB` to a key file you saved outside GitHub if you do not want to trust the copy in this repository. `PARADISE_ALLOW_UNSIGNED=1` skips that check. It installs mode 0755, using sudo only when the install directory is not writable by you. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -41,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.6 or later. v0.4.3 and v0.4.4 are withdrawn.
+Install v0.4.7 or later. v0.4.3, v0.4.4, and v0.4.5 are withdrawn.
 
 ## First run
 

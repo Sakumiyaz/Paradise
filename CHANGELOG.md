@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.7
+
+- The installer test changes `SHA256SUMS` and leaves `SHA256SUMS.minisig` untouched. That install is refused.
+- Internal version text in the binaries is v0.4.7. The stale `v0.4.0` label is gone.
+- v0.4.5 is withdrawn. It still created state files as mode 0644.
+
 ## v0.4.6
 
 - State files created by `status` and `init` are mode 0600, not the user umask.
