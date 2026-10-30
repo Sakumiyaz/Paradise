@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Paradise installer.
-# Review this file before running it. Do not pipe it straight into a shell.
+# Read this file before running it. Do not pipe it straight into a shell.
 set -Eeuo pipefail
 
 REPO="Sakumiyaz/Paradise"
@@ -58,28 +58,37 @@ remove_binary() {
   info "Removed ${dest} if it was installed."
 }
 
-if [[ "${1:-}" == "--uninstall" ]]; then
-  remove_binary
-  exit 0
-fi
-
-if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-  cat <<EOF
+case "${1:-}" in
+  --uninstall)
+    remove_binary
+    exit 0
+    ;;
+  --help|-h)
+    cat <<EOF
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.0.
+  PARADISE_VERSION          Release tag to install, for example v0.4.2.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
                             Not recommended.
 
+Unknown arguments are refused. A typo such as --unistall does not install.
+
 Published today: linux/aarch64 only.
 This public repository does not contain source code, so a failed download
 cannot fall back to compiling.
+State is stored in ~/.config/paradise, not in the current directory and not in /tmp.
 EOF
-  exit 0
-fi
+    exit 0
+    ;;
+  "")
+    ;;
+  *)
+    die "unknown argument: ${1}. Run 'bash install.sh --help'."
+    ;;
+esac
 
 need curl
 need uname
@@ -126,40 +135,89 @@ if ! API_JSON="$(curl -fsSL --retry 2 --retry-delay 1 "${API_URL}")"; then
   die "GitHub API request failed (${API_URL}). Check the network or the unauthenticated rate limit (60 requests/hour). Set PARADISE_VERSION if you already know the tag. This public repository has no source, so the installer will not try to compile."
 fi
 
-python_parse() {
-  python3 - "$1" <<'PY'
-import json, sys
-needle = sys.argv[1]
-data = json.load(sys.stdin)
+# The Python program is an argument, not a heredoc. A heredoc would consume
+# stdin and drop the release JSON piped into this function.
+parse_release_json() {
+  local needle="$1"
+  PARADISE_PARSE_NEEDLE="${needle}" python3 -c '
+import json, os, sys
+needle = os.environ.get("PARADISE_PARSE_NEEDLE", "")
+try:
+    data = json.load(sys.stdin)
+except json.JSONDecodeError as exc:
+    print(f"invalid release json: {exc}", file=sys.stderr)
+    raise SystemExit(2)
+if not isinstance(data, dict):
+    print("release json was not an object", file=sys.stderr)
+    raise SystemExit(2)
 if needle == "tag":
     print(data.get("tag_name") or "")
     raise SystemExit(0)
-assets = data.get("assets") or []
-for asset in assets:
+if needle == "names":
+    print("\n".join((a.get("name") or "") for a in (data.get("assets") or [])))
+    raise SystemExit(0)
+for asset in data.get("assets") or []:
     if asset.get("name") == needle:
         print(asset.get("browser_download_url") or "")
         raise SystemExit(0)
 print("")
-PY
+'
 }
 
-fallback_tag() {
-  printf '%s\n' "${API_JSON}" | grep -o '"tag_name": *"[^"]*"' | head -1 | sed 's/.*"tag_name": *"//;s/"//' || true
+extract_exact_field() {
+  local field="$1"
+  awk -v field="${field}" '
+    BEGIN { found = 0 }
+    {
+      pattern = "\"" field "\"[[:space:]]*:[[:space:]]*\"[^\"]*\""
+      if (match($0, pattern)) {
+        value = substr($0, RSTART, RLENGTH)
+        sub("^.*\"" field "\"[[:space:]]*:[[:space:]]*\"", "", value)
+        sub("\"$", "", value)
+        print value
+        found = 1
+        exit
+      }
+    }
+    END { if (!found) exit 0 }
+  '
 }
 
-fallback_asset_url() {
+extract_exact_asset_url() {
   local name="$1"
-  printf '%s\n' "${API_JSON}" | grep -o "\"browser_download_url\": *\"[^\"]*${name}[^\"]*\"" | head -1 | sed 's/.*"browser_download_url": *"//;s/"//' || true
+  awk -v name="${name}" '
+    BEGIN { RS = "\\{" ; found = 0 }
+    {
+      name_re = "\"name\"[[:space:]]*:[[:space:]]*\"" name "\""
+      if (match($0, name_re)) {
+        if (match($0, "\"browser_download_url\"[[:space:]]*:[[:space:]]*\"[^\"]*\"")) {
+          url = substr($0, RSTART, RLENGTH)
+          sub("^.*\"browser_download_url\"[[:space:]]*:[[:space:]]*\"", "", url)
+          sub("\"$", "", url)
+          print url
+          found = 1
+          exit
+        }
+      }
+    }
+    END { if (!found) exit 0 }
+  '
 }
 
 if command -v python3 >/dev/null 2>&1; then
-  LATEST="$(printf '%s' "${API_JSON}" | python_parse tag || true)"
-  DOWNLOAD_URL="$(printf '%s' "${API_JSON}" | python_parse "${ASSET_NAME}" || true)"
-  SUMS_URL="$(printf '%s' "${API_JSON}" | python_parse "SHA256SUMS" || true)"
+  if ! LATEST="$(printf '%s' "${API_JSON}" | parse_release_json tag)"; then
+    die "could not parse the GitHub release JSON with python3."
+  fi
+  if ! DOWNLOAD_URL="$(printf '%s' "${API_JSON}" | parse_release_json "${ASSET_NAME}")"; then
+    die "could not parse release assets with python3."
+  fi
+  if ! SUMS_URL="$(printf '%s' "${API_JSON}" | parse_release_json "SHA256SUMS")"; then
+    die "could not parse SHA256SUMS from the release JSON."
+  fi
 else
-  LATEST="$(fallback_tag || true)"
-  DOWNLOAD_URL="$(fallback_asset_url "${ASSET_NAME}" || true)"
-  SUMS_URL="$(fallback_asset_url "SHA256SUMS" || true)"
+  LATEST="$(printf '%s\n' "${API_JSON}" | extract_exact_field tag_name || true)"
+  DOWNLOAD_URL="$(printf '%s\n' "${API_JSON}" | extract_exact_asset_url "${ASSET_NAME}" || true)"
+  SUMS_URL="$(printf '%s\n' "${API_JSON}" | extract_exact_asset_url "SHA256SUMS" || true)"
 fi
 
 if [[ -z "${LATEST}" ]]; then
@@ -168,17 +226,27 @@ fi
 
 info "Release: ${LATEST}"
 
-if [[ "${LATEST}" == "v0.4.0" && "${PARADISE_ALLOW_INSECURE_RELEASE:-0}" != "1" ]]; then
-  die "v0.4.0 compiled in an operator HTTP endpoint and is not a safe default install. Publish a rebuilt release, or set PARADISE_ALLOW_INSECURE_RELEASE=1 to install that exact asset anyway."
+if [[ "${LATEST}" == "v0.4.0" ]]; then
+  die "v0.4.0 compiled in an operator HTTP endpoint and has been withdrawn. Install v0.4.2 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then
   info "No binary named ${ASSET_NAME} in ${LATEST}."
   info "Assets in this release:"
   if command -v python3 >/dev/null 2>&1; then
-    printf '%s' "${API_JSON}" | python3 -c 'import json,sys; data=json.load(sys.stdin); print("\n".join(a.get("name","") for a in data.get("assets") or []) or "(none)")'
+    printf '%s' "${API_JSON}" | parse_release_json names || true
   else
-    printf '%s\n' "${API_JSON}" | grep -o '"name": *"[^"]*"' | sed 's/.*"name": *"//;s/"//' || true
+    printf '%s\n' "${API_JSON}" | awk '
+      {
+        while (match($0, /"name"[[:space:]]*:[[:space:]]*"[^"]*"/)) {
+          value = substr($0, RSTART, RLENGTH)
+          sub(/^.*"name"[[:space:]]*:[[:space:]]*"/, "", value)
+          sub(/"$/, "", value)
+          print value
+          $0 = substr($0, RSTART + RLENGTH)
+        }
+      }
+    ' || true
   fi
   die "refusing to install a mismatched or missing binary."
 fi
@@ -196,7 +264,7 @@ if [[ -n "${SUMS_URL}" ]]; then
   curl -fsSL --retry 2 --retry-delay 1 "${SUMS_URL}" -o "${TMP_SUMS}"
   expected="$(awk -v name="${ASSET_NAME}" '$2 == name { print $1; exit }' "${TMP_SUMS}")"
   if [[ -z "${expected}" ]]; then
-    die "SHA256SUMS does not contain ${ASSET_NAME}"
+    die "SHA256SUMS does not contain an exact entry for ${ASSET_NAME}"
   fi
   actual="$(sha256sum "${TMP_BIN}" | awk '{print $1}')"
   if [[ "${actual}" != "${expected}" ]]; then
@@ -212,5 +280,6 @@ fi
 install_binary "${TMP_BIN}"
 info ""
 info "Paradise installed to ${INSTALL_DIR}/${BIN_NAME} (mode 0755)."
-info "State stays in \${PARADISE_STATE_DIR:-\$PWD/.paradise} and is not sent anywhere unless you configure a provider."
+info "State is kept in \${XDG_CONFIG_HOME:-\$HOME/.config}/paradise (directory 0700, files 0600)."
+info "It is not stored in the current directory and not in /tmp."
 info "Run 'paradise --help' for commands. Uninstall with: bash install.sh --uninstall"

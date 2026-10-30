@@ -29,7 +29,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.1 bash install.sh
+PARADISE_VERSION=v0.4.2 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS` before copying the binary, and installs it as root:root mode 0755 when `/usr/local/bin` is not writable. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -40,7 +40,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-v0.4.0 has no `SHA256SUMS` and was built with an operator HTTP address compiled in. The installer refuses that tag unless `PARADISE_ALLOW_INSECURE_RELEASE=1`. Prefer a release built after that fix.
+Install v0.4.2 or later. v0.4.0 is withdrawn. v0.4.1 verifies checksums, but its Python parser cannot read the release JSON.
 
 ## First run
 
@@ -53,9 +53,9 @@ With no arguments in a terminal, the binary opens the TUI. Otherwise it runs the
 
 ## Configuration and data
 
-Operator state defaults to `./.paradise`, or `PARADISE_STATE_DIR` when that is set. The CLI also accepts `--state-dir`.
+Operator state defaults to `~/.config/paradise`, or `$XDG_CONFIG_HOME/paradise` when that variable is set. Override it with `PARADISE_STATE_DIR` or `--state-dir`. The directory is mode 0700 and files written by the CLI are mode 0600. Do not use the working tree or `/tmp`: a checkout can be committed, and `/tmp` is shared.
 
-Provider settings, including an API key if you add one, are local files under that directory (`paradise_providers.json`). They are not uploaded by the installer. A chat request sends the prompt only to the provider you configured (OpenAI, Ollama, or another endpoint you set). If you do not configure a provider, do not assume a prompt left the machine.
+Provider settings, including an API key if you add one, stay in that directory (`paradise_providers.json`). They are not uploaded by the installer. A chat request sends the prompt only to the provider you configured. If you do not configure a provider, do not assume a prompt left the machine.
 
 There is no compiled-in model server. A remote Eden module server is used only when you set:
 
@@ -75,6 +75,4 @@ Earlier text compared Paradise with Copilot and Cursor as if those products neve
 
 ## License
 
-Proprietary. All rights reserved. Binary releases are provided for installation and use. Source code is not distributed from this repository.
-
-The private tree has previously been described as MIT. Those statements disagree. Until a `LICENSE` file is published, treat the public binary as proprietary and do not assume an MIT grant.
+Proprietary. All rights reserved. See `LICENSE`. Binary releases are provided for installation and use. Source code is not distributed from this repository.
