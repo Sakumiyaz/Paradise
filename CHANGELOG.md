@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.11
+
+- `git diff` and `git status` used after an edit no longer honor `core.fsmonitor`, hooks, or a global git config. Writes inside `.git/` are refused, and shell commands cannot modify `.git/`.
+- `--api-key` is not written to `paradise_providers.json`.
+- A lone `DONE` is rejected when the request asked for a named change and that name is not in the added code. A comment or a filename does not count.
+- Actions inside markdown fences are parsed. A unified diff is applied, and `EDIT_FILE` tolerates indentation differences.
+- `WRITE_FILE` ends the file with a newline. `config get` of an unknown key exits non-zero. Python projects can use `TEST` via pytest or unittest.
+
 ## v0.4.10
 
 - `GIT`, `CHECK`, and `TEST` run in the same bubblewrap sandbox as `RUN`. A git hook or alias cannot write outside the project.
