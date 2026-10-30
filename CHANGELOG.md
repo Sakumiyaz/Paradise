@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.10
+
+- `GIT`, `CHECK`, and `TEST` run in the same bubblewrap sandbox as `RUN`. A git hook or alias cannot write outside the project.
+- Without bubblewrap those commands are refused. macOS does not include bubblewrap, so they are refused there.
+- A file change is not success unless the requested name appears in the change. `DONE` on a question that did not try to edit a file is allowed. An empty response is not.
+- Repeated `READ`, `RUN`, and `GIT` actions are skipped, not run again.
+- `--api-key` is used for that invocation only. It is not written to disk. It is listed in `--help`.
+
 ## v0.4.9
 
 - `DONE` is rejected unless a file was actually written or edited. A failed or missing edit exits non-zero.
