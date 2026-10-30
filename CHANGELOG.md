@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.8
+
+- Model output is not permission to act. Writes, shell commands, and git commands wait for confirmation. `--yes` is the explicit override.
+- File actions stay inside the current project. `../` and `/etc/passwd` are refused.
+- `EDIT_FILE: path | OLD: ... | NEW: ...` works with spaces, and multi-line edits work. An edit that changes nothing is a failure, not `SUCCESS`.
+- A read and an edit in the same response no longer edits before the file contents are returned.
+- `agent run` and `agent workflow` use the configured model. They do not compile `eden_agent_system`.
+- `paradise chat` exits non-zero when the provider or model fails.
+- Skill files are written under the state directory, not in the project tree.
+
 ## v0.4.7
 
 - The installer test changes `SHA256SUMS` and leaves `SHA256SUMS.minisig` untouched. That install is refused.
