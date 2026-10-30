@@ -164,44 +164,39 @@ print("")
 '
 }
 
+# Do not split the release document on "{". GitHub puts an uploader object
+# inside each asset, so the asset name and browser_download_url are not in
+# the same brace-delimited chunk. Match the download URL suffix instead.
+extract_download_urls() {
+  grep -oE '"browser_download_url"[[:space:]]*:[[:space:]]*"[^"]*"' \
+    | sed -E 's/^"browser_download_url"[[:space:]]*:[[:space:]]*"//; s/"$//'
+}
+
 extract_exact_field() {
   local field="$1"
-  awk -v field="${field}" '
-    BEGIN { found = 0 }
-    {
-      pattern = "\"" field "\"[[:space:]]*:[[:space:]]*\"[^\"]*\""
-      if (match($0, pattern)) {
-        value = substr($0, RSTART, RLENGTH)
-        sub("^.*\"" field "\"[[:space:]]*:[[:space:]]*\"", "", value)
-        sub("\"$", "", value)
-        print value
-        found = 1
-        exit
-      }
-    }
-    END { if (!found) exit 0 }
-  '
+  grep -oE "\"${field}\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" \
+    | head -1 \
+    | sed -E "s/^\"${field}\"[[:space:]]*:[[:space:]]*\"//; s/\"$//" \
+    || true
 }
 
 extract_exact_asset_url() {
   local name="$1"
-  awk -v name="${name}" '
-    BEGIN { RS = "\\{" ; found = 0 }
+  extract_download_urls | awk -v name="${name}" '
     {
-      name_re = "\"name\"[[:space:]]*:[[:space:]]*\"" name "\""
-      if (match($0, name_re)) {
-        if (match($0, "\"browser_download_url\"[[:space:]]*:[[:space:]]*\"[^\"]*\"")) {
-          url = substr($0, RSTART, RLENGTH)
-          sub("^.*\"browser_download_url\"[[:space:]]*:[[:space:]]*\"", "", url)
-          sub("\"$", "", url)
-          print url
-          found = 1
-          exit
-        }
+      suffix = "/" name
+      n = length($0)
+      s = length(suffix)
+      if (n >= s && substr($0, n - s + 1, s) == suffix) {
+        print
+        exit
       }
     }
-    END { if (!found) exit 0 }
   '
+}
+
+list_asset_names() {
+  extract_download_urls | awk -F/ '{ print $NF }'
 }
 
 if command -v python3 >/dev/null 2>&1; then
@@ -226,8 +221,8 @@ fi
 
 info "Release: ${LATEST}"
 
-if [[ "${LATEST}" == "v0.4.0" ]]; then
-  die "v0.4.0 compiled in an operator HTTP endpoint and has been withdrawn. Install v0.4.2 or later."
+if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" ]]; then
+  die "${LATEST} is withdrawn. Install v0.4.2 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then
@@ -236,17 +231,7 @@ if [[ -z "${DOWNLOAD_URL}" ]]; then
   if command -v python3 >/dev/null 2>&1; then
     printf '%s' "${API_JSON}" | parse_release_json names || true
   else
-    printf '%s\n' "${API_JSON}" | awk '
-      {
-        while (match($0, /"name"[[:space:]]*:[[:space:]]*"[^"]*"/)) {
-          value = substr($0, RSTART, RLENGTH)
-          sub(/^.*"name"[[:space:]]*:[[:space:]]*"/, "", value)
-          sub(/"$/, "", value)
-          print value
-          $0 = substr($0, RSTART + RLENGTH)
-        }
-      }
-    ' || true
+    printf '%s\n' "${API_JSON}" | list_asset_names || true
   fi
   die "refusing to install a mismatched or missing binary."
 fi

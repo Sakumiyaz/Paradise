@@ -40,7 +40,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.2 or later. v0.4.0 is withdrawn. v0.4.1 verifies checksums, but its Python parser cannot read the release JSON.
+Install v0.4.2 or later. v0.4.0 and v0.4.1 are withdrawn.
 
 ## First run
 
