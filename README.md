@@ -30,7 +30,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.4 bash install.sh
+PARADISE_VERSION=v0.4.5 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS`, and verifies `SHA256SUMS.minisig` with the embedded public key. Set `PARADISE_MINISIGN_PUB` to a key file you saved outside GitHub if you do not want to trust the copy in this repository. `PARADISE_ALLOW_UNSIGNED=1` skips that check. It installs mode 0755, using sudo only when the install directory is not writable by you. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -41,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.4 or later. Older releases are missing a platform, a signature check, or both.
+Install v0.4.5 or later. v0.4.3 is withdrawn because its installer check failed.
 
 ## First run
 
@@ -56,7 +56,7 @@ With no arguments in a terminal, the binary opens the TUI. Otherwise it runs the
 
 Operator state defaults to `~/.config/paradise`, or `$XDG_CONFIG_HOME/paradise` when that variable is set. Override it with `PARADISE_STATE_DIR` or `--state-dir`. The directory is mode 0700 and files written by the CLI are mode 0600. Do not use the working tree or `/tmp`: a checkout can be committed, and `/tmp` is shared.
 
-Provider settings, including an API key if you add one, stay in that directory (`paradise_providers.json`). They are not uploaded by the installer. A chat request sends the prompt only to the provider you configured. If you do not configure a provider, do not assume a prompt left the machine.
+Provider settings stay in that directory (`paradise_providers.json`, mode 0600). A new install uses local Ollama at `http://127.0.0.1:11434` and does not send prompts anywhere until that local server is running. A remote provider is used only after you select it with `paradise config set provider`. `paradise config set api_key` does not print the key.
 
 There is no compiled-in model server. A remote Eden module server is used only when you set:
 
@@ -65,9 +65,6 @@ There is no compiled-in model server. A remote Eden module server is used only w
 | `EDEN_70B_MODEL_SERVER_URL` | `https://` URL of your model server. Required for that backend. |
 | `EDEN_70B_MODEL_SERVER_TOKEN` | Optional bearer token. Refused on non-loopback HTTP. |
 | `EDEN_70B_ALLOW_INSECURE_HTTP` | Set to `1` only on a trusted network if you must use HTTP. |
-| `PARADISE_GPU_HOST` | Operator GPU host. Required for remote GPU commands. No default. |
-| `PARADISE_GPU_USER` | SSH user for that host. |
-| `PARADISE_GPU_SSH_KEY` | Optional SSH key path. |
 | `PARADISE_STATE_DIR` | State directory. |
 
 ## What the comparison table used to claim

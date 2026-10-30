@@ -157,6 +157,11 @@ fi
 grep -q 'PARADISE_ALLOW_UNSIGNED=1' "${tmp}/allow.out" || fail "unsigned opt-in was not announced"
 mv "${tmp}/minisign.bak" "${tmp}/bin/minisign"
 
+if PATH="${tmp}/bin:${PATH}" PARADISE_INSTALL_DIR="${tmp}/missing-key" PARADISE_MINISIGN_PUB="${tmp}/no-such-key.pub" /bin/bash "${installer}" >"${tmp}/missingkey.out" 2>"${tmp}/missingkey.err"; then
+  fail "missing PARADISE_MINISIGN_PUB was accepted"
+fi
+grep -q 'is not a file' "${tmp}/missingkey.err" || { cat "${tmp}/missingkey.err" >&2; fail "missing public key was not reported"; }
+
 # A missing parent under the user home must not call sudo.
 cat >"${tmp}/bin/sudo" <<'EOF'
 #!/bin/sh

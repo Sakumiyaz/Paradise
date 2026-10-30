@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.5
+
+- A new install uses local Ollama. It does not select a remote provider.
+- `paradise_providers.json` is written mode 0600. `config set api_key` does not print the key.
+- `PARADISE_MINISIGN_PUB` must name an existing file. A missing path is an error, not a silent fallback.
+- v0.4.3 is withdrawn. Its commit had a failing installer check.
+
 ## v0.4.4
 
 - The installer refuses to continue when `minisign` is missing, unless `PARADISE_ALLOW_UNSIGNED=1`.

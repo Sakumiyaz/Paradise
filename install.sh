@@ -78,13 +78,14 @@ case "${1:-}" in
 Usage: install.sh [--uninstall]
 
 Environment:
-  PARADISE_VERSION          Release tag to install, for example v0.4.4.
+  PARADISE_VERSION          Release tag to install, for example v0.4.5.
                             Default: the latest GitHub release.
   PARADISE_INSTALL_DIR      Install directory. Default: /usr/local/bin
   PARADISE_ALLOW_UNVERIFIED Set to 1 to install without SHA256SUMS.
                             Not recommended.
-  PARADISE_ALLOW_UNSIGNED   Set to 1 to install when minisign is missing
-                            or the signature cannot be checked. Not recommended.
+  PARADISE_ALLOW_UNSIGNED   Set to 1 to skip minisign verification.
+                            A release without SHA256SUMS.minisig is still refused.
+                            Not recommended.
   PARADISE_MINISIGN_PUB     Public key file. Default: the key embedded below.
                             Use a copy you saved outside GitHub.
 
@@ -242,7 +243,10 @@ verify_signature() {
   fi
   pub_file="$(mktemp)"
   TMPFILES+=("${pub_file}")
-  if [[ -n "${PARADISE_MINISIGN_PUB:-}" && -f "${PARADISE_MINISIGN_PUB}" ]]; then
+  if [[ -n "${PARADISE_MINISIGN_PUB:-}" ]]; then
+    if [[ ! -f "${PARADISE_MINISIGN_PUB}" ]]; then
+      die "PARADISE_MINISIGN_PUB is set but is not a file: ${PARADISE_MINISIGN_PUB}"
+    fi
     cp "${PARADISE_MINISIGN_PUB}" "${pub_file}"
   else
     printf '%s\n%s\n' 'untrusted comment: minisign public key' "${EMBEDDED_MINISIGN_PUB}" >"${pub_file}"
@@ -276,7 +280,7 @@ fi
 info "Release: ${LATEST}"
 
 if [[ "${LATEST}" == "v0.4.0" || "${LATEST}" == "v0.4.1" ]]; then
-  die "${LATEST} is withdrawn. Install v0.4.4 or later."
+  die "${LATEST} is withdrawn. Install v0.4.5 or later."
 fi
 
 if [[ -z "${DOWNLOAD_URL}" ]]; then
