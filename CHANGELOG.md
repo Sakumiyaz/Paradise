@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.17
+
+- `multiply, and divide` and `multiply, y divide` require both names. The comma no longer hides the second one.
+- `add some logging` does not require a function named `some`.
+- `call add(a, b)` and `use add(a, b)` do not require a new `def add`. `call add(a, b) inside multiply` requires `multiply`.
+
 ## v0.4.16
 
 - A name is required only when it is marked: `def name`, `name(...)`, backticks, the object of add/implement/quiero, or a pair joined by `and`, `y`, or `&`. Trailing words such as `real`, `appreciate`, `cheers`, and `use` are not required.
