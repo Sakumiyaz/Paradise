@@ -30,7 +30,7 @@ bash install.sh
 Pin a release:
 
 ```bash
-PARADISE_VERSION=v0.4.15 bash install.sh
+PARADISE_VERSION=v0.4.16 bash install.sh
 ```
 
 The installer downloads one GitHub release object, checks `SHA256SUMS`, and verifies `SHA256SUMS.minisig` with the embedded public key. Set `PARADISE_MINISIGN_PUB` to a key file you saved outside GitHub if you do not want to trust the copy in this repository. `PARADISE_ALLOW_UNSIGNED=1` skips that check. It installs mode 0755, using sudo only when the install directory is not writable by you. It will not install if the checksum file is missing, unless you set `PARADISE_ALLOW_UNVERIFIED=1`.
@@ -41,7 +41,7 @@ Uninstall:
 bash install.sh --uninstall
 ```
 
-Install v0.4.15 or later. v0.4.3, v0.4.4, and v0.4.5 are withdrawn.
+Install v0.4.16 or later. v0.4.3, v0.4.4, and v0.4.5 are withdrawn.
 
 ## First run
 
@@ -71,7 +71,7 @@ There is no compiled-in model server. A remote Eden module server is used only w
 
 Earlier text compared Paradise with Copilot and Cursor as if those products never keep session memory. That is not a fair claim: Cursor can retain project memory, and Copilot has its own history features. Paradise's local distinction is that its state files stay on the machine you choose, and that model output is not treated as permission to act. Test counts are not listed here until a public CI run publishes them.
 
-Writes, shell commands, and git commands proposed by the model wait for a `y` confirmation. `paradise chat --yes` skips that prompt. `RUN`, `GIT`, `CHECK`, and `TEST` need [bubblewrap](https://github.com/containers/bubblewrap) and can write only in the current directory. macOS does not include bubblewrap, so those commands are refused there. A file edit is not treated as success unless the function the task asks for is defined, for example `def multiply`, including when the prompt is `quiero multiply` or `por favor multiply`. Trailing words such as `cheers` or `use print()` are not required definitions. A comparison such as `like add(a, b)`, a filename, or words such as `and`, `keep`, and `existing` are not required definitions. A comment, string, or filename does not count. If the request asks for a test and the change is Python, that test must return and pass. `os._exit(0)` does not count, and a test that runs longer than 5 seconds is killed. An edit request that changes nothing exits non-zero. `paradise chat --api-key` applies only to that invocation and is not saved. Chat history stays with that project.
+Writes, shell commands, and git commands proposed by the model wait for a `y` confirmation. `paradise chat --yes` skips that prompt. `RUN`, `GIT`, `CHECK`, and `TEST` need [bubblewrap](https://github.com/containers/bubblewrap) and can write only in the current directory. macOS does not include bubblewrap, so those commands are refused there. A file edit is not treated as success unless a new function was added. A specific name is required only when the prompt marks it, for example `def multiply`, `multiply(a, b)`, `` `multiply` ``, or `multiply & divide`. Trailing words are not required definitions. If the prompt names no function, any new function counts, and a requested test must still pass. A comparison such as `like add(a, b)` is not a required definition. A comment, string, or filename does not count. If the request asks for a test and the change is Python, that test must return and pass. `os._exit(0)` does not count, and a test that runs longer than 5 seconds is killed. An edit request that changes nothing exits non-zero. `paradise chat --api-key` applies only to that invocation and is not saved. Chat history stays with that project.
 
 ## License
 

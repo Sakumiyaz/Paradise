@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.16
+
+- A name is required only when it is marked: `def name`, `name(...)`, backticks, the object of add/implement/quiero, or a pair joined by `and`, `y`, or `&`. Trailing words such as `real`, `appreciate`, `cheers`, and `use` are not required.
+- If the prompt does not mark a name, any new function is enough. A requested test must still be defined and pass.
+- `sum`, `max`, `min`, `map`, `list`, `filter`, and `range` can be requested. `print()` and `len()` are not required. `multiply & divide` requires both.
+
 ## v0.4.15
 
 - The name check follows the function the task asks for, not the rest of the sentence. `Add multiply please, cheers` and `Add multiply, use print() to debug` require `multiply` only. `quiero multiply` and `por favor multiply` recognize `multiply`.
