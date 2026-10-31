@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.14
+
+- The name check asks only for the function the task introduces. `Add multiply(a, b) like add(a, b)` does not require `def add`. Words such as `and`, `keep`, `existing`, or `función` are not required definitions.
+- A requested Python test must return and pass. `os._exit(0)` does not count. A test that does not finish in 5 seconds is killed and the task fails.
+
 ## v0.4.13
 
 - The names required for a successful edit come from `def`, `fn`, or `name(...)`. A filename, or words such as `define` and `returns`, are not required definitions.
