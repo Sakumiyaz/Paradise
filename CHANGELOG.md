@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.13
+
+- The names required for a successful edit come from `def`, `fn`, or `name(...)`. A filename, or words such as `define` and `returns`, are not required definitions.
+- When the request asks for a test and the change is Python, exit 0 requires the `test_*` functions in the edited files to run and pass. A definition that returns the wrong value is rejected.
+- A test that does not check the result can still pass. Non-Python tests are still checked as definitions only.
+
 ## v0.4.12
 
 - Writes through a symlink into `.git`, and paths spelled `.GIT`, are refused.
