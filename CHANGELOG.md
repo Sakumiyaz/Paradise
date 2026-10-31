@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.18
+
+- A bare word after a verb is not a required name. `add basic logging` and `añade algo de logging` do not require `basic` or `algo`. Any new function is enough, and a requested test must still pass.
+- `usa add(a, b)` does not require a new `def add` when `add` already exists. A call to an existing function is not a request to define it again.
+- `then` is not a join. `multiply, then divide` does not require both names. `and`, `y`, and `&` still do.
+
 ## v0.4.17
 
 - `multiply, and divide` and `multiply, y divide` require both names. The comma no longer hides the second one.
