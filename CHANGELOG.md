@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.15
+
+- The name check follows the function the task asks for, not the rest of the sentence. `Add multiply please, cheers` and `Add multiply, use print() to debug` require `multiply` only. `quiero multiply` and `por favor multiply` recognize `multiply`.
+- `Add multiply and divide` still requires both. A function mentioned only as a comparison is still not required.
+
 ## v0.4.14
 
 - The name check asks only for the function the task introduces. `Add multiply(a, b) like add(a, b)` does not require `def add`. Words such as `and`, `keep`, `existing`, or `función` are not required definitions.
